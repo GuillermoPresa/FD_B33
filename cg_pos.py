@@ -28,15 +28,6 @@ def passengers_cg(passenger_list):
 	return total_mass, x_pos, y_pos
 	
 
-
-class mass_item:
-
-	def __init__(self, mass, x_pos, y_pos):
-		self.mass = mass
-		self.x_pos = x_pos
-		self.y_pos = y_pos
-
-
 #CREW
 Pilot1 = Passenger(61,1)
 Pilot2 = Passenger(61,2)
@@ -51,11 +42,20 @@ Luke = Passenger(61,3)
 Flip = Passenger(61,3)
 
 passenger_list = [Pilot1, Pilot2, Coordinator, Guille, Igor, Bob, Daniel, Luke, Flip]
+Passengers_mass, Passengers_cg_x, Passengers_cg_y = passengers_cg(passenger_list)
 
-#Aircraft
-Engines = mass_item(100,5,0)
+#Aircraft cg readings
+
+Empty_mass =  9165.0
+Empty_arm = 291.65
+Empty_moment = 2672953.5
+
+if abs(Empty_moment-Empty_mass*Empty_arm) > 50:
+	raise ValueError("Aircraft cg readings make no sense. abs(Moment-Mass*Arm) > 50")
+
+Zero_fuel_mass = Empty_mass + Passengers_mass
+Zero_fuel_cg_x = (Empty_moment + Passengers_cg_x*Passengers_mass) / Zero_fuel_mass
+print("The Zero fuel mass is:", Zero_fuel_mass, "The zero fuel x_cg is:", Zero_fuel_cg_x )
 
 
 
-passengers_mass, passengers_x, passengers_y = passengers_cg(passenger_list)
-passengers = mass_item(passengers_mass, passengers_x, passengers_y)
