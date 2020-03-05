@@ -1,7 +1,7 @@
 import math
 
 '''
-Aircraft data. Where is the datum
+Fix datum lines.
 '''
 
 
@@ -66,11 +66,12 @@ Bag2 = Bag(5,2)
 Bag3 = Bag(5,2)
 
 #Aircraft cg readings
-Empty_mass =  9165.0
-Empty_arm = 291.65
-Empty_moment = 2672953.5
+Empty_mass = 0.453592 * 9165.0
+Empty_weight = 4.44822 * 9165.0
+Empty_arm = 0.0254 * 291.65
+Empty_moment = 0.1129848 * 2672953.5
 
-if abs(Empty_moment-Empty_mass*Empty_arm) > 50:
+if abs(Empty_moment-Empty_weight*Empty_arm) > 50:
 	raise ValueError("Aircraft cg readings make no sense. abs(Moment-Mass*Arm) > 50")
 
 
@@ -80,8 +81,8 @@ payload_list = passenger_list + Baggage_list
 Passengers_mass, Passengers_cg_x, Passengers_cg_y = payload_cg(payload_list)
 
 Zero_fuel_mass = Empty_mass + Passengers_mass
-Zero_fuel_cg_x = (Empty_moment + Passengers_cg_x*Passengers_mass) / Zero_fuel_mass
-print("The Zero fuel mass is:", Zero_fuel_mass, "The zero fuel x_cg is:", Zero_fuel_cg_x )
+Zero_fuel_cg_x = (Empty_mass*Empty_arm + Passengers_cg_x*Passengers_mass) / Zero_fuel_mass
+print("The Zero fuel mass is:", Zero_fuel_mass, "The zero fuel x_cg is:", Zero_fuel_cg_x, "or (in inch):", Zero_fuel_cg_x*39.3701 )
 
 #In inch-pound/100
 Fuel_moment_list = [0, 298.16, 591.18, 879.08, 1165.42, 1448.40, 1732.53, 2014.80, 2298.84, 2581.92, 2866.30, 3150.18, 3434.52, 3718.52, 4003.23, 4287.76, 4572.24, 4856.56, 5141.16, 5425.64, 5709.90, 5994.04, 6278.47, 6562.82, 6846.96, 7131.00, 7415.33, 7699.60, 7984.34, 8269.06, 8554.05, 8839.04, 9124.80, 9410.62, 9696.97, 9983.40, 10270.08, 10556.84, 10843.87, 11131.00, 11418.20, 11705.50, 11993.31, 12281.18, 12569.04, 12856.86, 13144.73, 13432.48, 13720.56, 14008.46, 14320.34]
@@ -96,13 +97,17 @@ def Fuel_cg(Actual_fuel_mass):
 	Fuel_index = 2.20462*Actual_fuel_mass/100
 	Actual_fuel_moment = 100*(Fuel_moment_list[int(math.trunc(Fuel_index))] + (Fuel_index - math.trunc(Fuel_index)) * (Fuel_moment_list[int(math.trunc(Fuel_index))+1] - Fuel_moment_list[int(math.trunc(Fuel_index))]))
 	#In nm:
-	Actual_fuel_moment = 0.113*Actual_fuel_moment
-	Fuel_cg = Actual_fuel_moment/Actual_fuel_mass
-	return 	Fuel_cg, Actual_fuel_mass, Actual_fuel_moment
+	Actual_fuel_moment = 0.1129848*Actual_fuel_moment
+	Fuel_cg_x = Actual_fuel_moment/Actual_fuel_mass/9.80665
+	return 	Fuel_cg_x, Actual_fuel_moment
 
 def cg(Actual_fuel_mass):
-	Fuel_cg, Actual_fuel_mass, Actual_fuel_moment = Fuel_cg(Actual_fuel_mass)
+	Fuel_cg_x = 0
+	Fuel_cg_x, Actual_fuel_moment = Fuel_cg(Actual_fuel_mass)
 	Total_mass = Zero_fuel_mass + Actual_fuel_mass
-	Total_cg_x = (Actual_fuel_moment + Zero_fuel_cg_x*Zero_fuel_mass) / Total_mass
-	print("The total mass is:", Total_mass, "The total x_cg is:", Total_cg_x )
+	Total_cg_x = (Fuel_cg_x*Actual_fuel_mass + Zero_fuel_cg_x*Zero_fuel_mass) / Total_mass
+	print("The total mass is:", Total_mass, "The total x_cg is:", Total_cg_x, "or (in inch):", Total_cg_x*39.3701)
 	return 	Total_cg_x, Total_mass
+
+cg(100/2.2)
+
