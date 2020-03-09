@@ -60,7 +60,10 @@ def Fuel_cg(Actual_fuel_mass):
 	Fuel_cg_x = Actual_fuel_moment/Actual_fuel_mass/9.80665
 	return 	Fuel_cg_x, Actual_fuel_moment
 
-def cg(Actual_fuel_mass):
+def cg(Actual_fuel_mass, payload_list): #In kg
+	Passengers_mass, Passengers_cg_x, Passengers_cg_y = payload_cg(payload_list)
+	Zero_fuel_mass = Empty_mass + Passengers_mass
+	Zero_fuel_cg_x = (Empty_mass*Empty_arm + Passengers_cg_x*Passengers_mass) / Zero_fuel_mass
 	Fuel_cg_x = 0
 	Fuel_cg_x, Actual_fuel_moment = Fuel_cg(Actual_fuel_mass)
 	Total_mass = Zero_fuel_mass + Actual_fuel_mass
@@ -105,5 +108,5 @@ Zero_fuel_mass = Empty_mass + Passengers_mass
 Zero_fuel_cg_x = (Empty_mass*Empty_arm + Passengers_cg_x*Passengers_mass) / Zero_fuel_mass
 print("The Zero fuel mass is:", Zero_fuel_mass, "The zero fuel x_cg is:", Zero_fuel_cg_x, "or (in inch):", Zero_fuel_cg_x*39.3701 )
 
-cg(100/2.2)
+cg(100/2.2, payload_list)
 

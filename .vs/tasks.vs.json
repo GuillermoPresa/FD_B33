@@ -1,0 +1,10 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskLabel": "task-Static_measurements",
+      "appliesTo": "Static_measurements.py",
+      "type": "launch"
+    }
+  ]
+}
