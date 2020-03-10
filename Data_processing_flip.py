@@ -26,6 +26,8 @@ def red_airspeed(hp, Vc, Tm, alt):
     # hp = measured pressure altitude 
     # Vc = calibrated airspeed on airplane airspeed indicator
     # Tm = measured temperature
+    # Ve = equivalent airspeed
+    # Ve_bar = reduced equivalent airspeed
     
     #input variables
     p0 = ISA_calculator.pressure0                   # [N/m^2]
@@ -57,5 +59,6 @@ def red_airspeed(hp, Vc, Tm, alt):
 
 def red_engine_thrust():    
     #reduction of the non-standard engine thrust
+    
     
     
