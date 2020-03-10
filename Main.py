@@ -75,52 +75,52 @@ class MyWindow:
 		self.btn.place(x=200, y=500)
 		self.lbl_Passenger_list = Label(window, textvariable="Passenger list", fg='red', font=("Helvetica", 16))
 		self.lbl_Passenger_list.place(x=100, y=20)
-		#Pilot 1
+	#Pilot 1
 		self.LabelSeat1 = Label(window, text="Pilot 1", fg='black', font=("Helvetica", 12))
 		self.LabelSeat1.place(x=50, y=75)
 		self.LabelSeat1 = Label(window, text=str(Pilot1.mass) + "kg", fg='black', font=("Helvetica", 12))
 		self.LabelSeat1.place(x=50+passenger_spacing_x, y=75)
-		#Pilot 2
+	#Pilot 2
 		self.LabelSeat2 = Label(window, text="Pilot 2", fg='black', font=("Helvetica", 12))
 		self.LabelSeat2.place(x=50, y=75+passenger_spacing_y)
 		self.WeightSeat2=Entry(window, textvariable=Pilot2.mass, bd=5)
 		self.WeightSeat2.place(x=50+passenger_spacing_x, y=75+passenger_spacing_y)
-		#Seat 3
+	#Seat 3
 		self.LabelSeat3 = Label(window, text="Seat 3", fg='black', font=("Helvetica", 12))
 		self.LabelSeat3.place(x=50, y=75+2*passenger_spacing_y)
 		self.WeightSeat3=Entry(window, text=Passenger3.mass, bd=5)
 		self.WeightSeat3.place(x=50+passenger_spacing_x, y=75+2*passenger_spacing_y)
-		#Seat 4
+	#Seat 4
 		self.LabelSeat4 = Label(window, text="Seat 4", fg='black', font=("Helvetica", 12))
 		self.LabelSeat4.place(x=50, y=75+3*passenger_spacing_y)
 		self.WeightSeat4=Entry(window, text=Passenger4.mass, bd=5)
 		self.WeightSeat4.place(x=50+passenger_spacing_x, y=75+3*passenger_spacing_y)
-		#Seat 5
+	#Seat 5
 		self.LabelSeat5 = Label(window, text="Seat 3", fg='black', font=("Helvetica", 12))
 		self.LabelSeat5.place(x=50, y=75+3*passenger_spacing_y)
 		self.WeightSeat5=Entry(window, text=Passenger5.mass, bd=5)
 		self.WeightSeat5.place(x=50+passenger_spacing_x, y=75+3*passenger_spacing_y)
-		#Seat 6
+	#Seat 6
 		self.LabelSeat6 = Label(window, text="Seat 4", fg='black', font=("Helvetica", 12))
 		self.LabelSeat6.place(x=50, y=75+4*passenger_spacing_y)
 		self.WeightSeat6=Entry(window, text=Passenger6.mass, bd=5)
 		self.WeightSeat6.place(x=50+passenger_spacing_x, y=75+4*passenger_spacing_y)
-		#Seat 7
+	#Seat 7
 		self.LabelSeat7 = Label(window, text="Seat 4", fg='black', font=("Helvetica", 12))
 		self.LabelSeat7.place(x=50, y=75+5*passenger_spacing_y)
 		self.WeightSeat7=Entry(window, text=Passenger7.mass, bd=5)
 		self.WeightSeat7.place(x=50+passenger_spacing_x, y=75+5*passenger_spacing_y)
-		#Seat 8
+	#Seat 8
 		self.LabelSeat8 = Label(window, text="Seat 3", fg='black', font=("Helvetica", 12))
 		self.LabelSeat8.place(x=50, y=75+6*passenger_spacing_y)
 		self.WeightSeat8=Entry(window, text=Passenger8.mass, bd=5)
 		self.WeightSeat8.place(x=50+passenger_spacing_x, y=75+6*passenger_spacing_y)
-		#Seat 9
+	#Seat 9
 		self.LabelSeat9 = Label(window, text="Seat 4", fg='black', font=("Helvetica", 12))
 		self.LabelSeat9.place(x=50, y=75+7*passenger_spacing_y)
 		self.WeightSeat9=Entry(window, text=Passenger9.mass, bd=5)
 		self.WeightSeat9.place(x=50+passenger_spacing_x, y=75+7*passenger_spacing_y)
-		#Seat 10
+	#Seat 10
 		self.LabelSeat10 = Label(window, text="Seat 4", fg='black', font=("Helvetica", 12))
 		self.LabelSeat10.place(x=50, y=75+8*passenger_spacing_y)
 		self.WeightSeat10=Entry(window, text=Passenger10.mass, bd=5)
