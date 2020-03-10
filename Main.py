@@ -1,12 +1,25 @@
 from tkinter import *
+from matplotlib import pyplot as plt
+import numpy as np
+import math
 import cg_pos
 import Stat_mes
 import aero_coeff
+import ISA_calculator
+
 
 SeaLevelPressure = 101324 #[Pa]
+SeaLevelDensity = 1.225 #[kg/m^3]
 SeaLevelTemperature = 15 #[C]
 SeaLevelTemperature = SeaLevelTemperature + 273.15 #[K]
 
+#Aircraft conditions
+Empty_mass = 0.453592 * 9165.0
+Empty_weight = 4.44822 * 9165.0
+Empty_arm = 0.0254 * 291.65
+Empty_moment = 0.1129848 * 2672953.5
+
+TotalFuelMass = 1000
 
 #CREW = Passenger(mass, seat number)
 Pilot1 = cg_pos.Passenger(61,1)
@@ -40,6 +53,10 @@ PassengerList = [Pilot1, Pilot2, Passenger3, Passenger4, Passenger5, Passenger6,
 BaggageList = [Bag1, Bag2, Bag3]
 PayloadList = PassengerList + BaggageList
 
+TotalPayloadMass = 0
+for Item in PayloadList:
+	TotalPayloadMass = TotalPayloadMass + Item.mass
+
 Xcg1 = cg_pos.cg(ActualFuelMass, PayloadList)
 
 #Moving Passenger
@@ -59,7 +76,7 @@ Xcg2 = cg_pos.cg(ActualFuelMass, PayloadList)
 
 Static_Measurements_1 = Stat_mes.DataBlock(PayloadList)
 
-									#	[hp,	IAS,	a,		FFl,	FFr,	F.used,	TAT]
+									#	[hp,	IAS,	a,		FFl,	FFr,	F.used,	TAT,	Temp,	Press,	Density,	Mass,	TAS,	CL]
 
 Static_Measurements_1.DataLineList =[	[5010,	249,	1.7,	798,	813,	360,	12.5],
 										[5020,	221,	2.4,	673,	682,	412,	10.5],
@@ -67,11 +84,31 @@ Static_Measurements_1.DataLineList =[	[5010,	249,	1.7,	798,	813,	360,	12.5],
 										[5030,	163,	5.4,	463,	484,	478,	7.2],
 										[5020,	130,	8.7,	443,	467,	532,	6],
 										[5110,	118,	10.6,	474,	499,	570,	5.2]]
-AvgDataLine_1 = [0] * 7
-for DataLine in Static_Measurements_1.DataLineList:
-	for i in range(0,len(DataLine)):
-		AvgDataLine_1[i] = AvgDataLine_1[i]+DataLine[i]/len(Static_Measurements_1.DataLineList)
 
+Cl_array = np.zeros(len(Static_Measurements_1.DataLineList))
+Alpha_array = np.zeros(len(Static_Measurements_1.DataLineList))
+i = 0
+for DataLine in Static_Measurements_1.DataLineList:
+	DataLine.append(ISA_calculator.ISAcalc(DataLine[0])[0])
+	DataLine.append(ISA_calculator.ISAcalc(DataLine[0])[1])
+	DataLine.append(ISA_calculator.ISAcalc(DataLine[0])[2])
+	DataLine.append(Empty_mass +TotalPayloadMass+TotalFuelMass)
+	DataLine.append(aero_coeff.IAStoMach(SeaLevelPressure, SeaLevelDensity, SeaLevelTemperature, DataLine[0], DataLine[1]))
+	DataLine.append((DataLine[10]*9.80665)/(0.5*DataLine[9]*math.pow(DataLine[11],2)))
+	Cl_array[i] = DataLine[12]
+	Alpha_array[i] = DataLine[2]
+	i = i + 1
+
+print("Cl_array is:", Cl_array)	
+
+
+fig = plt.figure()
+ax1 = fig.add_subplot(111)
+ax1.set_title('Cla')
+ax1.set_xlabel('Alpha')
+ax1.set_ylabel('Cl')
+img1 = ax1.scatter(Alpha_array, Cl_array)
+plt.show()
 	
 
 						
@@ -84,6 +121,14 @@ Static_Measurements_ETC.DataLineList = [[6060,	161,	5.3,	0,		2.8,	0,		462,	486,	
 										[6160,	173,	4.5,	0.4,	2.8,	26,		465,	489,	798,	5.0],
 										[5810,	179,	4.1,	0.6,	2.8,	40,		472,	496,	825,	6.2],
 										[5310,	192,	3.4,	1,		2.8,	83,		482,	505,	846,	8.2]]
+
+
+#Static_CG_Shift_
+#5730	161	5.3	0	2.8	0	471	493	881	5.0
+#5790	161	5,3	-0,5	2.8	-30	468	490	910	5.0
+
+
+	
 																						 
 AvgDataLine_ETC = [0] * 10
 for DataLine in Static_Measurements_ETC.DataLineList:
