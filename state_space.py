@@ -21,7 +21,7 @@ def asymmetric_matrix_c2(cyb, cl, cyp, cyr, mub, clb, clp, clr, cnb, cnp, cnr):
 def asymmetric_matrix_c3(cyda, cydr, clda, cldr, cnda, cndr):
     return np.array([[cyda,cydr],[0,0],[clda,cldr],[cnda,cndr]])
 
-
+#this takes in the c1,c2,c3 matrices and returns the state_space of them
 def abcd_solver(c1mat,c2mat,c3mat):
 
     a = -np.matmul(np.linalg.inv(c1mat), c2mat)
@@ -29,5 +29,7 @@ def abcd_solver(c1mat,c2mat,c3mat):
     c = np.identity(4)
     d = np.array([[0,0],[0,0],[0,0],[0,0]])
     return control.ss(a,b,c,d)
-
+#this returns the ybar values from the equation ybar = C*xbar + D*ubar the output is a y, a t and an x out
+def ybar(state_space,ubar,time_steps):
+    return control.forced_response(state_space,ubar,time_steps)
 
