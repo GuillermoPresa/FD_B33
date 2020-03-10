@@ -3,7 +3,7 @@ from math import *
 def EAStoTAS(eas,density, density0 =1.225):
     return eas*sqrt(density0/density)
 
-def IAStoMach(press0, density0, SeaLevelTemperature, PressureAltitude, IAS, gamma = 1.4):
+def IAStoMach(press0, density0, SeaLevelTemperature, PressureAltitude, IAS, LapseRate, gamma = 1.4):
     press = CalibratedPressure(press0, SeaLevelTemperature, PressureAltitude, LapseRate)
     return sqrt( (2/(gamma - 1)) * ((1 + (press0/press)*( (1 + (gamma - 1) / (2 * gamma) * density0/press0 * IAS**2 )**(gamma/(gamma-1)) -1 ) )**((gamma-1)/gamma) - 1 ) )
 
