@@ -2,6 +2,10 @@ from tkinter import *
 import cg_pos
 import Stat_mes
 
+SeaLevelPressure = 101324 #[Pa]
+SeaLevelTemperature = 15 #[C]
+SeaLevelTemperature = SeaLevelTemperature + 273.15 #[K]
+
 
 #CREW = Passenger(mass, seat number)
 Pilot1 = cg_pos.Passenger(61,1)
