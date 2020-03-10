@@ -1,6 +1,7 @@
 from tkinter import *
 import cg_pos
 import Stat_mes
+import aero_coeff
 
 SeaLevelPressure = 101324 #[Pa]
 SeaLevelTemperature = 15 #[C]
@@ -33,16 +34,32 @@ Empty_weight = 4.44822 * 9165.0
 Empty_arm = 0.0254 * 291.65
 Empty_moment = 0.1129848 * 2672953.5
 
-passenger_spacing_y = 40
-passenger_spacing_x = 75
+ActualFuelMass = 5
 																				 
 PassengerList = [Pilot1, Pilot2, Passenger3, Passenger4, Passenger5, Passenger6, Passenger7, Passenger8, Passenger9, Passenger10]
 BaggageList = [Bag1, Bag2, Bag3]
 PayloadList = PassengerList + BaggageList
 
+Xcg1 = cg_pos.cg(ActualFuelMass, PayloadList)
 
+#Moving Passenger
+Passenger3 = cg_pos.Passenger(1,3)
+Passenger4 = cg_pos.Passenger(61,5)
+
+ActualFuelMass = 5
+
+PassengerList = [Pilot1, Pilot2, Passenger3, Passenger4, Passenger5, Passenger6, Passenger7, Passenger8, Passenger9, Passenger10]
+BaggageList = [Bag1, Bag2, Bag3]
+PayloadList = PassengerList + BaggageList
+
+Xcg2 = cg_pos.cg(ActualFuelMass, PayloadList)
+
+
+#CN = W/(0.5*density*velocity2*surface)
 
 Static_Measurements_1 = Stat_mes.DataBlock(PayloadList)
+
+									#	[hp,	IAS,	a,		FFl,	FFr,	F.used,	TAT]
 
 Static_Measurements_1.DataLineList =[	[5010,	249,	1.7,	798,	813,	360,	12.5],
 										[5020,	221,	2.4,	673,	682,	412,	10.5],
@@ -50,17 +67,28 @@ Static_Measurements_1.DataLineList =[	[5010,	249,	1.7,	798,	813,	360,	12.5],
 										[5030,	163,	5.4,	463,	484,	478,	7.2],
 										[5020,	130,	8.7,	443,	467,	532,	6],
 										[5110,	118,	10.6,	474,	499,	570,	5.2]]
+AvgDataLine_1 = [0] * 7
+for DataLine in Static_Measurements_1.DataLineList:
+	for i in range(0,len(DataLine)):
+		AvgDataLine_1[i] = AvgDataLine_1[i]+DataLine[i]/len(Static_Measurements_1.DataLineList)
+
+	
+
 						
 Static_Measurements_ETC = Stat_mes.DataBlock(PayloadList)
 
 Static_Measurements_ETC.DataLineList = [[6060,	161,	5.3,	0,		2.8,	0,		462,	486,	664,	5.5],
-										[6350,	150,	6.3,	-0,4,	2.8,	-23,	458,	482,	694,	4.5],
-										[6550,	140,	7.3,	-0,9,	2.8,	-29,	454,	477,	730,	3.5],
-										[6880,	130,	8.5,	-1,5,	2.8,	-46,	449,	473,	755,	2.5],
-										[6160,	173,	4.5,	0,4,	2.8,	26,		465,	489,	798,	5.0],
-										[5810,	179,	4.1,	0,6,	2.8,	40,		472,	496,	825,	6.2],
+										[6350,	150,	6.3,	-0.4,	2.8,	-23,	458,	482,	694,	4.5],
+										[6550,	140,	7.3,	-0.9,	2.8,	-29,	454,	477,	730,	3.5],
+										[6880,	130,	8.5,	-1.5,	2.8,	-46,	449,	473,	755,	2.5],
+										[6160,	173,	4.5,	0.4,	2.8,	26,		465,	489,	798,	5.0],
+										[5810,	179,	4.1,	0.6,	2.8,	40,		472,	496,	825,	6.2],
 										[5310,	192,	3.4,	1,		2.8,	83,		482,	505,	846,	8.2]]
-
+																						 
+AvgDataLine_ETC = [0] * 10
+for DataLine in Static_Measurements_ETC.DataLineList:
+	for i in range(0,len(DataLine)):
+		AvgDataLine_ETC[i] = AvgDataLine_ETC[i]+DataLine[i]/len(Static_Measurements_ETC.DataLineList)
 
 
 
@@ -69,15 +97,17 @@ Static_Measurements_ETC.DataLineList = [[6060,	161,	5.3,	0,		2.8,	0,		462,	486,	
 
 
 																					
+#-------------------------------------------------------------------------------------------------------------------------------------------------
+#																USER INTERFACE
+#-------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
+passenger_spacing_y = 40
+passenger_spacing_x = 75
 
 class MyWindow:
 	def __init__(self, win):
-		self.btn=Button(window, text="This is Button widget", fg='blue')
-		self.btn.place(x=200, y=500)
-		self.lbl_Passenger_list = Label(window, textvariable="Passenger list", fg='red', font=("Helvetica", 16))
+
+		self.lbl_Passenger_list = Label(window, text="Passenger list", fg='red', font=("Helvetica", 16))
 		self.lbl_Passenger_list.place(x=100, y=20)
 	#Pilot 1
 		self.LabelSeat1 = Label(window, text="Pilot 1", fg='black', font=("Helvetica", 12))
@@ -129,6 +159,12 @@ class MyWindow:
 		self.LabelSeat10.place(x=50, y=75+8*passenger_spacing_y)
 		self.WeightSeat10=Entry(window, text=Passenger10.mass, bd=5)
 		self.WeightSeat10.place(x=50+passenger_spacing_x, y=75+8*passenger_spacing_y)
+	#Passenger moved
+		self.lbl_Passenger_moved = Label(window, text="Passenger moved", fg='red', font=("Helvetica", 16))
+		self.lbl_Passenger_moved.place(x=100, y=75+10*passenger_spacing_y)
+
+		self.btn=Button(window, text="This is Button widget", fg='blue')
+		self.btn.place(x=200, y=660)
 
 
 

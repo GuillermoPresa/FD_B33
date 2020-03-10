@@ -6,7 +6,7 @@ Fix datum lines.
 
 #This module computes the cg and returns it as a funct of fuel consumed
 
-seat_positions_x = [3.3274, 3.3274, 5.4356, 5.4356, 6.3754 , 6.3754, 7.3152, 7.3152, None ,4.318] #Its in meters
+seat_positions_x = [3.3274, 3.3274, 5.4356, 5.4356, 6.3754 , 6.3754, 7.3152, 7.3152, 4.318 ,4.318] #Its in meters
 seat_positions_y = [0,0,0,0,0,0,0,0,0,0] #Its in meters
 
 baggage_compartment_x =	[1.8796, 8.1534, 8.5852]
