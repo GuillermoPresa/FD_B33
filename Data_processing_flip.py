@@ -17,14 +17,15 @@ import Data_reader
 #### task 1: First Stationary Measurement Series
 
 #inputs from the collected data
-Tm = 0          # [K]
-Vc = Data_reader.flightdata['Dadc1_tas']         # [m/s]
-hp = 0          # [-]
-alt = 0         # [m]
-delta_meas = 0  # [deg] 
+Tm = Data_reader.flightdata['Dadc1_tat']                # [K] Measured Temperature
+Vc = Data_reader.flightdata['Dadc1_tas']                # [m/s] Measured Airspeed
+hp = 0          # [-] Pressure altitude
+alt = Data_reader.flightdata['Dadc1_alt']               # [m] Altitude
+delta_meas = Data_reader.flightdata['elevator_dte']     # [deg] Elevator Deflection
+AOA = Data_reader.flightdata['vane_AOA']                # [deg] Angle of attack
 
-print(Vc)
-'''
+Ve_bar_lst = np.zeros(len(Data_reader.flightdata['Dadc1_tas']))
+
 def red_airspeed(hp, Vc, Tm, alt):
     # alt = altitude
     # hp = measured pressure altitude 
@@ -70,6 +71,7 @@ def red_thrust(delta_meas):
     red_el_def = delta_meas - 1/Cmd * Cmtc * (Tcs -Tc)
     
     return red_el_def
-'''
 
+for i in Ve_bar_lst:
+    Ve_bar_lst[i] = red_airspeed(hp[i], Vc[i], Tm[i], alt[i])
     
