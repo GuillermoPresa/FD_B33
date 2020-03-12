@@ -10,22 +10,24 @@ Created on Mon Mar  9 15:04:57 2020
 
 import math as m
 import numpy as np
-import cg_pos
+from cg_pos import cg, payload_list
 import ISA_calculator
 import Data_reader
 
 #### task 1: First Stationary Measurement Series
 
 #inputs from the collected data
-Tm = 0          # [K]
-Vc = Data_reader.flightdata['Dadc1_tas']         # [m/s]
-hp = 0          # [-]
-alt = 0         # [m]
-delta_meas = 0  # [deg] 
+Tm = Data_reader.flightdata['Dadc1_tat']                # [K] Measured Temperature
+Vc = Data_reader.flightdata['Dadc1_tas']                # [m/s] Measured Airspeed                                               
+hp = Data_reader.flightdata['Dadc1_alt']                # [N/m^2] Pressure altitude
+delta_meas = Data_reader.flightdata['elevator_dte']     # [deg] Elevator Deflection
+AOA = Data_reader.flightdata['vane_AOA']                # [deg] Angle of attack
 
-print(Vc)
-'''
-def red_airspeed(hp, Vc, Tm, alt):
+Ve_bar_lst = np.zeros(len(Data_reader.flightdata['Dadc1_tas']))
+Red_el_def_lst = np.zeros(len(Data_reader.flightdata['elevator_dte']))
+
+
+def red_airspeed(hp, Vc, Tm):
     # alt = altitude
     # hp = measured pressure altitude 
     # Vc = calibrated airspeed on airplane airspeed indicator
@@ -41,10 +43,9 @@ def red_airspeed(hp, Vc, Tm, alt):
     R = ISA_calculator.R                            # [J/(mol*K)]
     lam = -0.0065                                   # [-]
     T0 = ISA_calculator.tempn[0]                    # [K]
-    Actual_fuel_mass = cg_pos.Actual_fuel_mass      # [kg]
-    rho = ISA_calculator.ISAcalc(alt)[2]            # [kg/m^3]
+    rho = ISA_calculator.ISAcalc(hp)[2]             # [kg/m^3]
     Ws = 60500                                      # [N] from assingment
-    
+                                       
     #calculation for the reduction of the measured airspeed
     p = p0 * (1 + (lam * hp)/T0) ** (g0/(lam * R))   
     M = m.sqrt(2/(gamma - 1) * ((1 + p0/p * ((1 + rho_0 * Vc ** 2 * (gamma - 1)/(2 * gamma * p0)) ** (gamma/(gamma -1)) -1)) ** ((gamma-1)/gamma) - 1))   
@@ -54,7 +55,7 @@ def red_airspeed(hp, Vc, Tm, alt):
     Ve = Vt * m.sqrt(rho/rho_0)
     
     #calculation for the reduction of the equivalent airspeed
-    m_tot = cg_pos.cg(Actual_fuel_mass)[1]
+    m_tot = cg(100/2.2, payload_list)[1]
     W = m_tot * g0
     Ve_bar = Ve * m.sqrt(Ws/W)
     
@@ -70,6 +71,13 @@ def red_thrust(delta_meas):
     red_el_def = delta_meas - 1/Cmd * Cmtc * (Tcs -Tc)
     
     return red_el_def
-'''
 
-    
+for i in range(0, len(Data_reader.flightdata['Dadc1_tas'])):
+    Ve_bar_lst[i] = red_airspeed(hp[i], Vc[i], Tm[i])[1]
+    Red_el_def_lst[i] = red_thrust(delta_meas[i])
+
+
+
+
+
+
