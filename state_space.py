@@ -1,7 +1,9 @@
 from Cit_par import *
 from math import *
 import numpy as np
+import matplotlib.pyplot as plt
 import control
+from Data_reader import *
 #These matrices are in the form of (C1d/dt)*xdot + (C2d/dt)*x + C1d/dt = 0
 def symmetric_matrix_c1(muc, c, vel, czadot, cmadot, ky):
     return np.array([[(-2*muc*c/vel), 0, 0, 0], [0, (czadot-2*muc)*c/vel, 0, 0], [0, 0, -c/vel, 0], [0, cmadot*c,vel, 0, -2*muc*ky**2 * c/vel]])
@@ -32,4 +34,6 @@ def abcd_solver(c1mat,c2mat,c3mat):
 #this returns the ybar values from the equation ybar = C*xbar + D*ubar the output is a y, a t and an x out
 def ybar(state_space,ubar,time_steps):
     return control.forced_response(state_space,ubar,time_steps)
+
+
 

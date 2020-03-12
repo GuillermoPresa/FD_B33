@@ -9,23 +9,29 @@ Created on Mon Mar  9 15:04:57 2020
 ###### Data Processing tasks ########
 
 import math as m
+import numpy as np
 import cg_pos
 import ISA_calculator
+import Data_reader
 
 #### task 1: First Stationary Measurement Series
 
 #inputs from the collected data
-Tm = 0      # [K]
-Vc = 0      # [m/s]
-hp = 0      # [-]
-alt = 0     # [m]
+Tm = 0          # [K]
+Vc = Data_reader.flightdata['Dadc1_tas']         # [m/s]
+hp = 0          # [-]
+alt = 0         # [m]
+delta_meas = 0  # [deg] 
 
-
+print(Vc)
+'''
 def red_airspeed(hp, Vc, Tm, alt):
     # alt = altitude
     # hp = measured pressure altitude 
     # Vc = calibrated airspeed on airplane airspeed indicator
     # Tm = measured temperature
+    # Ve = equivalent airspeed
+    # Ve_bar = reduced equivalent airspeed
     
     #input variables
     p0 = ISA_calculator.pressure0                   # [N/m^2]
@@ -54,8 +60,16 @@ def red_airspeed(hp, Vc, Tm, alt):
     
     return Ve, Ve_bar
 
-
-def red_engine_thrust():    
+def red_thrust(delta_meas):
     #reduction of the non-standard engine thrust
+    Cmd = -1.1642       # [-] Elevator deflection moment coefficient
+    Cmtc = -0.0064      # [-] Thrust moment arm
+    Tcs = 0             # [-] Standard thrust coefficient
+    Tc = 0              # [-] Thrust coefficient
+
+    red_el_def = delta_meas - 1/Cmd * Cmtc * (Tcs -Tc)
     
+    return red_el_def
+'''
+
     
