@@ -9,6 +9,7 @@ Created on Mon Mar  9 15:04:57 2020
 ###### Data Processing tasks ########
 
 import math as m
+import numpy as np
 import cg_pos
 import ISA_calculator
 import Data_reader
@@ -17,12 +18,13 @@ import Data_reader
 
 #inputs from the collected data
 Tm = 0          # [K]
-Vc = 0          # [m/s]
+Vc = Data_reader.flightdata['Dadc1_tas']         # [m/s]
 hp = 0          # [-]
 alt = 0         # [m]
 delta_meas = 0  # [deg] 
 
-
+print(Vc)
+'''
 def red_airspeed(hp, Vc, Tm, alt):
     # alt = altitude
     # hp = measured pressure altitude 
@@ -68,6 +70,6 @@ def red_thrust(delta_meas):
     red_el_def = delta_meas - 1/Cmd * Cmtc * (Tcs -Tc)
     
     return red_el_def
+'''
 
-    
     
