@@ -1,6 +1,6 @@
 import scipy.io
 import numpy as np
-mat = scipy.io.loadmat('matlab.mat')
+mat = scipy.io.loadmat('/Users/frederik/GitHub/FD_B33/matlab.mat')
 #print(mat)
 #print(mat.get('flightdata')[0][0][1][0][0][0])
 #print(np.concatenate((mat.get('flightdata')[0][0][1][0][0][0]), axis=None ))
