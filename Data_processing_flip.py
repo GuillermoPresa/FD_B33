@@ -19,7 +19,7 @@ import Data_reader
 #inputs from the collected data
 Tm = Data_reader.flightdata['Dadc1_tat']                # [K] Measured Temperature
 Vc = Data_reader.flightdata['Dadc1_tas']                # [m/s] Measured Airspeed
-hp = 0          # [-] Pressure altitude
+hp = 0                                                  # [N/m^2] Pressure altitude
 alt = Data_reader.flightdata['Dadc1_alt']               # [m] Altitude
 delta_meas = Data_reader.flightdata['elevator_dte']     # [deg] Elevator Deflection
 AOA = Data_reader.flightdata['vane_AOA']                # [deg] Angle of attack
