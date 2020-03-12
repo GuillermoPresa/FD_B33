@@ -6,9 +6,15 @@ import cg_pos
 import Stat_mes
 import aero_coeff
 import ISA_calculator
+import scipy.io
+import os
+import csv
 
 
-SeaLevelPressure = 101324 #[Pa]
+
+
+
+SeaLevelPressure = 101325 #[Pa]
 SeaLevelDensity = 1.225 #[kg/m^3]
 SeaLevelTemperature = 15 #[C]
 SeaLevelTemperature = SeaLevelTemperature + 273.15 #[K]
@@ -18,6 +24,7 @@ Empty_mass = 0.453592 * 9165.0
 Empty_weight = 4.44822 * 9165.0
 Empty_arm = 0.0254 * 291.65
 Empty_moment = 0.1129848 * 2672953.5
+WingArearea = 30 #m^2
 
 TotalFuelMass = 1000
 
@@ -47,7 +54,8 @@ Empty_weight = 4.44822 * 9165.0
 Empty_arm = 0.0254 * 291.65
 Empty_moment = 0.1129848 * 2672953.5
 
-ActualFuelMass = 5
+ActualFuelMass = 1000
+
 																				 
 PassengerList = [Pilot1, Pilot2, Passenger3, Passenger4, Passenger5, Passenger6, Passenger7, Passenger8, Passenger9, Passenger10]
 BaggageList = [Bag1, Bag2, Bag3]
@@ -63,7 +71,6 @@ Xcg1 = cg_pos.cg(ActualFuelMass, PayloadList)
 Passenger3 = cg_pos.Passenger(1,3)
 Passenger4 = cg_pos.Passenger(61,5)
 
-ActualFuelMass = 5
 
 PassengerList = [Pilot1, Pilot2, Passenger3, Passenger4, Passenger5, Passenger6, Passenger7, Passenger8, Passenger9, Passenger10]
 BaggageList = [Bag1, Bag2, Bag3]
@@ -76,7 +83,7 @@ Xcg2 = cg_pos.cg(ActualFuelMass, PayloadList)
 
 Static_Measurements_1 = Stat_mes.DataBlock(PayloadList)
 
-									#	[hp,	IAS,	a,		FFl,	FFr,	F.used,	TAT,	Temp,	Press,	Density,	Mass,	TAS,	CL]
+									#	[hp,	IAS,	a,		FFl,	FFr,	F.used,	TAT,	Temp,	Press,	Density,	Mass,	Mach,	TAS,	Cl]
 
 Static_Measurements_1.DataLineList =[	[5010,	249,	1.7,	798,	813,	360,	12.5],
 										[5020,	221,	2.4,	673,	682,	412,	10.5],
@@ -88,14 +95,67 @@ Static_Measurements_1.DataLineList =[	[5010,	249,	1.7,	798,	813,	360,	12.5],
 Cl_array = np.zeros(len(Static_Measurements_1.DataLineList))
 Alpha_array = np.zeros(len(Static_Measurements_1.DataLineList))
 i = 0
-for DataLine in Static_Measurements_1.DataLineList:
-	DataLine.append(ISA_calculator.ISAcalc(DataLine[0])[0])
-	DataLine.append(ISA_calculator.ISAcalc(DataLine[0])[1])
-	DataLine.append(ISA_calculator.ISAcalc(DataLine[0])[2])
-	DataLine.append(Empty_mass +TotalPayloadMass+TotalFuelMass)
-	DataLine.append(aero_coeff.IAStoMach(SeaLevelPressure, SeaLevelDensity, SeaLevelTemperature, DataLine[0], DataLine[1]))
-	DataLine.append((DataLine[10]*9.80665)/(0.5*DataLine[9]*math.pow(DataLine[11],2)))
-	Cl_array[i] = DataLine[12]
+
+for DataLine in Static_Measurements_1.DataLineList: #Processing1
+	DataLine[0] = DataLine[0]*0.3048	#ft to m
+	DataLine[1] = DataLine[1]*0.514444	#Knots to m/s
+	DataLine[3] = DataLine[3]*0.453592/3600	#Lb/hr to kg/s
+	DataLine[4] = DataLine[4]*0.453592/3600	#Lb/hr to kg/s
+	DataLine[5] = DataLine[5]*0.453592	#Lb to Kg
+	DataLine[6] = DataLine[6]+273.15	#C to K
+	DataLine.append(ISA_calculator.ISAcalc(DataLine[0])[0])	#Append Temperature
+	DataLine.append(ISA_calculator.ISAcalc(DataLine[0])[1])	#Append Pressure
+	DataLine.append(ISA_calculator.ISAcalc(DataLine[0])[2])	#Append Density
+	#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	DataLine.append(Empty_mass +TotalPayloadMass+TotalFuelMass)	#Append Mass. MISSING SUBSTRACT CONSUMED FUEL MASS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	DataLine.append(aero_coeff.IAStoMach(SeaLevelPressure, SeaLevelDensity, SeaLevelTemperature, DataLine[0], DataLine[1]))	#Append Mach
+	DataLine.append(DataLine[11]*aero_coeff.SpeedOfSound(DataLine[7]))	#Append TAS
+
+
+#Create input matlab for thrust.exe
+PressureAltitude = np.zeros(len(Static_Measurements_1.DataLineList))
+Mach = np.zeros(len(Static_Measurements_1.DataLineList))
+FuelFlow1 = np.zeros(len(Static_Measurements_1.DataLineList))
+FuelFlow2 = np.zeros(len(Static_Measurements_1.DataLineList))
+TemperatureDifference = np.zeros(len(Static_Measurements_1.DataLineList))
+Total_array = np.zeros(5*len(Static_Measurements_1.DataLineList))
+
+for i in range(0,len(Static_Measurements_1.DataLineList)): #Processing1
+	PressureAltitude[i] = Static_Measurements_1.DataLineList[i][0]
+	Total_array[5*i] = Static_Measurements_1.DataLineList[i][0]
+	Mach[i] = Static_Measurements_1.DataLineList[i][11]
+	Total_array[5*i+1] = Static_Measurements_1.DataLineList[i][11]
+	FuelFlow1[i] = Static_Measurements_1.DataLineList[i][3]
+	Total_array[5*i+2] = Static_Measurements_1.DataLineList[i][3]
+	FuelFlow2[i] = Static_Measurements_1.DataLineList[i][4]
+	Total_array[5*i+3] = Static_Measurements_1.DataLineList[i][4]
+	TemperatureDifference[i] = Static_Measurements_1.DataLineList[i][7] - Static_Measurements_1.DataLineList[i][6]
+	Total_array[5*i+4]  = Static_Measurements_1.DataLineList[i][6] - Static_Measurements_1.DataLineList[i][7]
+
+
+
+dat = np.array([PressureAltitude, Mach, TemperatureDifference, FuelFlow1, FuelFlow2])
+print("DAT array is:", dat)
+a = np.column_stack((dat))
+#print("A column stack is:", a)
+np.savetxt('matlab.dat', a, delimiter=' ')
+
+#Run thrust.exe
+
+os.startfile("C:/Users/Guille/Documents/GitHub/FD_B33/thrust.exe")
+
+#Read thrust.exe output
+
+datContent = [i.strip().split() for i in open("thrust.dat").readlines()]
+for ThrustTupple in datContent:
+	Static_Measurements_1.DataLineList.append(ThrustTupple[0]+ThrustTupple[1])
+
+for DataLine in Static_Measurements_1.DataLineList: #Processing2
+
+	print("Mass:", DataLine[10])
+	print("TAS:", DataLine[11])
+	DataLine.append((DataLine[10]*9.80665)/(0.5*DataLine[9]*math.pow(DataLine[12],2)*WingArearea))
+	Cl_array[i] = DataLine[13]
 	Alpha_array[i] = DataLine[2]
 	i = i + 1
 
@@ -121,12 +181,6 @@ Static_Measurements_ETC.DataLineList = [[6060,	161,	5.3,	0,		2.8,	0,		462,	486,	
 										[6160,	173,	4.5,	0.4,	2.8,	26,		465,	489,	798,	5.0],
 										[5810,	179,	4.1,	0.6,	2.8,	40,		472,	496,	825,	6.2],
 										[5310,	192,	3.4,	1,		2.8,	83,		482,	505,	846,	8.2]]
-
-
-#Static_CG_Shift_
-#5730	161	5.3	0	2.8	0	471	493	881	5.0
-#5790	161	5,3	-0,5	2.8	-30	468	490	910	5.0
-
 
 	
 																						 
