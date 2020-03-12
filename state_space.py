@@ -2,6 +2,7 @@ from Cit_par import *
 from math import *
 import numpy as np
 import control
+from Data_reader import *
 #These matrices are in the form of (C1d/dt)*xdot + (C2d/dt)*x + C1d/dt = 0
 def symmetric_matrix_c1(muc, c, vel, czadot, cmadot, ky):
     return np.array([[(-2*muc*c/vel), 0, 0, 0], [0, (czadot-2*muc)*c/vel, 0, 0], [0, 0, -c/vel, 0], [0, cmadot*c,vel, 0, -2*muc*ky**2 * c/vel]])
