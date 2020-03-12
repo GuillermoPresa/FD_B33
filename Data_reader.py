@@ -29,9 +29,36 @@ flightdata = {'vane_AOA': np.concatenate((mat.get('flightdata')[0][0][0][0][0][0
               'Fms1_trueHeading':np.concatenate((mat.get('flightdata')[0][0][21][0][0][0]), axis=None),
               'Gps_lat':np.concatenate((mat.get('flightdata')[0][0][22][0][0][0]), axis=None),
               'Gps_long':np.concatenate((mat.get('flightdata')[0][0][23][0][0][0]), axis=None),
-              'Ahrs1_bRollRate':np.concatenate((mat.get('flightdata')[0][0][24][0][0][0]), axis=None)}
+              'Ahrs1_bRollRate':np.concatenate((mat.get('flightdata')[0][0][24][0][0][0]), axis=None),
+              'Ahrs1_bPitchRate':np.concatenate((mat.get('flightdata')[0][0][25][0][0][0]), axis=None),
+              'Ahrs1_bYawRate':np.concatenate((mat.get('flightdata')[0][0][26][0][0][0]), axis=None),
+              'Ahrs1_bLongAcc':np.concatenate((mat.get('flightdata')[0][0][27][0][0][0]), axis=None),
+              'Ahrs1_bLatAcc':np.concatenate((mat.get('flightdata')[0][0][28][0][0][0]), axis=None),
+              'Ahrs1_bNormAcc':np.concatenate((mat.get('flightdata')[0][0][29][0][0][0]), axis=None),
+              'Ahrs1_aHdgAcc':np.concatenate((mat.get('flightdata')[0][0][30][0][0][0]), axis=None),
+              'Ahrs1_xHdgAcc':np.concatenate((mat.get('flightdata')[0][0][31][0][0][0]), axis=None),
+              'Ahrs1_VertAcc':np.concatenate((mat.get('flightdata')[0][0][32][0][0][0]), axis=None),
+              'Dadc1_sat':np.concatenate((mat.get('flightdata')[0][0][33][0][0][0]), axis=None),
+              'Dadc1_tat':np.concatenate((mat.get('flightdata')[0][0][34][0][0][0]), axis=None),
+              'Dadc1_alt':np.concatenate((mat.get('flightdata')[0][0][35][0][0][0]), axis=None),
+              'Dadc1_bcAlt':np.concatenate((mat.get('flightdata')[0][0][36][0][0][0]), axis=None),
+              'Dadc1_bcAltMb':np.concatenate((mat.get('flightdata')[0][0][37][0][0][0]), axis=None),
+              'Dadc1_mach':np.concatenate((mat.get('flightdata')[0][0][38][0][0][0]), axis=None),
+              'Dadc1_cas':np.concatenate((mat.get('flightdata')[0][0][39][0][0][0]), axis=None),
+              'Dadc1_tas':np.concatenate((mat.get('flightdata')[0][0][40][0][0][0]), axis=None),
+              'Dadc1_altRate':np.concatenate((mat.get('flightdata')[0][0][41][0][0][0]), axis=None),
+              'measurement_run':np.concatenate((mat.get('flightdata')[0][0][42][0][0][0]), axis=None),
+              'measurement_n_r':np.concatenate((mat.get('flightdata')[0][0][43][0][0][0]), axis=None),
+              'display_graph_state':np.concatenate((mat.get('flightdata')[0][0][44][0][0][0]), axis=None),
+              'display_active_scr':np.concatenate((mat.get('flightdata')[0][0][45][0][0][0]), axis=None),
+              'time':np.concatenate((mat.get('flightdata')[0][0][46][0][0][0]), axis=None)}
 
-print(flightdata['vane_AOA'])
+print(len(flightdata['Dadc1_alt']))
+print(len(flightdata['elevator_dte']))
+print(len(flightdata['delta_e']))
+print(len(flightdata['delta_a']))
+print(len(flightdata['delta_r']))
+print(len(flightdata['time']))
 
 
 
