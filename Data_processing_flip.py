@@ -50,7 +50,11 @@ def red_airspeed(hp, Vc, Tm):
     p = p0 * (1 + (lam * hp)/T0) ** (g0/(lam * R))   
     M = m.sqrt(2/(gamma - 1) * ((1 + p0/p * ((1 + rho_0 * Vc ** 2 * (gamma - 1)/(2 * gamma * p0)) ** (gamma/(gamma -1)) -1)) ** ((gamma-1)/gamma) - 1))   
     T = Tm/(1 + (gamma - 1)/2 * M ** 2)
-    a = m.sqrt(gamma * R * T)
+    
+    if T >= 0:
+        a = m.sqrt(gamma * R * T)
+    else:
+        a =     
     Vt = M * a
     Ve = Vt * m.sqrt(rho/rho_0)
     
