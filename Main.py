@@ -83,7 +83,7 @@ Xcg2 = cg_pos.cg(ActualFuelMass, PayloadList)
 
 Static_Measurements_1 = Stat_mes.DataBlock(PayloadList)
 
-									#	[hp,	IAS,	a,		FFl,	FFr,	F.used,	TAT,	Temp,	Press,	Density,	Mass,	Mach,	TAS,	Cl]
+									#	[hp,	IAS,	a,		FFl,	FFr,	F.used,	TAT,	Temp,	Press,	Density,	Mass,	Mach,	TAS,	Cl,		Tot-Thrust,		Cd]
 
 Static_Measurements_1.DataLineList =[	[5010,	249,	1.7,	798,	813,	360,	12.5],
 										[5020,	221,	2.4,	673,	682,	412,	10.5],
@@ -92,9 +92,6 @@ Static_Measurements_1.DataLineList =[	[5010,	249,	1.7,	798,	813,	360,	12.5],
 										[5020,	130,	8.7,	443,	467,	532,	6],
 										[5110,	118,	10.6,	474,	499,	570,	5.2]]
 
-Cl_array = np.zeros(len(Static_Measurements_1.DataLineList))
-Alpha_array = np.zeros(len(Static_Measurements_1.DataLineList))
-i = 0
 
 for DataLine in Static_Measurements_1.DataLineList: #Processing1
 	DataLine[0] = DataLine[0]*0.3048	#ft to m
@@ -110,6 +107,8 @@ for DataLine in Static_Measurements_1.DataLineList: #Processing1
 	DataLine.append(Empty_mass +TotalPayloadMass+TotalFuelMass)	#Append Mass. MISSING SUBSTRACT CONSUMED FUEL MASS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	DataLine.append(aero_coeff.IAStoMach(SeaLevelPressure, SeaLevelDensity, SeaLevelTemperature, DataLine[0], DataLine[1]))	#Append Mach
 	DataLine.append(DataLine[11]*aero_coeff.SpeedOfSound(DataLine[7]))	#Append TAS
+	DataLine.append((DataLine[10]*9.80665)/(0.5*DataLine[9]*math.pow(DataLine[12],2)*WingArearea))
+	print((DataLine[10]*9.80665)/(0.5*DataLine[9]*math.pow(DataLine[12],2)*WingArearea))
 
 
 #Create input matlab for thrust.exe
@@ -147,19 +146,29 @@ os.startfile("C:/Users/Guille/Documents/GitHub/FD_B33/thrust.exe")
 #Read thrust.exe output
 
 datContent = [i.strip().split() for i in open("thrust.dat").readlines()]
-for ThrustTupple in datContent:
-	Static_Measurements_1.DataLineList.append(ThrustTupple[0]+ThrustTupple[1])
+for i in range(0,len(Static_Measurements_1.DataLineList)):
+	Static_Measurements_1.DataLineList[i].append(float(datContent[i][0])+float(datContent[i][1]))
+	#Static_Measurements_1.DataLineList.append(float(ThrustTupple[0])+float(ThrustTupple[1]))
 
-for DataLine in Static_Measurements_1.DataLineList: #Processing2
+Cl_array = np.zeros(len(Static_Measurements_1.DataLineList))
+Cd_array = np.zeros(len(Static_Measurements_1.DataLineList))
+Alpha_array = np.zeros(len(Static_Measurements_1.DataLineList))
+i = 0
 
-	print("Mass:", DataLine[10])
-	print("TAS:", DataLine[11])
-	DataLine.append((DataLine[10]*9.80665)/(0.5*DataLine[9]*math.pow(DataLine[12],2)*WingArearea))
-	Cl_array[i] = DataLine[13]
-	Alpha_array[i] = DataLine[2]
-	i = i + 1
 
-print("Cl_array is:", Cl_array)	
+for i in range(0,len(Static_Measurements_1.DataLineList)): #Processing2
+	print("AT i: ",i,"The AOA is: ",Static_Measurements_1.DataLineList[i][2])
+	print((Static_Measurements_1.DataLineList[i][10]*9.80665)/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
+
+	Static_Measurements_1.DataLineList[i].append((Static_Measurements_1.DataLineList[i][13])/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
+	Alpha_array[i] = Static_Measurements_1.DataLineList[i][2]
+	Cl_array[i] = Static_Measurements_1.DataLineList[i][13]
+	Cd_array[i] = Static_Measurements_1.DataLineList[i][15]
+
+
+
+print(Static_Measurements_1.DataLineList)
+
 
 
 fig = plt.figure()
@@ -167,7 +176,21 @@ ax1 = fig.add_subplot(111)
 ax1.set_title('Cla')
 ax1.set_xlabel('Alpha')
 ax1.set_ylabel('Cl')
-img1 = ax1.scatter(Alpha_array, Cl_array)
+img1 = ax1.plot(Cl_array, Alpha_array)
+
+ax1 = fig.add_subplot(122)
+ax1.set_title('Cda')
+ax1.set_xlabel('Alpha')
+ax1.set_ylabel('Cd')
+img1 = ax1.plot(Cd_array, Alpha_array)
+
+ax1 = fig.add_subplot(133)
+ax1.set_title('Cl/Cd')
+ax1.set_xlabel('Cl')
+ax1.set_ylabel('Cd')
+img1 = ax1.plot(Cd_array, Cl_array)
+ax1.set_ylim(0,1.25)
+ax1.set_xlim(-0.000003,0.00003)	
 plt.show()
 	
 
