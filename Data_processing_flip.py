@@ -24,6 +24,8 @@ delta_meas = Data_reader.flightdata['elevator_dte']     # [deg] Elevator Deflect
 AOA = Data_reader.flightdata['vane_AOA']                # [deg] Angle of attack
 
 Ve_bar_lst = np.zeros(len(Data_reader.flightdata['Dadc1_tas']))
+Red_el_def_lst = np.zeros(len(Data_reader.flightdata['elevator_dte']))
+
 
 def red_airspeed(hp, Vc, Tm):
     # alt = altitude
@@ -70,12 +72,9 @@ def red_thrust(delta_meas):
     
     return red_el_def
 
-for i in Ve_bar_lst:
-    h = hp[i]
-    V = Vc[i]
-    T = Tm[i]
-    Ve_bar_lst[i] = red_airspeed(h, V, T)
-
+for i in range(0, len(Data_reader.flightdata['Dadc1_tas'])):
+    Ve_bar_lst[i] = red_airspeed(hp[i], Vc[i], Tm[i])[1]
+    Red_el_def_lst[i] = red_thrust(delta_meas[i])
 
 
 
