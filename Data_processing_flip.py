@@ -11,14 +11,16 @@ Created on Mon Mar  9 15:04:57 2020
 import math as m
 import cg_pos
 import ISA_calculator
+import Data_reader
 
 #### task 1: First Stationary Measurement Series
 
 #inputs from the collected data
-Tm = 0      # [K]
-Vc = 0      # [m/s]
-hp = 0      # [-]
-alt = 0     # [m]
+Tm = 0          # [K]
+Vc = 0          # [m/s]
+hp = 0          # [-]
+alt = 0         # [m]
+delta_meas = 0  # [deg] 
 
 
 def red_airspeed(hp, Vc, Tm, alt):
@@ -56,9 +58,16 @@ def red_airspeed(hp, Vc, Tm, alt):
     
     return Ve, Ve_bar
 
-
-def red_engine_thrust():    
+def red_thrust(delta_meas):
     #reduction of the non-standard engine thrust
+    Cmd = -1.1642       # [-] Elevator deflection moment coefficient
+    Cmtc = -0.0064      # [-] Thrust moment arm
+    Tcs = 0             # [-] Standard thrust coefficient
+    Tc = 0              # [-] Thrust coefficient
+
+    red_el_def = delta_meas - 1/Cmd * Cmtc * (Tcs -Tc)
     
+    return red_el_def
+
     
     
