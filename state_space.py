@@ -1,6 +1,7 @@
 from Cit_par import *
 from math import *
 import numpy as np
+import matplotlib.pyplot as plt
 import control
 from Data_reader import *
 #These matrices are in the form of (C1d/dt)*xdot + (C2d/dt)*x + C1d/dt = 0
@@ -33,4 +34,6 @@ def abcd_solver(c1mat,c2mat,c3mat):
 #this returns the ybar values from the equation ybar = C*xbar + D*ubar the output is a y, a t and an x out
 def ybar(state_space,ubar,time_steps):
     return control.forced_response(state_space,ubar,time_steps)
+
+
 

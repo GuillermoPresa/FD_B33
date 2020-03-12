@@ -53,12 +53,10 @@ flightdata = {'vane_AOA': np.concatenate((mat.get('flightdata')[0][0][0][0][0][0
               'display_active_scr':np.concatenate((mat.get('flightdata')[0][0][45][0][0][0]), axis=None),
               'time':np.concatenate((mat.get('flightdata')[0][0][46][0][0][0]), axis=None)}
 
-print(len(flightdata['Dadc1_alt']))
-print(len(flightdata['elevator_dte']))
-print(len(flightdata['delta_e']))
-print(len(flightdata['delta_a']))
-print(len(flightdata['delta_r']))
-print(len(flightdata['time']))
+
+#print(flightdata['Dadc1_alt'])
+
+
 
 
 
