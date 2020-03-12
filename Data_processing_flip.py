@@ -10,7 +10,7 @@ Created on Mon Mar  9 15:04:57 2020
 
 import math as m
 import numpy as np
-import cg_pos
+from cg_pos import cg, payload_list
 import ISA_calculator
 import Data_reader
 
@@ -43,7 +43,7 @@ def red_airspeed(hp, Vc, Tm):
     T0 = ISA_calculator.tempn[0]                    # [K]
     rho = ISA_calculator.ISAcalc(hp)[2]             # [kg/m^3]
     Ws = 60500                                      # [N] from assingment
-    
+                                       
     #calculation for the reduction of the measured airspeed
     p = p0 * (1 + (lam * hp)/T0) ** (g0/(lam * R))   
     M = m.sqrt(2/(gamma - 1) * ((1 + p0/p * ((1 + rho_0 * Vc ** 2 * (gamma - 1)/(2 * gamma * p0)) ** (gamma/(gamma -1)) -1)) ** ((gamma-1)/gamma) - 1))   
@@ -53,7 +53,7 @@ def red_airspeed(hp, Vc, Tm):
     Ve = Vt * m.sqrt(rho/rho_0)
     
     #calculation for the reduction of the equivalent airspeed
-    m_tot = cg_pos.cg(100/2.2, payload_list)[1]
+    m_tot = cg(100/2.2, payload_list)[1]
     W = m_tot * g0
     Ve_bar = Ve * m.sqrt(Ws/W)
     
@@ -70,8 +70,11 @@ def red_thrust(delta_meas):
     
     return red_el_def
 
-for i in range(0, len(Data_reader.flightdata['Dadc1_tas'])):
-    Ve_bar_lst[i] = red_airspeed(hp[i], Vc[i], Tm[i])
+for i in Ve_bar_lst:
+    h = hp[i]
+    V = Vc[i]
+    T = Tm[i]
+    Ve_bar_lst[i] = red_airspeed(h, V, T)
 
 
 
