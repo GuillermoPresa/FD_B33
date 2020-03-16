@@ -43,10 +43,10 @@ AOA = Data_reader.flightdata['vane_AOA']                # [deg] Measured Angle o
 Fe = Data_reader.flightdata['column_fe']                # [N] Measured elevator control force
 time = Data_reader.flightdata['time']                   # [s] Time
 
-AFM = np.zeros(len(Data_reader.flightdata['Dadc1_tas'])) #still needs to be calculated 
+#to be calculated
+AFM = np.zeros(len(Data_reader.flightdata['Dadc1_tas'])) #actual fuel mass till needs to be calculated 
+T = np.zeros(len(Data_reader.flightdata['Dadc1_tas'])) #thrust still needs to be calculated from thrust.exe
 
-#thrust calculations
-#T =        from thrust.exe
 
 Ve_bar_lst = np.zeros(len(Data_reader.flightdata['Dadc1_tas']))
 red_el_def_lst = np.zeros(len(Data_reader.flightdata['elevator_dte']))
@@ -60,6 +60,7 @@ def red_airspeed(hp, Vc, Tm, AFM):
     # Tm = measured temperature
     # Ve = equivalent airspeed
     # Ve_bar = reduced equivalent airspeed
+    # AFM = actual fuel mass
     
     rho = ISA_calculator.ISAcalc(hp)[2]             # [kg/m^3]
                                        
@@ -122,6 +123,12 @@ def CD(T, hp, Vc, Tm, AFM):
 
 
 def C_md(time1, time2):
+    #calculations for the determination of the elevator effectiveness coefficient C_md
+    # time1 = time at beginning of weight shift (Xcg1)
+    # time2 = time at end of weight shift (Xcg2)
+    # el_def1 = elevator deflection at beginning of weight shift
+    # el_def2 = elevator deflection at end of weight shift
+    # C_md = Elevator effectiveness coefficient
     
     abs_difference1 = lambda list_value : abs(list_value - time1)
     closest1 = min(time, key=abs_difference1)
