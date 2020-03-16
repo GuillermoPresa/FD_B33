@@ -10,6 +10,7 @@ Created on Mon Mar  9 15:04:57 2020
 
 import math as m
 import numpy as np
+import matplotlib.pyplot as plt
 from cg_pos import cg, payload_list
 import ISA_calculator
 import Data_reader
@@ -52,9 +53,10 @@ def red_airspeed(hp, Vc, Tm):
     T = Tm/(1 + (gamma - 1)/2 * M ** 2)
     
     if T >= 0:
-        a = m.sqrt(gamma * R * T)
+         a = m.sqrt(gamma * R * T)
     else:
-        a =     
+         a = m.sqrt(gamma * R)   
+    
     Vt = M * a
     Ve = Vt * m.sqrt(rho/rho_0)
     
@@ -80,6 +82,36 @@ for i in range(0, len(Data_reader.flightdata['Dadc1_tas'])):
     Ve_bar_lst[i] = red_airspeed(hp[i], Vc[i], Tm[i])[1]
     Red_el_def_lst[i] = red_thrust(delta_meas[i])
 
+def plotter(Ve_bar, el_def, F_e, alpha, CL, CD):
+    #plotter for different graphs
+    
+    fig = plt.figure()
+    
+    el_trim_curve = fig.add_subplot(221)
+    el_trim_curve.set_title('Elevator Trim Curve')
+    el_trim_curve.set_xlabel('Equivalent Airspeed')
+    el_trim_curve.set_ylabel('Reduced Elevator Deflection')
+    el_trim_curve.plot(Ve_bar, el_def)   
+    
+    el_force_curve = fig.add_subplot(222)
+    el_force_curve.set_title('Reduced Elevator Control Force Curve')
+    el_force_curve.set_xlabel('Equivalent Airspeed')
+    el_force_curve.set_ylabel('Reduced Elevator Control Force')
+    el_force_curve.plot(Ve_bar, F_e)
+    
+    Cl_alpha_curve = fig.add_subplot(223)
+    Cl_alpha_curve.set_title('Cl vs Alpha Curve')
+    Cl_alpha_curve.set_xlabel('Angle of Attack')
+    Cl_alpha_curve.set_ylabel('Lift Coefficient')
+    Cl_alpha_curve.plot(alpha, CL)
+    
+    CL_CD_curve = fig.add_subplot(224)
+    CL_CD_curve.set_title('Cl vs Cd Curve')
+    CL_CD_curve.set_xlabel('Drag Coefficient')
+    CL_CD_curve.set_ylabel('Lift Coefficient')
+    CL_CD_curve.plot(CD, CL)
+    
+    plt.show()
 
 
 
