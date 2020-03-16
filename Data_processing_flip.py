@@ -109,6 +109,7 @@ def red_force(Fe, hp, Vc, Tm):
 
 def CL(hp, Vc, Tm, AFM):
     #calculations for the lift coefficient
+    
     Cl = (red_airspeed(hp, Vc, Tm, AFM)[3])/(0.5 * red_airspeed(hp, Vc, Tm, AFM)[2] * red_airspeed(hp, Vc, Tm, AFM)[1] ** 2 * S)
     
     return Cl
