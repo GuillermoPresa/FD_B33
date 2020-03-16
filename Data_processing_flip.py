@@ -17,15 +17,30 @@ import Data_reader
 
 #### task 1: First Stationary Measurement Series
 
-#inputs from the collected data
+# General inputs
+gamma = 1.4                                     # [-]
+lam = -0.0065                                   # [-]
+Ws = 60500                                      # [N] Reduced aircraft weight from assingment
+R = 287.0                                       # [J/(mol*K)] Specific gas Constant of Air
+
+# Sea level conditions
+p0 = ISA_calculator.pressure0                   # [N/m^2] Pressure at Sea level
+g0 = ISA_calculator.g0                          # [m/s^2] Gravitational Constant
+rho_0 = ISA_calculator.rho0                     # [kg/m^3] Air Density at Sea level
+T0 = ISA_calculator.tempn[0]                    # [K] Temperature at Sea level
+
+# Inputs from the collected data
 Tm = Data_reader.flightdata['Dadc1_tat']                # [K] Measured Temperature
 Vc = Data_reader.flightdata['Dadc1_tas']                # [m/s] Measured Airspeed                                               
 hp = Data_reader.flightdata['Dadc1_alt']                # [N/m^2] Pressure altitude
-delta_meas = Data_reader.flightdata['elevator_dte']     # [deg] Elevator Deflection
-AOA = Data_reader.flightdata['vane_AOA']                # [deg] Angle of attack
+delta_meas = Data_reader.flightdata['elevator_dte']     # [deg] Measured Elevator Deflection
+AOA = Data_reader.flightdata['vane_AOA']                # [deg] Measured Angle of attack
+Fe = Data_reader.flightdata['column_fe']                # [N] Measured elevator control force
+
 
 Ve_bar_lst = np.zeros(len(Data_reader.flightdata['Dadc1_tas']))
-Red_el_def_lst = np.zeros(len(Data_reader.flightdata['elevator_dte']))
+red_el_def_lst = np.zeros(len(Data_reader.flightdata['elevator_dte']))
+red_Fe_lst = np.zeros(len(Data_reader.flightdata['column_fe']))
 
 
 def red_airspeed(hp, Vc, Tm):
@@ -36,26 +51,14 @@ def red_airspeed(hp, Vc, Tm):
     # Ve = equivalent airspeed
     # Ve_bar = reduced equivalent airspeed
     
-    #input variables
-    p0 = ISA_calculator.pressure0                   # [N/m^2]
-    g0 = ISA_calculator.g0                          # [m/s^2]
-    rho_0 = ISA_calculator.rho0                     # [kg/m^3]
-    gamma = 1.4                                     # [-]
-    R = ISA_calculator.R                            # [J/(mol*K)]
-    lam = -0.0065                                   # [-]
-    T0 = ISA_calculator.tempn[0]                    # [K]
     rho = ISA_calculator.ISAcalc(hp)[2]             # [kg/m^3]
-    Ws = 60500                                      # [N] from assingment
                                        
     #calculation for the reduction of the measured airspeed
     p = p0 * (1 + (lam * hp)/T0) ** (g0/(lam * R))   
     M = m.sqrt(2/(gamma - 1) * ((1 + p0/p * ((1 + rho_0 * Vc ** 2 * (gamma - 1)/(2 * gamma * p0)) ** (gamma/(gamma -1)) -1)) ** ((gamma-1)/gamma) - 1))   
-    T = Tm/(1 + (gamma - 1)/2 * M ** 2)
+    T = (Tm + 273.15)/(1 + (gamma - 1)/2 * M ** 2)
     
-    if T >= 0:
-         a = m.sqrt(gamma * R * T)
-    else:
-         a = m.sqrt(gamma * R)   
+    a = m.sqrt(gamma * R * T)   
     
     Vt = M * a
     Ve = Vt * m.sqrt(rho/rho_0)
@@ -67,8 +70,12 @@ def red_airspeed(hp, Vc, Tm):
     
     return Ve, Ve_bar
 
+
 def red_thrust(delta_meas):
     #reduction of the non-standard engine thrust
+    # delta_meas = measured elevator deflection
+    # red_el_def = reduced elevator deflection
+    
     Cmd = -1.1642       # [-] Elevator deflection moment coefficient
     Cmtc = -0.0064      # [-] Thrust moment arm
     Tcs = 0             # [-] Standard thrust coefficient
@@ -78,12 +85,23 @@ def red_thrust(delta_meas):
     
     return red_el_def
 
-for i in range(0, len(Data_reader.flightdata['Dadc1_tas'])):
-    Ve_bar_lst[i] = red_airspeed(hp[i], Vc[i], Tm[i])[1]
-    Red_el_def_lst[i] = red_thrust(delta_meas[i])
+
+def red_force(Fe):
+    #calculations for the reduced elevator control force
+    # Fe = measured elevator control force
+    # red_Fe = reduced elevator control force
+    
+    #Aircraft weight calculations
+    m_tot = cg(100/2.2, payload_list)[1]
+    W = m_tot * g0
+    
+    red_Fe = Fe * Ws/W
+    
+    return red_Fe
+
 
 def plotter(Ve_bar, el_def, F_e, alpha, CL, CD):
-    #plotter for different graphs
+    #plotter for the different graphs
     
     fig = plt.figure()
     
@@ -114,6 +132,10 @@ def plotter(Ve_bar, el_def, F_e, alpha, CL, CD):
     plt.show()
 
 
+for i in range(0, len(Data_reader.flightdata['Dadc1_tas'])):
+    Ve_bar_lst[i] = red_airspeed(hp[i], Vc[i], Tm[i])[1]
+    red_el_def_lst[i] = red_thrust(delta_meas[i])
+    red_Fe_lst[i] = red_force(Fe[i])
 
 
 
