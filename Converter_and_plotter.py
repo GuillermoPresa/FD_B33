@@ -3,6 +3,13 @@ from Data_reader import *
 import matplotlib.pyplot as plt
 from math import *
 from state_space import *
+phu_index = 0
+spir_index = 0
+short_index = 0
+dutch_index = 0
+aproll_index = 0
+t = 0
+
 
 def psi_to_pascal(psi_vals):
     return psi_vals*6894.76
