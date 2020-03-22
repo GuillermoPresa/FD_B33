@@ -18,6 +18,8 @@ def pnd_to_kil(w_vals):
 #phugoid, spiral, short period, dutch roll, aperiodic indexes
 index = [(32470,34210),(34210,35130),(35130,36000),(36000,37110),(37110,39000)]
 
+#Manuever type 1 means symmetric and 0 means asymmetric
+manuever_type = [1,0,1,0,0]
 time = flightdata['time'] - 9
 #----SYMM stuff---
 velocity = knots_to_mps(flightdata['Dadc1_tas'])
@@ -25,6 +27,7 @@ alpha = deg_to_rad(flightdata['vane_AOA'])
 theta = deg_to_rad(flightdata['Ahrs1_Pitch'])
 q_val = deg_to_rad(flightdata['Ahrs1_bPitchRate'])
 #---ASYMM stuff---
+yaw_beta = deg_to_rad(flightdata['Ahrs1_bYawRate'])
 phi = deg_to_rad(flightdata['Ahrs1_Roll'])
 p = deg_to_rad(flightdata['Ahrs1_bRollRate'])
 r = deg_to_rad(flightdata['Ahrs1_bYawRate'])
@@ -33,11 +36,12 @@ alt = ft_to_m(flightdata['Dadc1_alt'])
 
 
 
-
+name = ['Phugoid', 'Spiral', 'Short Period', 'Dutch Roll', 'Aperiodic']
 #------------SYMM states-----------
 for i in range(len(index)):
     index_begin = index[i][0]
     index_end = index[i][1]
+    manuever = name[i]
     #mass calculation
     fuel_cons = pnd_to_kil(flightdata['rh_engine_FU'][index_begin]) + pnd_to_kil(flightdata['lh_engine_FU'][index_begin])
     mass_new = m-fuel_cons
@@ -83,17 +87,85 @@ for i in range(len(index)):
 
     time_new = time[index_begin:index_end]
 
-    abcd_sym = abcd_solver(symmatc1,symmatc2,symmatc3)
-    abcd_asymm = abcd_solver(asymmatc1,asymmatc2,asymmatc3)
+    abcd_sym = symabcd_solver(symmatc1,symmatc2,symmatc3)
+    abcd_asymm = asymabcd_solver(asymmatc1,asymmatc2,asymmatc3)
    # print(time_new)
-    #print(len(time_new))
-    ybar_symm = ybar(abcd_sym,ubar_symm,time_new)
-    ybar_asymm = ybar(abcd_asymm,ubar_asymm,time_new)
-    print('-------------------SYMMETRIC-----------------')
-    print(ybar_symm)
-    print(len(ybar_symm))
-    print('-------------------ASYMMETRIC-----------------')
-    print(ybar_asymm)
-    plt.plot(time_new,(vel_st+ybar_symm[0,:]*vel_st))
-    plt.plot(time_new, velocity)
-    plt.show()
+    print(len(time_new))
+    ybar_symm = ybar(abcd_sym,ubar_symm,time_new,np.array([0,0,theta_st,q_st]))
+    ybar_asymm = ybar(abcd_asymm,ubar_asymm,time_new,np.array([[0],[phi_st],[p_st],[r_st]]))
+    print(manuever)
+
+
+
+
+
+
+
+    #print(ybar_asymm)
+
+    if manuever_type[i] == 1:
+        print('-------------------SYMMETRIC-----------------')
+        plt.subplot(2,2,1)
+        plt.plot(time_new,(vel_st+ybar_symm[0]*vel_st), label = 'Simulated Response')
+        plt.plot(time_new, velocity[index_begin:index_end], label = 'Actual Response')
+        plt.xlabel('Time Steps')
+        plt.ylabel('Velocity [m/s]')
+        plt.subplot(2,2,2)
+        plt.plot(time_new,ybar_symm[1]+alpha_st, label = 'Simulated Response')
+        plt.plot(time_new,alpha[index_begin:index_end], label = 'Actual Response')
+        plt.xlabel('Time Steps')
+        plt.ylabel('Alpha [Rad]')
+        plt.subplot(2,2,3)
+        plt.plot(time_new, ybar_symm[2]+theta_st, label = 'Simulated Response')
+        plt.plot(time_new,theta[index_begin:index_end], label = 'Actual Response')
+        plt.xlabel('Time Steps')
+        plt.ylabel('Theta [Rad]')
+        plt.subplot(2,2,4)
+        plt.plot(time_new, ybar_symm[3]*(vel_st/c), label = 'Simulated Response')
+        plt.plot(time_new, p[index_begin:index_end], label = 'Actual Response')
+        plt.xlabel('Time Steps')
+        plt.ylabel('Pitch Rate [Rad/s]')
+        plt.suptitle(manuever)
+        plt.show()
+        print('1')
+        print(abcd_sym)
+        print('2')
+        print(ubar_symm)
+        print('3')
+        print(time_new)
+    else:
+    #Asymm Plots
+        print('-------------------ASYMMETRIC-----------------')
+        print(ybar_asymm[0])
+        print(phi_st+ybar_asymm[1])
+        print((ybar_asymm[2]*2*vel_st/b)-p_st)
+        print((ybar_asymm[3]*2*vel_st/b)+r_st)
+        plt.subplot(2,2,1)
+        plt.plot(time_new,(ybar_asymm[0]), label = 'Simulated Response')
+        plt.plot(time_new, yaw_beta[index_begin:index_end], label = 'Actual Response')
+        plt.xlabel('Time Steps')
+        plt.ylabel('Beta [Rad]')
+        plt.subplot(2,2,2)
+        plt.plot(time_new,phi_st+ybar_asymm[1], label = 'Simulated Response')
+        plt.plot(time_new,phi[index_begin:index_end], label = 'Actual Response')
+        plt.xlabel('Time Steps')
+        plt.ylabel('Phi [Rad]')
+        plt.subplot(2,2,3)
+        plt.plot(time_new, (ybar_asymm[2]*2*vel_st/b)-p_st, label = 'Simulated Response')
+        plt.plot(time_new,p[index_begin:index_end], label = 'Actual Response')
+        plt.xlabel('Time Steps')
+        plt.ylabel('p Values [Rad/s]')
+        plt.subplot(2,2,4)
+        plt.plot(time_new, (ybar_asymm[3]*2*vel_st/b)+r_st, label = 'Simulated Response')
+        plt.plot(time_new, r[index_begin:index_end], label = 'Actual Response')
+        plt.xlabel('Time Steps')
+        plt.ylabel('r Values [Rad/s]')
+        plt.suptitle(manuever)
+        plt.show()
+        print('1')
+        print(abcd_asymm)
+        print('2')
+        print(ubar_asymm)
+        print('3')
+        print(time_new)
+        print(len(ubar_asymm[0]), len(ubar_asymm[1]))
