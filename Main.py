@@ -11,7 +11,7 @@ import os
 import csv
 import time
 import Data_processing
-from cit.par import A as Aspect_ratio
+from Cit_par import A as Aspect_ratio
 
 
 #                                                        TO DO:
@@ -20,7 +20,6 @@ from cit.par import A as Aspect_ratio
 #-----------------------------------------------------------------------------------------------------------------------------------
 # 
 # IN ORDER TO DO Cma we need the elevator trim curve!
-# 1.-INPUT CORRECT CHORD VALUE
 #
 #
 #
@@ -40,7 +39,7 @@ Empty_weight = 4.44822 * 9165.0
 Empty_arm = 0.0254 * 291.65
 Empty_moment = 0.1129848 * 2672953.5
 WingArearea = 30 #m^2
-Chord = 1 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CHORRRRD 
+Chord = 2.0569
 
 TotalFuelMass = 1000
 
@@ -55,7 +54,6 @@ Passenger5 = cg_pos.Passenger(61,5)
 Passenger6 = cg_pos.Passenger(61,6)
 Passenger7 = cg_pos.Passenger(61,7)
 Passenger8 = cg_pos.Passenger(61,8)
-Passenger9 = cg_pos.Passenger(61,9)
 Passenger10 = cg_pos.Passenger(61,10)
 
 
@@ -73,7 +71,7 @@ Empty_moment = 0.1129848 * 2672953.5
 ActualFuelMass = 1000
 
                                                                                  
-PassengerList = [Pilot1, Pilot2, Passenger3, Passenger4, Passenger5, Passenger6, Passenger7, Passenger8, Passenger9, Passenger10]
+PassengerList = [Pilot1, Pilot2, Passenger3, Passenger4, Passenger5, Passenger6, Passenger7, Passenger8, Passenger10]
 BaggageList = [Bag1, Bag2, Bag3]
 PayloadList = PassengerList + BaggageList
 
@@ -82,7 +80,6 @@ for Item in PayloadList:
     TotalPayloadMass = TotalPayloadMass + Item.mass
 
 Xcg1 = cg_pos.cg(ActualFuelMass, PayloadList)
-
 
 
 
@@ -107,7 +104,7 @@ def Coeficients1(Static_Measurements_1, Data_reduction = False):
         DataLine.append(DataLine[11]*aero_coeff.SpeedOfSound(DataLine[7]))    #Append TAS
         
         if Data_reduction is True:
-            DataLine[12] = Data_processing.red_airspeed(DataLineList[0], DataLineList[1], DataLineList[6], (TotalFuelMass - DataLineList[5]))[1]
+            DataLine[12] = Data_processing.red_airspeed(DataLine[0], DataLine[1], DataLine[6], (TotalFuelMass - DataLine[5]))[1]
         
         DataLine.append((DataLine[10]*9.80665)/(0.5*DataLine[9]*math.pow(DataLine[12],2)*WingArearea))
 #         print((DataLine[10]*9.80665)/(0.5*DataLine[9]*math.pow(DataLine[12],2)*WingArearea))
@@ -143,7 +140,7 @@ def Coeficients1(Static_Measurements_1, Data_reduction = False):
 
     #Run thrust.exe
 
-    os.startfile("C:/Users/Guille/Documents/GitHub/FD_B33/thrust.exe")
+#    os.startfile("C:/Users/Guille/Documents/GitHub/FD_B33/thrust.exe")
 
     #Read thrust.exe output
     datfile = open("thrust.dat",'r')
@@ -175,19 +172,19 @@ def Coeficients1(Static_Measurements_1, Data_reduction = False):
 
 
     fig = plt.figure()
-    ax1 = fig.add_subplot(111)
+    ax1 = fig.add_subplot(311)
     ax1.set_title('Cla')
     ax1.set_xlabel('Alpha')
     ax1.set_ylabel('Cl')
     img1 = ax1.plot(Cl_array, Alpha_array)
 
-    ax1 = fig.add_subplot(122)
+    ax1 = fig.add_subplot(312)
     ax1.set_title('Cda')
     ax1.set_xlabel('Alpha')
     ax1.set_ylabel('Cd')
     img1 = ax1.plot(Cd_array, Alpha_array)
 
-    ax1 = fig.add_subplot(133)
+    ax1 = fig.add_subplot(313)
     ax1.set_title('Cl/Cd')
     ax1.set_xlabel('Cl')
     ax1.set_ylabel('Cd')
@@ -211,6 +208,7 @@ Static_Measurements_1.DataLineList =[    [5010,    249,    1.7,    798,    813, 
 
 Coeficients1(Static_Measurements_1)
 
+test = Coeficients1(Static_Measurements_1, True)[2]
 
 def Coeficients2(Static_Measurements_2, Data_reduction = False):
 #     print("Executing Main: Coeficients2")
@@ -226,11 +224,11 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
         DataLine.append(ISA_calculator.ISAcalc(DataLine[0])[2])    #Append Density
         DataLine.append(Empty_mass +TotalPayloadMass+TotalFuelMass-DataLine[8])    
         DataLine.append(aero_coeff.IAStoMach(SeaLevelPressure, SeaLevelDensity, SeaLevelTemperature, DataLine[0], DataLine[1]))    #Append Mach
+        DataLine.append(DataLine[11+3]*aero_coeff.SpeedOfSound(DataLine[7+3]))    #Append TAS
         
         if Data_reduction is True:
-            DataLine[12] = Data_processing.red_airspeed(DataLineList[0], DataLineList[1], DataLineList[10], (TotalFuelMass - DataLineList[8]))[1]
-            
-        DataLine.append(DataLine[11+3]*aero_coeff.SpeedOfSound(DataLine[7+3]))    #Append TAS
+            DataLine[15] = Data_processing.red_airspeed(DataLine[0], DataLine[1], DataLine[10], (TotalFuelMass - DataLine[8]))[1]
+        
         DataLine.append((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea))
 #         print((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea))
 
@@ -265,7 +263,7 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
 
     #Run thrust.exe
 
-    os.startfile("C:/Users/Guille/Documents/GitHub/FD_B33/thrust.exe")
+#    os.startfile("C:/Users/Guille/Documents/GitHub/FD_B33/thrust.exe")
     time.sleep(0.1)
     #Read thrust.exe output
     datfile = open("thrust.dat")
@@ -299,19 +297,19 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
 
 
     fig = plt.figure()
-    ax1 = fig.add_subplot(111)
+    ax1 = fig.add_subplot(311)
     ax1.set_title('Cla')
     ax1.set_xlabel('Alpha')
     ax1.set_ylabel('Cl')
     img1 = ax1.plot(Cl_array, Alpha_array)
 
-    ax1 = fig.add_subplot(122)
+    ax1 = fig.add_subplot(312)
     ax1.set_title('Cda')
     ax1.set_xlabel('Alpha')
     ax1.set_ylabel('Cd')
     img1 = ax1.plot(Cd_array, Alpha_array)
 
-    ax1 = fig.add_subplot(133)
+    ax1 = fig.add_subplot(313)
     ax1.set_title('Cl/Cd')
     ax1.set_xlabel('Cl')
     ax1.set_ylabel('Cd')
@@ -339,7 +337,7 @@ def CoeficientsCGShift(Static_Measurements_3, Xcg1, Xcg2, Data_reduction = False
         DataLine.append(DataLine[11+3]*aero_coeff.SpeedOfSound(DataLine[7+3]))    #Append TAS
         
         if Data_reduction is True:
-            DataLine[12] = Data_processing.red_airspeed(DataLineList[0], DataLineList[1], DataLineList[10], (TotalFuelMass - DataLineList[8]))[1]
+            DataLine[15] = Data_processing.red_airspeed(DataLine[0], DataLine[1], DataLine[10], (TotalFuelMass - DataLine[8]))[1]
         
         DataLine.append((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea))
      #   print((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea))
@@ -350,25 +348,27 @@ def CoeficientsCGShift(Static_Measurements_3, Xcg1, Xcg2, Data_reduction = False
     return Cmd
 
 
-Xcg1 = cg_pos.cg(ActualFuelMass, PayloadList)[0]
-#Moving Passenger
-Passenger3 = cg_pos.Passenger(1,3)
-Passenger4 = cg_pos.Passenger(61,5)
-
-
-PassengerList2 = [Pilot1, Pilot2, Passenger3, Passenger4, Passenger5, Passenger6, Passenger7, Passenger8, Passenger9, Passenger10]
-BaggageList2 = [Bag1, Bag2, Bag3]
-PayloadList2 = PassengerList + BaggageList
-
-Xcg2 = cg_pos.cg(ActualFuelMass, PayloadList2)[0]
-
-
 Static_Measurements_3 = Stat_mes.DataBlock(PayloadList)
                                     #    [hp,    IAS,    a,        de,        detr,    Fe,        FFl,    FFr,    F.used,    TAT,    Temp,    Press,    Density,    Mass,    Mach,    TAS,    Cl,        Tot-Thrust,        Cd]
 Static_Measurements_3.DataLineList = [[5730,    161,    5.3,    0,        2.8,    0,        471,    493,    881,    5],
                                         [5790,    161,    5.3,    -0.5,    2.8,    -30,    468,    490,    910,    5]]
 
+
+Xcg1 = cg_pos.cg((TotalFuelMass - Static_Measurements_3.DataLineList[0][8]), PayloadList)[0]
+
+#Moving Passenger
+Passenger10_moved = cg_pos.Passenger(61,7)
+
+
+PassengerList2 = [Pilot1, Pilot2, Passenger3, Passenger4, Passenger5, Passenger6, Passenger7, Passenger8, Passenger10_moved]
+PayloadList2 = PassengerList2 + BaggageList
+
+Xcg2 = cg_pos.cg((TotalFuelMass - Static_Measurements_3.DataLineList[1][8]), PayloadList2)[0]
+
+
 CoeficientsCGShift(Static_Measurements_3,Xcg1,Xcg2)
+
+test=CoeficientsCGShift(Static_Measurements_3,Xcg1,Xcg2)
                         
 Static_Measurements_2 = Stat_mes.DataBlock(PayloadList)
                                     #    [hp,    IAS,    a,        de,        detr,    Fe,        FFl,    FFr,    F.used,    TAT,    Temp,    Press,    Density,    Mass,    Mach,    TAS,    Cl,        Tot-Thrust,        Cd]
@@ -381,66 +381,77 @@ Static_Measurements_2.DataLineList = [[6060,    161,    5.3,    0,        2.8,  
                                         [5310,    192,    3.4,    1,        2.8,    83,        482,    505,    846,    8.2]]
 
 Coeficients2(Static_Measurements_2)
-
-    
+   
                                                                                 
 #-------------------------------------------------------------------------------------------------------------------------------------------------
 #                                                                DATA PROCESSING
 #-------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-# STATIC MEASUREMENT 1
+########## STATIC MEASUREMENT 1
 stat_meas1_outcomes = []
 
 alpha = Coeficients1(Static_Measurements_1, True)[0]
+alpha_rad = (alpha * math.pi)/180
 CL = Coeficients1(Static_Measurements_1, True)[1]
 CD = Coeficients1(Static_Measurements_1, True)[2]
 CL2 = np.square(CL)
 
-Cl_alpha = (CL[-1] - CL[0])/(alpha[-1] - alpha[0])
+Cl_alpha = (CL[-1] - CL[0])/(alpha_rad[-1] - alpha_rad[0])
 
 line_derivative = (CL2[-1] - CL2[0])/(CD[-1] - CD[0])
 Cd_0 = CL2[0] - line_derivative * CD[0]
 
-e = 1/(pi * line_derivative * Aspect_ratio)
+e = 1/(math.pi * line_derivative * Aspect_ratio)
+
+    
+#Cl_alpha line for control
+b = alpha_rad[0] - Cl_alpha * CL[0]
+y1 = Cl_alpha * alpha_rad + b
+
+#straight line trough Cd - Cl^2
+y2 = line_derivative * CD + Cd_0
 
 # plotting
-Data_processing.plotter_stat_meas1(alpha, CL, CD, CL2, Cl_alpha, Cd_0, line_derivative)
+Data_processing.plotter_stat_meas1(alpha_rad, CL, CD, CL2, y1, y2)
 
 # variables
 stat_meas1_outcomes.append(Cl_alpha)
 stat_meas1_outcomes.append(Cd_0)
 stat_meas1_outcomes.append(e)
 
-# STATIC MEASURMENT 2
+########## STATIC MEASURMENT 2
 stat_meas2_outcomes = []
 
-red_Ve = np.zeros[len(Static_Measurements_2.DataLineList)]
+red_Ve = np.zeros(len(Static_Measurements_2.DataLineList))
 for i in range(0, len(Static_Measurements_2.DataLineList)):
     red_Ve[i] = Data_processing.red_airspeed(Static_Measurements_2.DataLineList[i][0], Static_Measurements_2.DataLineList[i][1], Static_Measurements_2.DataLineList[i][10], (TotalFuelMass - Static_Measurements_2.DataLineList[i][8]))[1]
 
-el_def = np.zeros[len(Static_Measurements_2.DataLineList)]
+el_def = np.zeros(len(Static_Measurements_2.DataLineList))
 for i in range(0, len(Static_Measurements_2.DataLineList)):
-    el_def[i] = Data_processing.red_thrust(Static_Measurements_2.DataLineList[i][3])
+    el_def[i] = Data_processing.red_thrust(Static_Measurements_2.DataLineList[i][3], red_Ve[i], Static_Measurements_2.DataLineList[i][17], Static_Measurements_2.DataLineList[i][12])
     
-red_F_e = np.zeros[len(Static_Measurements_2.DataLineList)]
+red_F_e = np.zeros(len(Static_Measurements_2.DataLineList))
 for i in range(0, len(Static_Measurements_2.DataLineList)):
     red_F_e[i] = Data_processing.red_force(Static_Measurements_2.DataLineList[i][5], Static_Measurements_2.DataLineList[i][0], Static_Measurements_2.DataLineList[i][1], Static_Measurements_2.DataLineList[i][10], (TotalFuelMass - Static_Measurements_2.DataLineList[i][8]))
 
-Cm_delta = CoeficientsCGShift(Static_Measurements_3,Xcg1,Xcg2, True)
-Cm_alpha = (red_F_e[-1] - red_F_e[0])/(red_Ve[-1] - red_Ve[0])
+Cm_delta = CoeficientsCGShift(Static_Measurements_3, Xcg1, Xcg2, True)
+Cm_alpha = -1 * ((red_F_e[-1] - red_F_e[0])/(red_Ve[-1] - red_Ve[0])) * Cm_delta
+
+#Cm_alpha line for control
+b = red_Ve[0] - el_def[0] * Cm_alpha
+y3 = Cm_alpha * red_Ve + b
 
 # plotting
-Data_processing.plotter_stat_meas2(red_Ve, el_def, red_F_e)
+Data_processing.plotter_stat_meas2(red_Ve, el_def, red_F_e, y3)
 
 # variables
 stat_meas2_outcomes.append(Cm_delta)
 stat_meas2_outcomes.append(Cm_alpha)
 
 
-print('relevant vales static measurement 1: Cl_alpha, Cd_0, oswald efficiency')
+print('relevant values static measurement 1: Cl_alpha, Cd_0, oswald efficiency')
 print(stat_meas1_outcomes)
-print('relevant vales static measurement 2: Cm_delta, Cm_alpha')
+print('relevant values static measurement 2: Cm_delta, Cm_alpha')
 print(stat_meas2_outcomes)
                                  
 
@@ -450,7 +461,7 @@ print(stat_meas2_outcomes)
 #-------------------------------------------------------------------------------------------------------------------------------------------------
 #                                                                USER INTERFACE
 #-------------------------------------------------------------------------------------------------------------------------------------------------
-
+'''
 passenger_spacing_y = 40
 passenger_spacing_x = 75
 
@@ -523,6 +534,6 @@ mywin=MyWindow(window)
 window.title('Group B33')
 window.geometry("1200x800+10+10")
 window.mainloop()
-
+'''
 
 

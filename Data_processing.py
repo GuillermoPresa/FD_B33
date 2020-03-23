@@ -81,15 +81,18 @@ def red_airspeed(hp, Vc, Tm, AFM):
     return Ve, Ve_bar, rho, W, T
 
 
-def red_thrust(el_def_meas):
+def red_thrust(el_def_meas, Ve_bar, Thrust, rho):
     #reduction of the non-standard engine thrust
     # delta_meas = measured elevator deflection
     # red_el_def = reduced elevator deflection
     
-    Cmd = -1.1642       # [-] Elevator deflection moment coefficient
-    Cmtc = -0.0064      # [-] Thrust moment arm
-    Tcs = 0             # [-] Standard thrust coefficient
-    Tc = 0              # [-] Thrust coefficient
+    Cmd = -1.1642               # [-] Elevator deflection moment coefficient
+    Cmtc = -0.0064              # [-] Thrust moment arm
+    D = 0.686                   # [m] Engine Diameter
+    Standard_thrust = 1000      # [-] Standard thrust
+    
+    Tcs = Standard_thrust/(0.5 * rho * Ve_bar**2 * D**2)    # [-] Standard thrust coefficient
+    Tc = Thrust/(0.5 * rho * Ve_bar**2 * D**2)              # [-] Thrust coefficient
 
     red_el_def = el_def_meas - 1/Cmd * Cmtc * (Tcs -Tc)
     
@@ -106,54 +109,22 @@ def red_force(Fe, hp, Vc, Tm, AFM):
     return red_Fe
 
 
-# def C_md(time1, time2):
-#     #calculations for the determination of the elevator effectiveness coefficient C_md
-#     # time1 = time at beginning of weight shift (Xcg1)
-#     # time2 = time at end of weight shift (Xcg2)
-#     # el_def1 = elevator deflection at beginning of weight shift
-#     # el_def2 = elevator deflection at end of weight shift
-#     # C_md = Elevator effectiveness coefficient
-    
-#     abs_difference1 = lambda list_value : abs(list_value - time1)
-#     closest1 = min(time, key=abs_difference1)
-#     index1 = time.index(closest1)
-    
-#     abs_difference2 = lambda list_value : abs(list_value - time2)
-#     closest2 = min(time, key=abs_difference2) 
-#     index2 = time.index(closest2)
-    
-#     el_def1 = el_def_meas[index1]
-#     el_def2 = el_def_meas[index2]
-    
-    
-#     # C_md = - 1/(el_def2 - el_def1) * CN * (Xcg2 - Xcg1)/c_bar
-    
-#     return C_md
-
-
-def plotter_stat_meas1(alpha, CL, CD, CL2, Cl_alpha, Cd_0, line_derivative):
+def plotter_stat_meas1(alpha, CL, CD, CL2, y1, y2):
     #plotter for the first static measurement graphs
-    
-    #Cl_alpha line for control
-    b = alpha[0] - Cl_alpha * CL[0]
-    y = Cl_alpha * alpha + b
-    
-    #straight line trough Cd - Cl^2
-    y2 = line_derivative * CD + Cd_0
     
     fig = plt.figure()
     
     
     Cl_alpha_curve = fig.add_subplot(221)
     Cl_alpha_curve.set_title('Cl vs Alpha Curve')
-    Cl_alpha_curve.set_xlabel('Angle of Attack')
+    Cl_alpha_curve.set_xlabel('Angle of Attack [rad]')
     Cl_alpha_curve.set_ylabel('Lift Coefficient')
     Cl_alpha_curve.plot(alpha, CL)
-    Cl_alpha_curve.plot((alpha, y), color='red')
+    # Cl_alpha_curve.plot((alpha, y1), color='red')
     
     Cd_alpha_curve = fig.add_subplot(222)
     Cd_alpha_curve.set_title('Cd vs Alpha Curve')
-    Cd_alpha_curve.set_xlabel('Angle of Attack')
+    Cd_alpha_curve.set_xlabel('Angle of Attack [rad]')
     Cd_alpha_curve.set_ylabel('Drag Coefficient')
     Cd_alpha_curve.plot(alpha, CD)
     
@@ -163,36 +134,33 @@ def plotter_stat_meas1(alpha, CL, CD, CL2, Cl_alpha, Cd_0, line_derivative):
     CL_CD_curve.set_ylabel('Lift Coefficient')
     CL_CD_curve.plot(CD, CL)
     
-    CD_CL2_curve = fig.add_subplot(223)
+    CD_CL2_curve = fig.add_subplot(224)
     CD_CL2_curve.set_title('Cd vs Cl^2 Curve')
     CD_CL2_curve.set_xlabel('Drag Coefficient')
     CD_CL2_curve.set_ylabel('Squared Lift Coefficient')
-    CD_CL2_curve.plot(CD, CL2)
-    CD_CL2_curve.plot((CD, y2), color='red')
+    CD_CL2_curve.plot(CL2, CD)
+    # CD_CL2_curve.plot((y2, CD), color='red')
     
     plt.show()
     
     
-def plotter_stat_meas2(Ve_bar, el_def, F_e, Cm_alpha):
+def plotter_stat_meas2(Ve_bar, el_def, F_e, y3):
     #plotter for the second static measurement graphs
     
-    #Cm_alpha line for control
-    b = Ve_bar[0] - el_def[0] * Cm_alpha
-    y = Cm_alpha * Ve_bar + b
     
     fig = plt.figure()
     
     el_trim_curve = fig.add_subplot(211)
     el_trim_curve.set_title('Elevator Trim Curve')
-    el_trim_curve.set_xlabel('Equivalent Airspeed')
-    el_trim_curve.set_ylabel('Reduced Elevator Deflection')
+    el_trim_curve.set_xlabel('Equivalent Airspeed [m/s]')
+    el_trim_curve.set_ylabel('Reduced Elevator Deflection [deg]')
     el_trim_curve.plot(Ve_bar, el_def)   
-    el_trim_curve.plot((Ve_bar, y), color='red')
+    # el_trim_curve.plot((y3, Ve_bar), color='red')
     
     el_force_curve = fig.add_subplot(212)
     el_force_curve.set_title('Reduced Elevator Control Force Curve')
-    el_force_curve.set_xlabel('Equivalent Airspeed')
-    el_force_curve.set_ylabel('Reduced Elevator Control Force')
+    el_force_curve.set_xlabel('Equivalent Airspeed [m/s]')
+    el_force_curve.set_ylabel('Reduced Elevator Control Force [N]')
     el_force_curve.plot(Ve_bar, F_e)
     
     plt.show()
