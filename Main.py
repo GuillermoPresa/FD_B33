@@ -352,7 +352,7 @@ def CoeficientsCGShift(Static_Measurements_3, Xcg1, Xcg2, Data_reduction = False
 
 Xcg1 = cg_pos.cg(ActualFuelMass, PayloadList)[0]
 #Moving Passenger
-Passenger3 = cg_pos.Passenger(1,3)
+Passenger3 = cg_pos.Passenger(61,3)
 Passenger4 = cg_pos.Passenger(61,5)
 
 
