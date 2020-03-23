@@ -88,7 +88,7 @@ Xcg1 = cg_pos.cg(ActualFuelMass, PayloadList)
 
 
 
-def Coeficients1(Static_Measurements_1):
+def Coeficients1(Static_Measurements_1, REAS = False):
 #     print("Executing Main: Coeficients1")
     for DataLine in Static_Measurements_1.DataLineList: #Processing1
         DataLine[0] = DataLine[0]*0.3048    #ft to m
@@ -103,6 +103,8 @@ def Coeficients1(Static_Measurements_1):
         DataLine.append(Empty_mass +TotalPayloadMass+TotalFuelMass - DataLine[5])    
         DataLine.append(aero_coeff.IAStoMach(SeaLevelPressure, SeaLevelDensity, SeaLevelTemperature, DataLine[0], DataLine[1]))    #Append Mach
         DataLine.append(DataLine[11]*aero_coeff.SpeedOfSound(DataLine[7]))    #Append TAS
+        if REAS is True:
+            DataLine[12] = red_airspeed(DataLineList[0], DataLineList[1], DataLineList[6], (TotalFuelMass - DataLineList[5]))[1]
         DataLine.append((DataLine[10]*9.80665)/(0.5*DataLine[9]*math.pow(DataLine[12],2)*WingArearea))
 #         print((DataLine[10]*9.80665)/(0.5*DataLine[9]*math.pow(DataLine[12],2)*WingArearea))
 
@@ -190,11 +192,11 @@ def Coeficients1(Static_Measurements_1):
     ax1.set_xlim(-0.000003,0.00003)    
     plt.show()
 
-    return Alpha_array, Cl_array, Cd_array 
+    return Alpha_array, Cl_array, Cd_array
 
 Static_Measurements_1 = Stat_mes.DataBlock(PayloadList)
 
-                                #    [hp,    IAS,    a,        FFl,    FFr,    F.used,    TAT,    Temp,    Press,    Density,    Mass,    Mach,    TAS,    Cl,        Tot-Thrust,        Cd]
+                                     #    [hp,    IAS,    a,        FFl,    FFr,    F.used,    TAT,  /*/  Temp,    Press,    Density,    Mass,    Mach,    TAS,    Cl,        Tot-Thrust,        Cd]
 
 Static_Measurements_1.DataLineList =[    [5010,    249,    1.7,    798,    813,    360,    12.5],
                                         [5020,    221,    2.4,    673,    682,    412,    10.5],
@@ -203,7 +205,7 @@ Static_Measurements_1.DataLineList =[    [5010,    249,    1.7,    798,    813, 
                                         [5020,    130,    8.7,    443,    467,    532,    6],
                                         [5110,    118,    10.6,    474,    499,    570,    5.2]]
 
-Coeficients1(Static_Measurements_1)
+Coeficients1(Static_Measurements_1,True)
 
 
 def Coeficients2(Static_Measurements_2):
