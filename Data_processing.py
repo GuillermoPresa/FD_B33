@@ -109,31 +109,6 @@ def red_force(Fe, hp, Vc, Tm, AFM):
     return red_Fe
 
 
-# def C_md(time1, time2):
-#     #calculations for the determination of the elevator effectiveness coefficient C_md
-#     # time1 = time at beginning of weight shift (Xcg1)
-#     # time2 = time at end of weight shift (Xcg2)
-#     # el_def1 = elevator deflection at beginning of weight shift
-#     # el_def2 = elevator deflection at end of weight shift
-#     # C_md = Elevator effectiveness coefficient
-    
-#     abs_difference1 = lambda list_value : abs(list_value - time1)
-#     closest1 = min(time, key=abs_difference1)
-#     index1 = time.index(closest1)
-    
-#     abs_difference2 = lambda list_value : abs(list_value - time2)
-#     closest2 = min(time, key=abs_difference2) 
-#     index2 = time.index(closest2)
-    
-#     el_def1 = el_def_meas[index1]
-#     el_def2 = el_def_meas[index2]
-    
-    
-#     # C_md = - 1/(el_def2 - el_def1) * CN * (Xcg2 - Xcg1)/c_bar
-    
-#     return C_md
-
-
 def plotter_stat_meas1(alpha, CL, CD, CL2, y1, y2):
     #plotter for the first static measurement graphs
     
