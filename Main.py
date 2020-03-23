@@ -85,7 +85,6 @@ Xcg1 = cg_pos.cg(ActualFuelMass, PayloadList)
 
 
 
-
 #CN = W/(0.5*density*velocity2*surface)
 
 
@@ -403,8 +402,16 @@ Cd_0 = CL2[0] - line_derivative * CD[0]
 
 e = 1/(math.pi * line_derivative * Aspect_ratio)
 
+    
+#Cl_alpha line for control
+b = alpha[0] - Cl_alpha * CL[0]
+y1 = Cl_alpha * alpha + b
+
+#straight line trough Cd - Cl^2
+y2 = line_derivative * CD + Cd_0
+
 # plotting
-Data_processing.plotter_stat_meas1(alpha, CL, CD, CL2, Cl_alpha, Cd_0, line_derivative)
+Data_processing.plotter_stat_meas1(alpha, CL, CD, CL2, y1, y2)
 
 # variables
 stat_meas1_outcomes.append(Cl_alpha)
@@ -426,11 +433,15 @@ red_F_e = np.zeros(len(Static_Measurements_2.DataLineList))
 for i in range(0, len(Static_Measurements_2.DataLineList)):
     red_F_e[i] = Data_processing.red_force(Static_Measurements_2.DataLineList[i][5], Static_Measurements_2.DataLineList[i][0], Static_Measurements_2.DataLineList[i][1], Static_Measurements_2.DataLineList[i][10], (TotalFuelMass - Static_Measurements_2.DataLineList[i][8]))
 
-Cm_delta = CoeficientsCGShift(Static_Measurements_3,Xcg1,Xcg2, True)
-Cm_alpha = (red_F_e[-1] - red_F_e[0])/(red_Ve[-1] - red_Ve[0])
+Cm_delta = CoeficientsCGShift(Static_Measurements_3, Xcg1, Xcg2, True)
+Cm_alpha = -1 * ((red_F_e[-1] - red_F_e[0])/(red_Ve[-1] - red_Ve[0])) * Cm_delta
+
+#Cm_alpha line for control
+b = red_Ve[0] - el_def[0] * Cm_alpha
+y3 = Cm_alpha * red_Ve + b
 
 # plotting
-Data_processing.plotter_stat_meas2(red_Ve, el_def, red_F_e, Cm_alpha)
+Data_processing.plotter_stat_meas2(red_Ve, el_def, red_F_e, y3)
 
 # variables
 stat_meas2_outcomes.append(Cm_delta)

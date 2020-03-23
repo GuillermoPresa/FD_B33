@@ -131,15 +131,8 @@ def red_force(Fe, hp, Vc, Tm, AFM):
 #     return C_md
 
 
-def plotter_stat_meas1(alpha, CL, CD, CL2, Cl_alpha, Cd_0, line_derivative):
+def plotter_stat_meas1(alpha, CL, CD, CL2, y1, y2):
     #plotter for the first static measurement graphs
-    
-    #Cl_alpha line for control
-    b = alpha[0] - Cl_alpha * CL[0]
-    y = Cl_alpha * alpha + b
-    
-    #straight line trough Cd - Cl^2
-    y2 = line_derivative * CD + Cd_0
     
     fig = plt.figure()
     
@@ -149,7 +142,7 @@ def plotter_stat_meas1(alpha, CL, CD, CL2, Cl_alpha, Cd_0, line_derivative):
     Cl_alpha_curve.set_xlabel('Angle of Attack')
     Cl_alpha_curve.set_ylabel('Lift Coefficient')
     Cl_alpha_curve.plot(alpha, CL)
-    #Cl_alpha_curve.plot((alpha, y), color='red')
+    # Cl_alpha_curve.plot((alpha, y1), color='red')
     
     Cd_alpha_curve = fig.add_subplot(222)
     Cd_alpha_curve.set_title('Cd vs Alpha Curve')
@@ -167,18 +160,15 @@ def plotter_stat_meas1(alpha, CL, CD, CL2, Cl_alpha, Cd_0, line_derivative):
     CD_CL2_curve.set_title('Cd vs Cl^2 Curve')
     CD_CL2_curve.set_xlabel('Drag Coefficient')
     CD_CL2_curve.set_ylabel('Squared Lift Coefficient')
-    CD_CL2_curve.plot(CD, CL2)
-    #CD_CL2_curve.plot((CD, y2), color='red')
+    CD_CL2_curve.plot(CL2, CD)
+    # CD_CL2_curve.plot((y2, CD), color='red')
     
     plt.show()
     
     
-def plotter_stat_meas2(Ve_bar, el_def, F_e, Cm_alpha):
+def plotter_stat_meas2(Ve_bar, el_def, F_e, y3):
     #plotter for the second static measurement graphs
     
-    #Cm_alpha line for control
-    b = Ve_bar[0] - el_def[0] * Cm_alpha
-    y = Cm_alpha * Ve_bar + b
     
     fig = plt.figure()
     
@@ -187,7 +177,7 @@ def plotter_stat_meas2(Ve_bar, el_def, F_e, Cm_alpha):
     el_trim_curve.set_xlabel('Equivalent Airspeed')
     el_trim_curve.set_ylabel('Reduced Elevator Deflection')
     el_trim_curve.plot(Ve_bar, el_def)   
-    #el_trim_curve.plot((Ve_bar, y), color='red')
+    # el_trim_curve.plot((y3, Ve_bar), color='red')
     
     el_force_curve = fig.add_subplot(212)
     el_force_curve.set_title('Reduced Elevator Control Force Curve')
