@@ -5,8 +5,9 @@ BlockFuel = 1000 #[Kg]
 
 class DataBlock:
 	
-	def __init__(self, PayloadList):
+	def __init__(self, PayloadList, PayloadList2 = None):
 		self.PayloadList = PayloadList
+		self.PayloadList2 = PayloadList2
 		self.DataLineList =  []
 	
 
