@@ -210,6 +210,7 @@ Static_Measurements_1.DataLineList =[    [5010,    249,    1.7,    798,    813, 
 
 Coeficients1(Static_Measurements_1)
 
+test = Coeficients1(Static_Measurements_1, True)[2]
 
 def Coeficients2(Static_Measurements_2, Data_reduction = False):
 #     print("Executing Main: Coeficients2")
