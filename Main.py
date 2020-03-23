@@ -414,15 +414,15 @@ stat_meas1_outcomes.append(e)
 ########## STATIC MEASURMENT 2
 stat_meas2_outcomes = []
 
-red_Ve = np.zeros[len(Static_Measurements_2.DataLineList)]
+red_Ve = np.zeros(len(Static_Measurements_2.DataLineList))
 for i in range(0, len(Static_Measurements_2.DataLineList)):
     red_Ve[i] = Data_processing.red_airspeed(Static_Measurements_2.DataLineList[i][0], Static_Measurements_2.DataLineList[i][1], Static_Measurements_2.DataLineList[i][10], (TotalFuelMass - Static_Measurements_2.DataLineList[i][8]))[1]
 
-el_def = np.zeros[len(Static_Measurements_2.DataLineList)]
+el_def = np.zeros(len(Static_Measurements_2.DataLineList))
 for i in range(0, len(Static_Measurements_2.DataLineList)):
     el_def[i] = Data_processing.red_thrust(Static_Measurements_2.DataLineList[i][3])
     
-red_F_e = np.zeros[len(Static_Measurements_2.DataLineList)]
+red_F_e = np.zeros(len(Static_Measurements_2.DataLineList))
 for i in range(0, len(Static_Measurements_2.DataLineList)):
     red_F_e[i] = Data_processing.red_force(Static_Measurements_2.DataLineList[i][5], Static_Measurements_2.DataLineList[i][0], Static_Measurements_2.DataLineList[i][1], Static_Measurements_2.DataLineList[i][10], (TotalFuelMass - Static_Measurements_2.DataLineList[i][8]))
 
@@ -430,7 +430,7 @@ Cm_delta = CoeficientsCGShift(Static_Measurements_3,Xcg1,Xcg2, True)
 Cm_alpha = (red_F_e[-1] - red_F_e[0])/(red_Ve[-1] - red_Ve[0])
 
 # plotting
-Data_processing.plotter_stat_meas2(red_Ve, el_def, red_F_e)
+Data_processing.plotter_stat_meas2(red_Ve, el_def, red_F_e, Cm_alpha)
 
 # variables
 stat_meas2_outcomes.append(Cm_delta)

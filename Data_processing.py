@@ -149,7 +149,7 @@ def plotter_stat_meas1(alpha, CL, CD, CL2, Cl_alpha, Cd_0, line_derivative):
     Cl_alpha_curve.set_xlabel('Angle of Attack')
     Cl_alpha_curve.set_ylabel('Lift Coefficient')
     Cl_alpha_curve.plot(alpha, CL)
-    Cl_alpha_curve.plot((alpha, y), color='red')
+    #Cl_alpha_curve.plot((alpha, y), color='red')
     
     Cd_alpha_curve = fig.add_subplot(222)
     Cd_alpha_curve.set_title('Cd vs Alpha Curve')
@@ -163,12 +163,12 @@ def plotter_stat_meas1(alpha, CL, CD, CL2, Cl_alpha, Cd_0, line_derivative):
     CL_CD_curve.set_ylabel('Lift Coefficient')
     CL_CD_curve.plot(CD, CL)
     
-    CD_CL2_curve = fig.add_subplot(223)
+    CD_CL2_curve = fig.add_subplot(224)
     CD_CL2_curve.set_title('Cd vs Cl^2 Curve')
     CD_CL2_curve.set_xlabel('Drag Coefficient')
     CD_CL2_curve.set_ylabel('Squared Lift Coefficient')
     CD_CL2_curve.plot(CD, CL2)
-    CD_CL2_curve.plot((CD, y2), color='red')
+    #CD_CL2_curve.plot((CD, y2), color='red')
     
     plt.show()
     
@@ -187,7 +187,7 @@ def plotter_stat_meas2(Ve_bar, el_def, F_e, Cm_alpha):
     el_trim_curve.set_xlabel('Equivalent Airspeed')
     el_trim_curve.set_ylabel('Reduced Elevator Deflection')
     el_trim_curve.plot(Ve_bar, el_def)   
-    el_trim_curve.plot((Ve_bar, y), color='red')
+    #el_trim_curve.plot((Ve_bar, y), color='red')
     
     el_force_curve = fig.add_subplot(212)
     el_force_curve.set_title('Reduced Elevator Control Force Curve')
