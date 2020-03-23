@@ -54,7 +54,6 @@ Passenger5 = cg_pos.Passenger(61,5)
 Passenger6 = cg_pos.Passenger(61,6)
 Passenger7 = cg_pos.Passenger(61,7)
 Passenger8 = cg_pos.Passenger(61,8)
-Passenger9 = cg_pos.Passenger(61,9)
 Passenger10 = cg_pos.Passenger(61,10)
 
 
@@ -72,7 +71,7 @@ Empty_moment = 0.1129848 * 2672953.5
 ActualFuelMass = 1000
 
                                                                                  
-PassengerList = [Pilot1, Pilot2, Passenger3, Passenger4, Passenger5, Passenger6, Passenger7, Passenger8, Passenger9, Passenger10]
+PassengerList = [Pilot1, Pilot2, Passenger3, Passenger4, Passenger5, Passenger6, Passenger7, Passenger8, Passenger10]
 BaggageList = [Bag1, Bag2, Bag3]
 PayloadList = PassengerList + BaggageList
 
@@ -349,25 +348,27 @@ def CoeficientsCGShift(Static_Measurements_3, Xcg1, Xcg2, Data_reduction = False
     return Cmd
 
 
-Xcg1 = cg_pos.cg(ActualFuelMass, PayloadList)[0]
-
-#Moving Passenger
-Passenger10 = cg_pos.Passenger(61,7)
-
-
-PassengerList2 = [Pilot1, Pilot2, Passenger3, Passenger4, Passenger5, Passenger6, Passenger7, Passenger8, Passenger9, Passenger10]
-BaggageList2 = [Bag1, Bag2, Bag3]
-PayloadList2 = PassengerList2 + BaggageList
-
-Xcg2 = cg_pos.cg(ActualFuelMass, PayloadList2)[0]
-
-
 Static_Measurements_3 = Stat_mes.DataBlock(PayloadList)
                                     #    [hp,    IAS,    a,        de,        detr,    Fe,        FFl,    FFr,    F.used,    TAT,    Temp,    Press,    Density,    Mass,    Mach,    TAS,    Cl,        Tot-Thrust,        Cd]
 Static_Measurements_3.DataLineList = [[5730,    161,    5.3,    0,        2.8,    0,        471,    493,    881,    5],
                                         [5790,    161,    5.3,    -0.5,    2.8,    -30,    468,    490,    910,    5]]
 
+
+Xcg1 = cg_pos.cg((TotalFuelMass - Static_Measurements_3.DataLineList[0][8]), PayloadList)[0]
+
+#Moving Passenger
+Passenger10_moved = cg_pos.Passenger(61,7)
+
+
+PassengerList2 = [Pilot1, Pilot2, Passenger3, Passenger4, Passenger5, Passenger6, Passenger7, Passenger8, Passenger10_moved]
+PayloadList2 = PassengerList2 + BaggageList
+
+Xcg2 = cg_pos.cg((TotalFuelMass - Static_Measurements_3.DataLineList[1][8]), PayloadList2)[0]
+
+
 CoeficientsCGShift(Static_Measurements_3,Xcg1,Xcg2)
+
+test=CoeficientsCGShift(Static_Measurements_3,Xcg1,Xcg2)
                         
 Static_Measurements_2 = Stat_mes.DataBlock(PayloadList)
                                     #    [hp,    IAS,    a,        de,        detr,    Fe,        FFl,    FFr,    F.used,    TAT,    Temp,    Press,    Density,    Mass,    Mach,    TAS,    Cl,        Tot-Thrust,        Cd]
