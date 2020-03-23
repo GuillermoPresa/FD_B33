@@ -140,15 +140,17 @@ def Coeficients1(Static_Measurements_1, Data_reduction = False):
 
     #Run thrust.exe
 
-#    os.startfile("C:/Users/Guille/Documents/GitHub/FD_B33/thrust.exe")
+    os.startfile("C:/Users/Guille/Documents/GitHub/FD_B33/thrust.exe")
 
     #Read thrust.exe output
+    time.sleep(0.2)
     datfile = open("thrust.dat",'r')
     datContent = [i.strip().split() for i in datfile.readlines()]
     for i in range(0,len(Static_Measurements_1.DataLineList)):
         Static_Measurements_1.DataLineList[i].append(float(datContent[i][0])+float(datContent[i][1]))
         #Static_Measurements_1.DataLineList.append(float(ThrustTupple[0])+float(ThrustTupple[1]))
     datfile.close()
+    os.remove("thrust.dat")
 
     Cl_array = np.zeros(len(Static_Measurements_1.DataLineList))
     Cd_array = np.zeros(len(Static_Measurements_1.DataLineList))
@@ -160,7 +162,7 @@ def Coeficients1(Static_Measurements_1, Data_reduction = False):
 #         print("AT i: ",i,"The AOA is: ",Static_Measurements_1.DataLineList[i][2])
 #         print((Static_Measurements_1.DataLineList[i][10]*9.80665)/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
 
-        Static_Measurements_1.DataLineList[i].append((Static_Measurements_1.DataLineList[i][13])/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
+        Static_Measurements_1.DataLineList[i].append((Static_Measurements_1.DataLineList[i][14])/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
         Alpha_array[i] = Static_Measurements_1.DataLineList[i][2]
         Cl_array[i] = Static_Measurements_1.DataLineList[i][13]
         Cd_array[i] = Static_Measurements_1.DataLineList[i][15]
@@ -176,21 +178,21 @@ def Coeficients1(Static_Measurements_1, Data_reduction = False):
     ax1.set_title('Cla')
     ax1.set_xlabel('Alpha')
     ax1.set_ylabel('Cl')
-    img1 = ax1.plot(Cl_array, Alpha_array)
+    img1 = ax1.plot(Alpha_array, Cl_array)
 
     ax1 = fig.add_subplot(312)
     ax1.set_title('Cda')
     ax1.set_xlabel('Alpha')
     ax1.set_ylabel('Cd')
-    img1 = ax1.plot(Cd_array, Alpha_array)
+    img1 = ax1.plot(Alpha_array, Cd_array)
 
     ax1 = fig.add_subplot(313)
     ax1.set_title('Cl/Cd')
-    ax1.set_xlabel('Cl')
-    ax1.set_ylabel('Cd')
+    ax1.set_xlabel('Cd')
+    ax1.set_ylabel('Cl')
     img1 = ax1.plot(Cd_array, Cl_array)
-    ax1.set_ylim(0,1.25)
-    ax1.set_xlim(-0.000003,0.00003)    
+    #ax1.set_ylim(0,1.25)
+    #ax1.set_xlim(-0.000003,0.00003)    
     plt.show()
 
     return Alpha_array, Cl_array, Cd_array
@@ -236,8 +238,8 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
     #Create input matlab for thrust.exe
     PressureAltitude = np.zeros(len(Static_Measurements_2.DataLineList))
     Mach = np.zeros(len(Static_Measurements_2.DataLineList))
-    FuelFlow1 = 0.048
-    FuelFlow2 = 0.048
+    FuelFlow1 = np.zeros(len(Static_Measurements_2.DataLineList))
+    FuelFlow2 = np.zeros(len(Static_Measurements_2.DataLineList))
     TemperatureDifference = np.zeros(len(Static_Measurements_2.DataLineList))
     Total_array = np.zeros(5*len(Static_Measurements_2.DataLineList))
 
@@ -246,9 +248,9 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
         Total_array[5*i] = Static_Measurements_2.DataLineList[i][0]
         Mach[i] = Static_Measurements_2.DataLineList[i][11+3]
         Total_array[5*i+1] = Static_Measurements_2.DataLineList[i][11+3]
-        FuelFlow1[i] = Static_Measurements_2.DataLineList[i][3+3]
+        FuelFlow1[i] = 0.048
         Total_array[5*i+2] = Static_Measurements_2.DataLineList[i][3+3]
-        FuelFlow2[i] = Static_Measurements_2.DataLineList[i][4+3]
+        FuelFlow2[i] = 0.048
         Total_array[5*i+3] = Static_Measurements_2.DataLineList[i][4+3]
         TemperatureDifference[i] = Static_Measurements_2.DataLineList[i][7+3] - Static_Measurements_2.DataLineList[i][6+3]
         Total_array[5*i+4]  = Static_Measurements_2.DataLineList[i][6+3] - Static_Measurements_2.DataLineList[i][7+3]
@@ -263,8 +265,8 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
 
     #Run thrust.exe
 
-#    os.startfile("C:/Users/Guille/Documents/GitHub/FD_B33/thrust.exe")
-    time.sleep(0.1)
+    os.startfile("C:/Users/Guille/Documents/GitHub/FD_B33/thrust.exe")
+    time.sleep(0.2)
     #Read thrust.exe output
     datfile = open("thrust.dat")
     datContent = [i.strip().split() for i in datfile.readlines()]
@@ -274,6 +276,7 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
         Static_Measurements_2.DataLineList[i].append(float(datContent[i][0])+float(datContent[i][1]))
         #Static_Measurements_2.DataLineList.append(float(ThrustTupple[0])+float(ThrustTupple[1]))
     datfile.close()
+    os.remove("thrust.dat")
 
     Cl_array = np.zeros(len(Static_Measurements_2.DataLineList))
     Cd_array = np.zeros(len(Static_Measurements_2.DataLineList))
@@ -285,7 +288,7 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
 #         print("AT i: ",i,"The AOA is: ",Static_Measurements_2.DataLineList[i][2])
 #         print((Static_Measurements_2.DataLineList[i][10+3]*9.80665)/(0.5*Static_Measurements_2.DataLineList[i][9+3]*math.pow(Static_Measurements_2.DataLineList[i][12+3],2)*WingArearea))
 
-        Static_Measurements_2.DataLineList[i].append((Static_Measurements_2.DataLineList[i][13+3])/(0.5*Static_Measurements_2.DataLineList[i][9+3]*math.pow(Static_Measurements_2.DataLineList[i][12+3],2)*WingArearea))
+        Static_Measurements_2.DataLineList[i].append((Static_Measurements_2.DataLineList[i][14+3])/(0.5*Static_Measurements_2.DataLineList[i][9+3]*math.pow(Static_Measurements_2.DataLineList[i][12+3],2)*WingArearea))
         Alpha_array[i] = Static_Measurements_2.DataLineList[i][2]
         Cl_array[i] = Static_Measurements_2.DataLineList[i][13+3]
         Cd_array[i] = Static_Measurements_2.DataLineList[i][15+3]
@@ -301,22 +304,23 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
     ax1.set_title('Cla')
     ax1.set_xlabel('Alpha')
     ax1.set_ylabel('Cl')
-    img1 = ax1.plot(Cl_array, Alpha_array)
+    img1 = ax1.plot(Alpha_array, Cl_array)
 
     ax1 = fig.add_subplot(312)
     ax1.set_title('Cda')
     ax1.set_xlabel('Alpha')
     ax1.set_ylabel('Cd')
-    img1 = ax1.plot(Cd_array, Alpha_array)
+    img1 = ax1.plot(Alpha_array, Cd_array)
 
     ax1 = fig.add_subplot(313)
     ax1.set_title('Cl/Cd')
-    ax1.set_xlabel('Cl')
-    ax1.set_ylabel('Cd')
+    ax1.set_xlabel('Cd')
+    ax1.set_ylabel('Cl')
     img1 = ax1.plot(Cd_array, Cl_array)
-    ax1.set_ylim(0,1.25)
-    ax1.set_xlim(-0.000003,0.00003)    
+    #ax1.set_ylim(0,1.25)
+    #ax1.set_xlim(-0.000003,0.00003)    
     plt.show()
+
 
     return Alpha_array, Cl_array, Cd_array
 
