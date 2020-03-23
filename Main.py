@@ -402,6 +402,7 @@ line_deriv1, Cd_0, r_value, p_value, std_err = stats.linregress(CL2, CD)
 
 e = 1/(math.pi * line_deriv1 * Aspect_ratio)
 
+#improving CL data
 CL_improved = CL_alpha * alpha_rad + Cl0
 
 
@@ -430,12 +431,9 @@ for i in range(0, len(Static_Measurements_2.DataLineList)):
 
 Cm_delta = CoeficientsCGShift(Static_Measurements_3, Xcg1, Xcg2, True)
 
-lin_deriv2, intercept, r_value, p_value, std_err = stats.linregress(red_Ve, red_F_e)
+lin_deriv2, intersect, r_value, p_value, std_err = stats.linregress(red_Ve, red_F_e)
 Cm_alpha = -1 * lin_deriv2 * Cm_delta
 
-#Cm_alpha line for control
-b = red_Ve[0] - el_def[0] * Cm_alpha
-y3 = Cm_alpha * red_Ve + b
 
 # plotting
 Data_processing.plotter_stat_meas2(red_Ve, el_def, red_F_e)
