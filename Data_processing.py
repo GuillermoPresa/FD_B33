@@ -89,7 +89,7 @@ def red_thrust(el_def_meas, Ve_bar, Thrust, rho):
     Cmd = -1.1642               # [-] Elevator deflection moment coefficient
     Cmtc = -0.0064              # [-] Thrust moment arm
     D = 0.686                   # [m] Engine Diameter
-    Standard_thrust = 1000      # [-] Standard thrust
+    Standard_thrust = 2113      # [-] Standard thrust
     
     Tcs = Standard_thrust/(0.5 * rho * Ve_bar**2 * D**2)    # [-] Standard thrust coefficient
     Tc = Thrust/(0.5 * rho * Ve_bar**2 * D**2)              # [-] Thrust coefficient
@@ -109,7 +109,7 @@ def red_force(Fe, hp, Vc, Tm, AFM):
     return red_Fe
 
 
-def plotter_stat_meas1(alpha, CL, CD, CL2, y1, y2):
+def plotter_stat_meas1(alpha, CL, CD, CL2):
     #plotter for the first static measurement graphs
     
     fig = plt.figure()
@@ -120,7 +120,6 @@ def plotter_stat_meas1(alpha, CL, CD, CL2, y1, y2):
     Cl_alpha_curve.set_xlabel('Angle of Attack [rad]')
     Cl_alpha_curve.set_ylabel('Lift Coefficient')
     Cl_alpha_curve.plot(alpha, CL)
-    # Cl_alpha_curve.plot((alpha, y1), color='red')
     
     Cd_alpha_curve = fig.add_subplot(222)
     Cd_alpha_curve.set_title('Cd vs Alpha Curve')
@@ -139,12 +138,11 @@ def plotter_stat_meas1(alpha, CL, CD, CL2, y1, y2):
     CD_CL2_curve.set_xlabel('Drag Coefficient')
     CD_CL2_curve.set_ylabel('Squared Lift Coefficient')
     CD_CL2_curve.plot(CL2, CD)
-    # CD_CL2_curve.plot((y2, CD), color='red')
     
     plt.show()
     
     
-def plotter_stat_meas2(Ve_bar, el_def, F_e, y3):
+def plotter_stat_meas2(Ve_bar, el_def, F_e):
     #plotter for the second static measurement graphs
     
     
@@ -155,7 +153,6 @@ def plotter_stat_meas2(Ve_bar, el_def, F_e, y3):
     el_trim_curve.set_xlabel('Equivalent Airspeed [m/s]')
     el_trim_curve.set_ylabel('Reduced Elevator Deflection [deg]')
     el_trim_curve.plot(Ve_bar, el_def)   
-    # el_trim_curve.plot((y3, Ve_bar), color='red')
     
     el_force_curve = fig.add_subplot(212)
     el_force_curve.set_title('Reduced Elevator Control Force Curve')
