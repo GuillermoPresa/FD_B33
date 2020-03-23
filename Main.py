@@ -225,11 +225,11 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
         DataLine.append(ISA_calculator.ISAcalc(DataLine[0])[2])    #Append Density
         DataLine.append(Empty_mass +TotalPayloadMass+TotalFuelMass-DataLine[8])    
         DataLine.append(aero_coeff.IAStoMach(SeaLevelPressure, SeaLevelDensity, SeaLevelTemperature, DataLine[0], DataLine[1]))    #Append Mach
+        DataLine.append(DataLine[11+3]*aero_coeff.SpeedOfSound(DataLine[7+3]))    #Append TAS
         
         if Data_reduction is True:
             DataLine[12] = Data_processing.red_airspeed(DataLine[0], DataLine[1], DataLine[10], (TotalFuelMass - DataLine[8]))[1]
-            
-        DataLine.append(DataLine[11+3]*aero_coeff.SpeedOfSound(DataLine[7+3]))    #Append TAS
+        
         DataLine.append((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea))
 #         print((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea))
 
@@ -381,7 +381,7 @@ Static_Measurements_2.DataLineList = [[6060,    161,    5.3,    0,        2.8,  
 
 Coeficients2(Static_Measurements_2)
 
-    
+test =  Coeficients2(Static_Measurements_2, True)[2]   
                                                                                 
 #-------------------------------------------------------------------------------------------------------------------------------------------------
 #                                                                DATA PROCESSING
@@ -391,11 +391,12 @@ Coeficients2(Static_Measurements_2)
 stat_meas1_outcomes = []
 
 alpha = Coeficients1(Static_Measurements_1, True)[0]
+alpha_rad = (alpha * math.pi)/180
 CL = Coeficients1(Static_Measurements_1, True)[1]
 CD = Coeficients1(Static_Measurements_1, True)[2]
 CL2 = np.square(CL)
 
-Cl_alpha = (CL[-1] - CL[0])/(alpha[-1] - alpha[0])
+Cl_alpha = (CL[-1] - CL[0])/(alpha_rad[-1] - alpha_rad[0])
 
 line_derivative = (CL2[-1] - CL2[0])/(CD[-1] - CD[0])
 Cd_0 = CL2[0] - line_derivative * CD[0]
@@ -404,14 +405,14 @@ e = 1/(math.pi * line_derivative * Aspect_ratio)
 
     
 #Cl_alpha line for control
-b = alpha[0] - Cl_alpha * CL[0]
-y1 = Cl_alpha * alpha + b
+b = alpha_rad[0] - Cl_alpha * CL[0]
+y1 = Cl_alpha * alpha_rad + b
 
 #straight line trough Cd - Cl^2
 y2 = line_derivative * CD + Cd_0
 
 # plotting
-Data_processing.plotter_stat_meas1(alpha, CL, CD, CL2, y1, y2)
+Data_processing.plotter_stat_meas1(alpha_rad, CL, CD, CL2, y1, y2)
 
 # variables
 stat_meas1_outcomes.append(Cl_alpha)
@@ -427,7 +428,7 @@ for i in range(0, len(Static_Measurements_2.DataLineList)):
 
 el_def = np.zeros(len(Static_Measurements_2.DataLineList))
 for i in range(0, len(Static_Measurements_2.DataLineList)):
-    el_def[i] = Data_processing.red_thrust(Static_Measurements_2.DataLineList[i][3])
+    el_def[i] = Data_processing.red_thrust(Static_Measurements_2.DataLineList[i][3], red_Ve[i], Static_Measurements_2.DataLineList[i][17], Static_Measurements_2.DataLineList[i][12])
     
 red_F_e = np.zeros(len(Static_Measurements_2.DataLineList))
 for i in range(0, len(Static_Measurements_2.DataLineList)):
