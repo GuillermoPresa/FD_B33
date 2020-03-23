@@ -20,7 +20,6 @@ from Cit_par import A as Aspect_ratio
 #-----------------------------------------------------------------------------------------------------------------------------------
 # 
 # IN ORDER TO DO Cma we need the elevator trim curve!
-# 1.-INPUT CORRECT CHORD VALUE
 #
 #
 #
@@ -40,7 +39,7 @@ Empty_weight = 4.44822 * 9165.0
 Empty_arm = 0.0254 * 291.65
 Empty_moment = 0.1129848 * 2672953.5
 WingArearea = 30 #m^2
-Chord = 1 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CHORRRRD 
+Chord = 2.0569
 
 TotalFuelMass = 1000
 
