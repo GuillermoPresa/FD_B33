@@ -89,7 +89,7 @@ Xcg1 = cg_pos.cg(ActualFuelMass, PayloadList)
 
 
 def Coeficients1(Static_Measurements_1):
-	print("Executing Main: Coeficients1")
+# 	print("Executing Main: Coeficients1")
 	for DataLine in Static_Measurements_1.DataLineList: #Processing1
 		DataLine[0] = DataLine[0]*0.3048	#ft to m
 		DataLine[1] = DataLine[1]*0.514444	#Knots to m/s
@@ -104,7 +104,7 @@ def Coeficients1(Static_Measurements_1):
 		DataLine.append(aero_coeff.IAStoMach(SeaLevelPressure, SeaLevelDensity, SeaLevelTemperature, DataLine[0], DataLine[1]))	#Append Mach
 		DataLine.append(DataLine[11]*aero_coeff.SpeedOfSound(DataLine[7]))	#Append TAS
 		DataLine.append((DataLine[10]*9.80665)/(0.5*DataLine[9]*math.pow(DataLine[12],2)*WingArearea))
-		print((DataLine[10]*9.80665)/(0.5*DataLine[9]*math.pow(DataLine[12],2)*WingArearea))
+# 		print((DataLine[10]*9.80665)/(0.5*DataLine[9]*math.pow(DataLine[12],2)*WingArearea))
 
 
 	#Create input matlab for thrust.exe
@@ -130,9 +130,9 @@ def Coeficients1(Static_Measurements_1):
 
 
 	dat = np.array([PressureAltitude, Mach, TemperatureDifference, FuelFlow1, FuelFlow2])
-	print("DAT array is:", dat)
+# 	print("DAT array is:", dat)
 	a = np.column_stack((dat))
-	#print("A column stack is:", a)
+# 	print("A column stack is:", a)
 	np.savetxt('matlab.dat', a, delimiter=' ')
 
 	#Run thrust.exe
@@ -154,8 +154,8 @@ def Coeficients1(Static_Measurements_1):
 
 
 	for i in range(0,len(Static_Measurements_1.DataLineList)): #Processing2
-		print("AT i: ",i,"The AOA is: ",Static_Measurements_1.DataLineList[i][2])
-		print((Static_Measurements_1.DataLineList[i][10]*9.80665)/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
+# 		print("AT i: ",i,"The AOA is: ",Static_Measurements_1.DataLineList[i][2])
+# 		print((Static_Measurements_1.DataLineList[i][10]*9.80665)/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
 
 		Static_Measurements_1.DataLineList[i].append((Static_Measurements_1.DataLineList[i][13])/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
 		Alpha_array[i] = Static_Measurements_1.DataLineList[i][2]
@@ -164,7 +164,7 @@ def Coeficients1(Static_Measurements_1):
 
 
 
-	print(Static_Measurements_1.DataLineList)
+# 	print(Static_Measurements_1.DataLineList)
 
 
 
@@ -206,9 +206,9 @@ Static_Measurements_1.DataLineList =[	[5010,	249,	1.7,	798,	813,	360,	12.5],
 Coeficients1(Static_Measurements_1)
 
 
-def Coeficients2(Static_Measurements_1):
-	print("Executing Main: Coeficients2")
-	for DataLine in Static_Measurements_1.DataLineList: #Processing1
+def Coeficients2(Static_Measurements_2):
+# 	print("Executing Main: Coeficients2")
+	for DataLine in Static_Measurements_2.DataLineList: #Processing1
 		DataLine[0] = DataLine[0]*0.3048	#ft to m
 		DataLine[1] = DataLine[1]*0.514444	#Knots to m/s
 		DataLine[3+3] = DataLine[3+3]*0.453592/3600	#Lb/hr to kg/s
@@ -222,35 +222,35 @@ def Coeficients2(Static_Measurements_1):
 		DataLine.append(aero_coeff.IAStoMach(SeaLevelPressure, SeaLevelDensity, SeaLevelTemperature, DataLine[0], DataLine[1]))	#Append Mach
 		DataLine.append(DataLine[11+3]*aero_coeff.SpeedOfSound(DataLine[7+3]))	#Append TAS
 		DataLine.append((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea))
-		print((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea))
+# 		print((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea))
 
 
 	#Create input matlab for thrust.exe
-	PressureAltitude = np.zeros(len(Static_Measurements_1.DataLineList))
-	Mach = np.zeros(len(Static_Measurements_1.DataLineList))
-	FuelFlow1 = np.zeros(len(Static_Measurements_1.DataLineList))
-	FuelFlow2 = np.zeros(len(Static_Measurements_1.DataLineList))
-	TemperatureDifference = np.zeros(len(Static_Measurements_1.DataLineList))
-	Total_array = np.zeros(5*len(Static_Measurements_1.DataLineList))
+	PressureAltitude = np.zeros(len(Static_Measurements_2.DataLineList))
+	Mach = np.zeros(len(Static_Measurements_2.DataLineList))
+	FuelFlow1 = np.zeros(len(Static_Measurements_2.DataLineList))
+	FuelFlow2 = np.zeros(len(Static_Measurements_2.DataLineList))
+	TemperatureDifference = np.zeros(len(Static_Measurements_2.DataLineList))
+	Total_array = np.zeros(5*len(Static_Measurements_2.DataLineList))
 
-	for i in range(0,len(Static_Measurements_1.DataLineList)): #Processing1
-		PressureAltitude[i] = Static_Measurements_1.DataLineList[i][0]
-		Total_array[5*i] = Static_Measurements_1.DataLineList[i][0]
-		Mach[i] = Static_Measurements_1.DataLineList[i][11+3]
-		Total_array[5*i+1] = Static_Measurements_1.DataLineList[i][11+3]
-		FuelFlow1[i] = Static_Measurements_1.DataLineList[i][3+3]
-		Total_array[5*i+2] = Static_Measurements_1.DataLineList[i][3+3]
-		FuelFlow2[i] = Static_Measurements_1.DataLineList[i][4+3]
-		Total_array[5*i+3] = Static_Measurements_1.DataLineList[i][4+3]
-		TemperatureDifference[i] = Static_Measurements_1.DataLineList[i][7+3] - Static_Measurements_1.DataLineList[i][6+3]
-		Total_array[5*i+4]  = Static_Measurements_1.DataLineList[i][6+3] - Static_Measurements_1.DataLineList[i][7+3]
+	for i in range(0,len(Static_Measurements_2.DataLineList)): #Processing1
+		PressureAltitude[i] = Static_Measurements_2.DataLineList[i][0]
+		Total_array[5*i] = Static_Measurements_2.DataLineList[i][0]
+		Mach[i] = Static_Measurements_2.DataLineList[i][11+3]
+		Total_array[5*i+1] = Static_Measurements_2.DataLineList[i][11+3]
+		FuelFlow1[i] = Static_Measurements_2.DataLineList[i][3+3]
+		Total_array[5*i+2] = Static_Measurements_2.DataLineList[i][3+3]
+		FuelFlow2[i] = Static_Measurements_2.DataLineList[i][4+3]
+		Total_array[5*i+3] = Static_Measurements_2.DataLineList[i][4+3]
+		TemperatureDifference[i] = Static_Measurements_2.DataLineList[i][7+3] - Static_Measurements_2.DataLineList[i][6+3]
+		Total_array[5*i+4]  = Static_Measurements_2.DataLineList[i][6+3] - Static_Measurements_2.DataLineList[i][7+3]
 
 
 
 	dat = np.array([PressureAltitude, Mach, TemperatureDifference, FuelFlow1, FuelFlow2])
-	print("DAT array is:", dat)
+# 	print("DAT array is:", dat)
 	a = np.column_stack((dat))
-	#print("A column stack is:", a)
+# 	print("A column stack is:", a)
 	np.savetxt('matlab.dat', a, delimiter=' ')
 
 	#Run thrust.exe
@@ -260,31 +260,31 @@ def Coeficients2(Static_Measurements_1):
 	#Read thrust.exe output
 	datfile = open("thrust.dat")
 	datContent = [i.strip().split() for i in datfile.readlines()]
-	for i in range(0,len(Static_Measurements_1.DataLineList)):
-		print(float(datContent[i][0]))
-		print("Step:", i)
-		Static_Measurements_1.DataLineList[i].append(float(datContent[i][0])+float(datContent[i][1]))
-		#Static_Measurements_1.DataLineList.append(float(ThrustTupple[0])+float(ThrustTupple[1]))
+	for i in range(0,len(Static_Measurements_2.DataLineList)):
+# 		print(float(datContent[i][0]))
+# 		print("Step:", i)
+		Static_Measurements_2.DataLineList[i].append(float(datContent[i][0])+float(datContent[i][1]))
+		#Static_Measurements_2.DataLineList.append(float(ThrustTupple[0])+float(ThrustTupple[1]))
 	datfile.close()
 
-	Cl_array = np.zeros(len(Static_Measurements_1.DataLineList))
-	Cd_array = np.zeros(len(Static_Measurements_1.DataLineList))
-	Alpha_array = np.zeros(len(Static_Measurements_1.DataLineList))
+	Cl_array = np.zeros(len(Static_Measurements_2.DataLineList))
+	Cd_array = np.zeros(len(Static_Measurements_2.DataLineList))
+	Alpha_array = np.zeros(len(Static_Measurements_2.DataLineList))
 	i = 0
 
 
-	for i in range(0,len(Static_Measurements_1.DataLineList)): #Processing2
-		print("AT i: ",i,"The AOA is: ",Static_Measurements_1.DataLineList[i][2])
-		print((Static_Measurements_1.DataLineList[i][10+3]*9.80665)/(0.5*Static_Measurements_1.DataLineList[i][9+3]*math.pow(Static_Measurements_1.DataLineList[i][12+3],2)*WingArearea))
+	for i in range(0,len(Static_Measurements_2.DataLineList)): #Processing2
+# 		print("AT i: ",i,"The AOA is: ",Static_Measurements_2.DataLineList[i][2])
+# 		print((Static_Measurements_2.DataLineList[i][10+3]*9.80665)/(0.5*Static_Measurements_2.DataLineList[i][9+3]*math.pow(Static_Measurements_2.DataLineList[i][12+3],2)*WingArearea))
 
-		Static_Measurements_1.DataLineList[i].append((Static_Measurements_1.DataLineList[i][13+3])/(0.5*Static_Measurements_1.DataLineList[i][9+3]*math.pow(Static_Measurements_1.DataLineList[i][12+3],2)*WingArearea))
-		Alpha_array[i] = Static_Measurements_1.DataLineList[i][2]
-		Cl_array[i] = Static_Measurements_1.DataLineList[i][13+3]
-		Cd_array[i] = Static_Measurements_1.DataLineList[i][15+3]
+		Static_Measurements_2.DataLineList[i].append((Static_Measurements_2.DataLineList[i][13+3])/(0.5*Static_Measurements_2.DataLineList[i][9+3]*math.pow(Static_Measurements_2.DataLineList[i][12+3],2)*WingArearea))
+		Alpha_array[i] = Static_Measurements_2.DataLineList[i][2]
+		Cl_array[i] = Static_Measurements_2.DataLineList[i][13+3]
+		Cd_array[i] = Static_Measurements_2.DataLineList[i][15+3]
 
 
 
-	print(Static_Measurements_1.DataLineList)
+# 	print(Static_Measurements_2.DataLineList)
 
 
 
@@ -312,9 +312,9 @@ def Coeficients2(Static_Measurements_1):
 
 	return Alpha_array, Cl_array, Cd_array
 
-def CoeficientsCGShift(Static_Measurements_1, Xcg1, Xcg2):
-	print("Executing Main: CoeficientsCGShift")
-	for DataLine in Static_Measurements_1.DataLineList: #Processing1
+def CoeficientsCGShift(Static_Measurements_3, Xcg1, Xcg2):
+# 	print("Executing Main: CoeficientsCGShift")
+	for DataLine in Static_Measurements_3.DataLineList: #Processing1
 		DataLine[0] = DataLine[0]*0.3048	#ft to m
 		DataLine[1] = DataLine[1]*0.514444	#Knots to m/s
 		DataLine[3+3] = DataLine[3+3]*0.453592/3600	#Lb/hr to kg/s
@@ -328,10 +328,10 @@ def CoeficientsCGShift(Static_Measurements_1, Xcg1, Xcg2):
 		DataLine.append(aero_coeff.IAStoMach(SeaLevelPressure, SeaLevelDensity, SeaLevelTemperature, DataLine[0], DataLine[1]))	#Append Mach
 		DataLine.append(DataLine[11+3]*aero_coeff.SpeedOfSound(DataLine[7+3]))	#Append TAS
 		DataLine.append((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea))
-		print((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea))
+# 		print((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea))
 
 	CN = DataLine[13]/(0.5*DataLine[12]*math.pow(DataLine[15],2)*WingArearea)
-	Cmd = -1/(Static_Measurements_1.DataLineList[1][3]-Static_Measurements_1.DataLineList[0][3]) * CN * (Xcg2-Xcg1)/Chord
+	Cmd = -1/(Static_Measurements_3.DataLineList[1][3]-Static_Measurements_3.DataLineList[0][3]) * CN * (Xcg2-Xcg1)/Chord
 
 Xcg1 = cg_pos.cg(ActualFuelMass, PayloadList)[0]
 #Moving Passenger
@@ -346,16 +346,16 @@ PayloadList2 = PassengerList + BaggageList
 Xcg2 = cg_pos.cg(ActualFuelMass, PayloadList2)[0]
 
 
-Static_Measurements_1 = Stat_mes.DataBlock(PayloadList)
+Static_Measurements_3 = Stat_mes.DataBlock(PayloadList)
 									#	[hp,	IAS,	a,		de,		detr,	Fe,		FFl,	FFr,	F.used,	TAT,	Temp,	Press,	Density,	Mass,	Mach,	TAS,	Cl,		Tot-Thrust,		Cd]
-Static_Measurements_1.DataLineList = [[5730,	161,	5.3,	0,		2.8,	0,		471,	493,	881,	5],
+Static_Measurements_3.DataLineList = [[5730,	161,	5.3,	0,		2.8,	0,		471,	493,	881,	5],
 										[5790,	161,	5.3,	-0.5,	2.8,	-30,	468,	490,	910,	5]]
 
-CoeficientsCGShift(Static_Measurements_1,Xcg1,Xcg2)
+CoeficientsCGShift(Static_Measurements_3,Xcg1,Xcg2)
 						
-Static_Measurements_1 = Stat_mes.DataBlock(PayloadList)
+Static_Measurements_2 = Stat_mes.DataBlock(PayloadList)
 									#	[hp,	IAS,	a,		de,		detr,	Fe,		FFl,	FFr,	F.used,	TAT,	Temp,	Press,	Density,	Mass,	Mach,	TAS,	Cl,		Tot-Thrust,		Cd]
-Static_Measurements_1.DataLineList = [[6060,	161,	5.3,	0,		2.8,	0,		462,	486,	664,	5.5],
+Static_Measurements_2.DataLineList = [[6060,	161,	5.3,	0,		2.8,	0,		462,	486,	664,	5.5],
 										[6350,	150,	6.3,	-0.4,	2.8,	-23,	458,	482,	694,	4.5],
 										[6550,	140,	7.3,	-0.9,	2.8,	-29,	454,	477,	730,	3.5],
 										[6880,	130,	8.5,	-1.5,	2.8,	-46,	449,	473,	755,	2.5],
@@ -363,7 +363,7 @@ Static_Measurements_1.DataLineList = [[6060,	161,	5.3,	0,		2.8,	0,		462,	486,	66
 										[5810,	179,	4.1,	0.6,	2.8,	40,		472,	496,	825,	6.2],
 										[5310,	192,	3.4,	1,		2.8,	83,		482,	505,	846,	8.2]]
 
-Coeficients2(Static_Measurements_1)
+Coeficients2(Static_Measurements_2)
 
 	
 																				
