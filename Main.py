@@ -11,7 +11,7 @@ import os
 import csv
 import time
 import Data_processing
-from cit.par import A as Aspect_ratio
+from Cit_par import A as Aspect_ratio
 
 
 #                                                        TO DO:
@@ -389,7 +389,7 @@ Coeficients2(Static_Measurements_2)
 #-------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-# STATIC MEASUREMENT 1
+########## STATIC MEASUREMENT 1
 stat_meas1_outcomes = []
 
 alpha = Coeficients1(Static_Measurements_1, True)[0]
@@ -412,7 +412,7 @@ stat_meas1_outcomes.append(Cl_alpha)
 stat_meas1_outcomes.append(Cd_0)
 stat_meas1_outcomes.append(e)
 
-# STATIC MEASURMENT 2
+########## STATIC MEASURMENT 2
 stat_meas2_outcomes = []
 
 red_Ve = np.zeros[len(Static_Measurements_2.DataLineList)]
@@ -438,9 +438,9 @@ stat_meas2_outcomes.append(Cm_delta)
 stat_meas2_outcomes.append(Cm_alpha)
 
 
-print('relevant vales static measurement 1: Cl_alpha, Cd_0, oswald efficiency')
+print('relevant values static measurement 1: Cl_alpha, Cd_0, oswald efficiency')
 print(stat_meas1_outcomes)
-print('relevant vales static measurement 2: Cm_delta, Cm_alpha')
+print('relevant values static measurement 2: Cm_delta, Cm_alpha')
 print(stat_meas2_outcomes)
                                  
 
