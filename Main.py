@@ -106,7 +106,7 @@ def Coeficients1(Static_Measurements_1, Data_reduction = False):
         if Data_reduction is True:
             DataLine[12] = Data_processing.red_airspeed(DataLine[0], DataLine[1], DataLine[6], (TotalFuelMass - DataLine[5]))[1]
         
-        DataLine.append((DataLine[10]*9.80665)/(0.5*DataLine[9]*math.pow(DataLine[12],2)*WingArearea))
+        DataLine.append((DataLine[10]*9.80665)/(0.5*DataLine[9]*math.pow(DataLine[12],2)*WingArearea)) #Just a placeholder until we substract the sin(a)*T of W
 #         print((DataLine[10]*9.80665)/(0.5*DataLine[9]*math.pow(DataLine[12],2)*WingArearea))
 
 
@@ -162,7 +162,8 @@ def Coeficients1(Static_Measurements_1, Data_reduction = False):
 #         print("AT i: ",i,"The AOA is: ",Static_Measurements_1.DataLineList[i][2])
 #         print((Static_Measurements_1.DataLineList[i][10]*9.80665)/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
 
-        Static_Measurements_1.DataLineList[i].append((Static_Measurements_1.DataLineList[i][14])/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
+        Static_Measurements_1.DataLineList[i].append((math.cos(math.pi/180*Static_Measurements_1.DataLineList[i][2])*Static_Measurements_1.DataLineList[i][14])/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
+        Static_Measurements_1.DataLineList[i][13] = ((DataLine[10]*9.80665-math.sin(math.pi/180*Static_Measurements_1.DataLineList[i][2])*Static_Measurements_1.DataLineList[i][14])/(0.5*DataLine[9]*math.pow(DataLine[12],2)*WingArearea))
         Alpha_array[i] = Static_Measurements_1.DataLineList[i][2]
         Cl_array[i] = Static_Measurements_1.DataLineList[i][13]
         Cd_array[i] = Static_Measurements_1.DataLineList[i][15]
@@ -231,7 +232,7 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
         if Data_reduction is True:
             DataLine[15] = Data_processing.red_airspeed(DataLine[0], DataLine[1], DataLine[10], (TotalFuelMass - DataLine[8]))[1]
         
-        DataLine.append((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea))
+        DataLine.append((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea)) #Only placeholder
 #         print((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea))
 
 
@@ -288,7 +289,8 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
 #         print("AT i: ",i,"The AOA is: ",Static_Measurements_2.DataLineList[i][2])
 #         print((Static_Measurements_2.DataLineList[i][10+3]*9.80665)/(0.5*Static_Measurements_2.DataLineList[i][9+3]*math.pow(Static_Measurements_2.DataLineList[i][12+3],2)*WingArearea))
 
-        Static_Measurements_2.DataLineList[i].append((Static_Measurements_2.DataLineList[i][14+3])/(0.5*Static_Measurements_2.DataLineList[i][9+3]*math.pow(Static_Measurements_2.DataLineList[i][12+3],2)*WingArearea))
+        Static_Measurements_2.DataLineList[i].append((math.cos(math.pi/180*Static_Measurements_2.DataLineList[i][2])*Static_Measurements_2.DataLineList[i][14+3])/(0.5*Static_Measurements_2.DataLineList[i][9+3]*math.pow(Static_Measurements_2.DataLineList[i][12+3],2)*WingArearea))
+        Static_Measurements_2.DataLineList[i][13] = ((DataLine[10+3]*9.80665-math.sin(math.pi/180*Static_Measurements_2.DataLineList[i][2])*Static_Measurements_2.DataLineList[i][14+3])/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea))
         Alpha_array[i] = Static_Measurements_2.DataLineList[i][2]
         Cl_array[i] = Static_Measurements_2.DataLineList[i][13+3]
         Cd_array[i] = Static_Measurements_2.DataLineList[i][15+3]
