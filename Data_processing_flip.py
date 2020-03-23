@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 from cg_pos import cg, payload_list
 import ISA_calculator
 import Data_reader
-from Main import Xcg1, Xcg2, CN
+import Main
 
 #### task 1: First Stationary Measurement Series
 
@@ -79,7 +79,7 @@ def red_airspeed(hp, Vc, Tm, AFM):
     W = m_tot * g0
     Ve_bar = Ve * m.sqrt(Ws/W)
     
-    return Ve, Ve_bar, rho, W
+    return Ve, Ve_bar, rho, W, T
 
 
 def red_thrust(el_def_meas):
@@ -97,30 +97,14 @@ def red_thrust(el_def_meas):
     return red_el_def
 
 
-def red_force(Fe, hp, Vc, Tm):
+def red_force(Fe, hp, Vc, Tm, AFM):
     #calculations for the reduced elevator control force
     # Fe = measured elevator control force
     # red_Fe = reduced elevator control force
     
-    red_Fe = Fe * Ws/(red_airspeed(hp, Vc, Tm)[3])
+    red_Fe = Fe * Ws/(red_airspeed(hp, Vc, Tm, AFM)[3])
     
     return red_Fe
-
-
-def CL(hp, Vc, Tm, AFM):
-    #calculations for the lift coefficient
-    
-    Cl = (red_airspeed(hp, Vc, Tm, AFM)[3])/(0.5 * red_airspeed(hp, Vc, Tm, AFM)[2] * red_airspeed(hp, Vc, Tm, AFM)[1] ** 2 * S)
-    
-    return Cl
-
-
-def CD(T, hp, Vc, Tm, AFM):
-    #calculations for the drag coefficient
-    
-    Cd = T/(0.5 * red_airspeed(hp, Vc, Tm, AFM)[2] * red_airspeed(hp, Vc, Tm, AFM)[1] ** 2 * S)
-
-    return Cd   
 
 
 def C_md(time1, time2):
@@ -142,47 +126,108 @@ def C_md(time1, time2):
     el_def1 = el_def_meas[index1]
     el_def2 = el_def_meas[index2]
     
-    C_md = - 1/(el_def2 - el_def1) * CN * (Xcg2 - Xcg1)/c_bar
+    C_md = - 1/(el_def2 - el_def1) * Main.CN * (Main.Xcg2 - Main.Xcg1)/c_bar
     
     return C_md
 
 
-def plotter(Ve_bar, el_def, F_e, alpha, CL, CD):
-    #plotter for the different graphs
+def plotter_stat_meas1(alpha, CL, CD, CL2):
+    #plotter for the first static measurement graphs
     
     fig = plt.figure()
     
-    el_trim_curve = fig.add_subplot(221)
-    el_trim_curve.set_title('Elevator Trim Curve')
-    el_trim_curve.set_xlabel('Equivalent Airspeed')
-    el_trim_curve.set_ylabel('Reduced Elevator Deflection')
-    el_trim_curve.plot(Ve_bar, el_def)   
     
-    el_force_curve = fig.add_subplot(222)
-    el_force_curve.set_title('Reduced Elevator Control Force Curve')
-    el_force_curve.set_xlabel('Equivalent Airspeed')
-    el_force_curve.set_ylabel('Reduced Elevator Control Force')
-    el_force_curve.plot(Ve_bar, F_e)
-    
-    Cl_alpha_curve = fig.add_subplot(223)
+    Cl_alpha_curve = fig.add_subplot(221)
     Cl_alpha_curve.set_title('Cl vs Alpha Curve')
     Cl_alpha_curve.set_xlabel('Angle of Attack')
     Cl_alpha_curve.set_ylabel('Lift Coefficient')
     Cl_alpha_curve.plot(alpha, CL)
     
-    CL_CD_curve = fig.add_subplot(224)
+    Cd_alpha_curve = fig.add_subplot(222)
+    Cd_alpha_curve.set_title('Cd vs Alpha Curve')
+    Cd_alpha_curve.set_xlabel('Angle of Attack')
+    Cd_alpha_curve.set_ylabel('Drag Coefficient')
+    Cd_alpha_curve.plot(alpha, CD)
+    
+    CL_CD_curve = fig.add_subplot(223)
     CL_CD_curve.set_title('Cl vs Cd Curve')
     CL_CD_curve.set_xlabel('Drag Coefficient')
     CL_CD_curve.set_ylabel('Lift Coefficient')
     CL_CD_curve.plot(CD, CL)
     
+    CD_CL2_curve = fig.add_subplot(223)
+    CD_CL2_curve.set_title('Cd vs Cl^2 Curve')
+    CD_CL2_curve.set_xlabel('Drag Coefficient')
+    CD_CL2_curve.set_ylabel('Squared Lift Coefficient')
+    CD_CL2_curve.plot(CD, CL2)
+    
+    plt.show()
+    
+    
+def plotter_stat_meas2(Ve_bar, el_def, F_e):
+    #plotter for the second static measurement graphs
+    
+    fig = plt.figure()
+    
+    el_trim_curve = fig.add_subplot(211)
+    el_trim_curve.set_title('Elevator Trim Curve')
+    el_trim_curve.set_xlabel('Equivalent Airspeed')
+    el_trim_curve.set_ylabel('Reduced Elevator Deflection')
+    el_trim_curve.plot(Ve_bar, el_def)   
+    
+    el_force_curve = fig.add_subplot(212)
+    el_force_curve.set_title('Reduced Elevator Control Force Curve')
+    el_force_curve.set_xlabel('Equivalent Airspeed')
+    el_force_curve.set_ylabel('Reduced Elevator Control Force')
+    el_force_curve.plot(Ve_bar, F_e)
+    
     plt.show()
 
 
-for i in range(0, len(Data_reader.flightdata['Dadc1_tas'])):
-    Ve_bar_lst[i] = red_airspeed(hp[i], Vc[i], Tm[i], AFM[i])[1]
-    red_el_def_lst[i] = red_thrust(el_def_meas[i])
-    red_Fe_lst[i] = red_force(Fe[i], hp[i], Vc[i], Tm[i], AFM[i])
+############## Calculations with main.py functions
+
+# substitute reduced values in static measuerements
+Static_Measurements_1 = Main.Static_Measurements_1
+Static_Measurements_2 = Main.Static_Measurements_2
+Static_Measurements_3 = Main.Static_Measurements_3
+
+Static_Measurements_1.DataLineList = Main.Static_Measurements_1.DataLineList
+Static_Measurements_2.DataLineList = Main.Static_Measurements_2.DataLineList
+Static_Measurements_3.DataLineList = Main.Static_Measurements_3.DataLineList
+
+
+for j in range(0, len(Main.Static_Measurements_1.DataLineList)):
+    Static_Measurements_1.DataLineList[j][1] = red_airspeed(Main.Static_Measurements_1.DataLineList[j][0], Main.Static_Measurements_1.DataLineList[j][1], Main.Static_Measurements_1.DataLineList[j][6], (Main.TotalFuelMass - Main.Static_Measurements_1.DataLineList[j][5]))[1]
+    Static_Measurements_1.DataLineList[j][6] = red_airspeed(Main.Static_Measurements_1.DataLineList[j][0], Main.Static_Measurements_1.DataLineList[j][1], Main.Static_Measurements_1.DataLineList[j][6], (Main.TotalFuelMass - Main.Static_Measurements_1.DataLineList[j][5]))[4]
+
+
+for j in range(0, len(Main.Static_Measurements_2.DataLineList)):
+    Static_Measurements_2.DataLineList[j][1] = red_airspeed(Main.Static_Measurements_2.DataLineList[j][0], Main.Static_Measurements_2.DataLineList[j][1], Main.Static_Measurements_2.DataLineList[j][10], (Main.TotalFuelMass - Main.Static_Measurements_2.DataLineList[j][8]))[1]
+    Static_Measurements_2.DataLineList[j][10] = red_airspeed(Main.Static_Measurements_2.DataLineList[j][0], Main.Static_Measurements_2.DataLineList[j][10], Main.Static_Measurements_2.DataLineList[j][10], (Main.TotalFuelMass - Main.Static_Measurements_2.DataLineList[j][8]))[4]
+
+
+for j in range(0, len(Main.Static_Measurements_3.DataLineList)):
+    Static_Measurements_3.DataLineList[j][1] = red_airspeed(Main.Static_Measurements_3.DataLineList[j][0], Main.Static_Measurements_3.DataLineList[j][1], Main.Static_Measurements_3.DataLineList[j][10], (Main.TotalFuelMass - Main.Static_Measurements_3.DataLineList[j][8]))[1]
+    Static_Measurements_3.DataLineList[j][10] = red_airspeed(Main.Static_Measurements_3.DataLineList[j][0], Main.Static_Measurements_3.DataLineList[j][1], Main.Static_Measurements_3.DataLineList[j][10], (Main.TotalFuelMass - Main.Static_Measurements_3.DataLineList[j][8]))[4]
+
+
+# plotting the values for stat meas 1
+alpha = Main.Coeficients1(Static_Measurements_1)[0]
+CL = Main.Coeficients1(Static_Measurements_1)[1]
+CD = Main.Coeficients1(Static_Measurements_1)[2]
+CL2 = np.square(CL)
+
+plotter_stat_meas1(alpha, CL, CD, CL2)
+print(CL)
+print(CD)
+
+# plotting the values for stat meas 2
+
+
+# for i in range(0, len(Data_reader.flightdata['Dadc1_tas'])):
+#     Ve_bar_lst[i] = red_airspeed(hp[i], Vc[i], Tm[i], AFM[i])[1]
+#     red_el_def_lst[i] = red_thrust(el_def_meas[i])
+#     red_Fe_lst[i] = red_force(Fe[i], hp[i], Vc[i], Tm[i], AFM[i])
 
 
 
