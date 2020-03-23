@@ -6,7 +6,7 @@ import control
 from Data_reader import *
 #These matrices are in the form of (C1d/dt)*xdot + (C2d/dt)*x + C1d/dt = 0
 def symmetric_matrix_c1(muc, c, vel, czadot, cmadot, ky):
-    return np.array([[(-2*muc*c/vel), 0, 0, 0], [0, (czadot-2*muc)*c/vel, 0, 0], [0, 0, -c/vel, 0], [0, cmadot*c/vel, 0, (-2*muc*ky**2 * c/vel)]])
+    return np.array([[(-2*muc*c/vel), 0, 0, 0], [0, (czadot-2*muc)*c/vel, 0, 0], [0, 0, -c/vel, 0], [0, cmadot*c/vel, 0, (-2*muc*ky * c/vel)]])
 def symmetric_matrix_c2(cxu,cxa,cz0,czu,cza,cx0, czq,muc, cmu, cma, cmq):
     return np.array([[cxu, cxa, cz0, 0],[czu, cza, -cx0, czq+2*muc],[0,0,0,1], [cmu,cma,0,cmq]])
 def symmetric_matrix_c3(cxde,cxdt,czde,czdt,cmde,cmdt):
@@ -40,7 +40,7 @@ def asymabcd_solver(c1mat,c2mat,c3mat):
     return control.ss(a,b,c,d)
 #this returns the ybar values from the equation ybar = C*xbar + D*ubar the output is a y, a t and an x out
 def ybar(state_space,ubar,time_steps,x0):
-    t,y,x = control.forced_response(state_space,time_steps,ubar,x0, transpose=False)
+    t,y,x = control.forced_response(state_space,time_steps,ubar,x0)
     return y
 
 

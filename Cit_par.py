@@ -16,11 +16,11 @@ m      = 6305.29           # mass [kg]
 # aerodynamic properties
 e      =  0.8           # Oswald factor [ ]
 CD0    = 0.04            # Zero lift drag coefficient [ ]
-CLa    = 5.084            # Slope of CL-alpha curve [ ]
+CLa    = 4.084            # Slope of CL-alpha curve [ ]
 
 # Longitudinal stability
-Cma    = -0.4934            # longitudinal stabilty [ ]  FILLER
-Cmde   = -1.23            # elevator effectiveness [ ] FILLER
+Cma    = -0.5832            # longitudinal stabilty [ ]  FILLER
+Cmde   = -1.2163            # elevator effectiveness [ ] FILLER
 
 # Aircraft geometry
 
