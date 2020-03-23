@@ -368,7 +368,7 @@ Xcg2 = cg_pos.cg((TotalFuelMass - Static_Measurements_3.DataLineList[1][8]), Pay
 
 CoeficientsCGShift(Static_Measurements_3,Xcg1,Xcg2)
 
-test=CoeficientsCGShift(Static_Measurements_3,Xcg1,Xcg2)
+
                         
 Static_Measurements_2 = Stat_mes.DataBlock(PayloadList)
                                     #    [hp,    IAS,    a,        de,        detr,    Fe,        FFl,    FFr,    F.used,    TAT,    Temp,    Press,    Density,    Mass,    Mach,    TAS,    Cl,        Tot-Thrust,        Cd]
