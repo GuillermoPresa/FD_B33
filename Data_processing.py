@@ -142,14 +142,14 @@ def plotter_stat_meas1(alpha, CL, CD, CL2, y1, y2):
     
     Cl_alpha_curve = fig.add_subplot(221)
     Cl_alpha_curve.set_title('Cl vs Alpha Curve')
-    Cl_alpha_curve.set_xlabel('Angle of Attack')
+    Cl_alpha_curve.set_xlabel('Angle of Attack [rad]')
     Cl_alpha_curve.set_ylabel('Lift Coefficient')
     Cl_alpha_curve.plot(alpha, CL)
     # Cl_alpha_curve.plot((alpha, y1), color='red')
     
     Cd_alpha_curve = fig.add_subplot(222)
     Cd_alpha_curve.set_title('Cd vs Alpha Curve')
-    Cd_alpha_curve.set_xlabel('Angle of Attack')
+    Cd_alpha_curve.set_xlabel('Angle of Attack [rad]')
     Cd_alpha_curve.set_ylabel('Drag Coefficient')
     Cd_alpha_curve.plot(alpha, CD)
     
@@ -177,15 +177,15 @@ def plotter_stat_meas2(Ve_bar, el_def, F_e, y3):
     
     el_trim_curve = fig.add_subplot(211)
     el_trim_curve.set_title('Elevator Trim Curve')
-    el_trim_curve.set_xlabel('Equivalent Airspeed')
-    el_trim_curve.set_ylabel('Reduced Elevator Deflection')
+    el_trim_curve.set_xlabel('Equivalent Airspeed [m/s]')
+    el_trim_curve.set_ylabel('Reduced Elevator Deflection [deg]')
     el_trim_curve.plot(Ve_bar, el_def)   
     # el_trim_curve.plot((y3, Ve_bar), color='red')
     
     el_force_curve = fig.add_subplot(212)
     el_force_curve.set_title('Reduced Elevator Control Force Curve')
-    el_force_curve.set_xlabel('Equivalent Airspeed')
-    el_force_curve.set_ylabel('Reduced Elevator Control Force')
+    el_force_curve.set_xlabel('Equivalent Airspeed [m/s]')
+    el_force_curve.set_ylabel('Reduced Elevator Control Force [N]')
     el_force_curve.plot(Ve_bar, F_e)
     
     plt.show()
