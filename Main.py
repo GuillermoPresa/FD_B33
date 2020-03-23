@@ -175,19 +175,19 @@ def Coeficients1(Static_Measurements_1, Data_reduction = False):
 
 
     fig = plt.figure()
-    ax1 = fig.add_subplot(111)
+    ax1 = fig.add_subplot(311)
     ax1.set_title('Cla')
     ax1.set_xlabel('Alpha')
     ax1.set_ylabel('Cl')
     img1 = ax1.plot(Cl_array, Alpha_array)
 
-    ax1 = fig.add_subplot(122)
+    ax1 = fig.add_subplot(312)
     ax1.set_title('Cda')
     ax1.set_xlabel('Alpha')
     ax1.set_ylabel('Cd')
     img1 = ax1.plot(Cd_array, Alpha_array)
 
-    ax1 = fig.add_subplot(133)
+    ax1 = fig.add_subplot(313)
     ax1.set_title('Cl/Cd')
     ax1.set_xlabel('Cl')
     ax1.set_ylabel('Cd')
@@ -299,19 +299,19 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
 
 
     fig = plt.figure()
-    ax1 = fig.add_subplot(111)
+    ax1 = fig.add_subplot(311)
     ax1.set_title('Cla')
     ax1.set_xlabel('Alpha')
     ax1.set_ylabel('Cl')
     img1 = ax1.plot(Cl_array, Alpha_array)
 
-    ax1 = fig.add_subplot(122)
+    ax1 = fig.add_subplot(312)
     ax1.set_title('Cda')
     ax1.set_xlabel('Alpha')
     ax1.set_ylabel('Cd')
     img1 = ax1.plot(Cd_array, Alpha_array)
 
-    ax1 = fig.add_subplot(133)
+    ax1 = fig.add_subplot(313)
     ax1.set_title('Cl/Cd')
     ax1.set_xlabel('Cl')
     ax1.set_ylabel('Cd')
@@ -449,7 +449,7 @@ print(stat_meas2_outcomes)
 #-------------------------------------------------------------------------------------------------------------------------------------------------
 #                                                                USER INTERFACE
 #-------------------------------------------------------------------------------------------------------------------------------------------------
-
+'''
 passenger_spacing_y = 40
 passenger_spacing_x = 75
 
@@ -522,6 +522,6 @@ mywin=MyWindow(window)
 window.title('Group B33')
 window.geometry("1200x800+10+10")
 window.mainloop()
-
+'''
 
 
