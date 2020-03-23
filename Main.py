@@ -350,14 +350,14 @@ def CoeficientsCGShift(Static_Measurements_3, Xcg1, Xcg2, Data_reduction = False
 
 
 Xcg1 = cg_pos.cg(ActualFuelMass, PayloadList)[0]
+
 #Moving Passenger
-Passenger3 = cg_pos.Passenger(61,3)
-Passenger4 = cg_pos.Passenger(61,5)
+Passenger10 = cg_pos.Passenger(61,7)
 
 
 PassengerList2 = [Pilot1, Pilot2, Passenger3, Passenger4, Passenger5, Passenger6, Passenger7, Passenger8, Passenger9, Passenger10]
 BaggageList2 = [Bag1, Bag2, Bag3]
-PayloadList2 = PassengerList + BaggageList
+PayloadList2 = PassengerList2 + BaggageList
 
 Xcg2 = cg_pos.cg(ActualFuelMass, PayloadList2)[0]
 
@@ -380,8 +380,7 @@ Static_Measurements_2.DataLineList = [[6060,    161,    5.3,    0,        2.8,  
                                         [5310,    192,    3.4,    1,        2.8,    83,        482,    505,    846,    8.2]]
 
 Coeficients2(Static_Measurements_2)
-
-test =  Coeficients2(Static_Measurements_2, True)[2]   
+   
                                                                                 
 #-------------------------------------------------------------------------------------------------------------------------------------------------
 #                                                                DATA PROCESSING
