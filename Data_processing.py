@@ -11,7 +11,7 @@ Created on Mon Mar  9 15:04:57 2020
 import math as m
 import numpy as np
 import matplotlib.pyplot as plt
-from cg_pos import cg, payload_list
+import cg_pos
 import ISA_calculator
 import Data_reader
 
@@ -74,7 +74,7 @@ def red_airspeed(hp, Vc, Tm, AFM):
     Ve = Vt * m.sqrt(rho/rho_0)
     
     #calculation for the reduction of the equivalent airspeed
-    m_tot = cg(AFM, payload_list)[1]
+    m_tot = cg_pos.cg(AFM, cg_pos.payload_list)[1]
     W = m_tot * g0
     Ve_bar = Ve * m.sqrt(Ws/W)
     

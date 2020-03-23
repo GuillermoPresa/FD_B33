@@ -442,7 +442,11 @@ print('relevant vales static measurement 1: Cl_alpha, Cd_0, oswald efficiency')
 print(stat_meas1_outcomes)
 print('relevant vales static measurement 2: Cm_delta, Cm_alpha')
 print(stat_meas2_outcomes)
-                                                                                    
+                                 
+
+
+
+                                                   
 #-------------------------------------------------------------------------------------------------------------------------------------------------
 #                                                                USER INTERFACE
 #-------------------------------------------------------------------------------------------------------------------------------------------------
