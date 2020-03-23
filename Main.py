@@ -6,7 +6,7 @@ import cg_pos
 import Stat_mes
 import aero_coeff
 import ISA_calculator
-import scipy.io
+from scipy import stats
 import os
 import csv
 import time
@@ -160,7 +160,7 @@ def Coeficients1(Static_Measurements_1, Data_reduction = False):
 #         print("AT i: ",i,"The AOA is: ",Static_Measurements_1.DataLineList[i][2])
 #         print((Static_Measurements_1.DataLineList[i][10]*9.80665)/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
 
-        Static_Measurements_1.DataLineList[i].append((Static_Measurements_1.DataLineList[i][13])/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
+        Static_Measurements_1.DataLineList[i].append((Static_Measurements_1.DataLineList[i][14])/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
         Alpha_array[i] = Static_Measurements_1.DataLineList[i][2]
         Cl_array[i] = Static_Measurements_1.DataLineList[i][13]
         Cd_array[i] = Static_Measurements_1.DataLineList[i][15]
@@ -285,7 +285,7 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
 #         print("AT i: ",i,"The AOA is: ",Static_Measurements_2.DataLineList[i][2])
 #         print((Static_Measurements_2.DataLineList[i][10+3]*9.80665)/(0.5*Static_Measurements_2.DataLineList[i][9+3]*math.pow(Static_Measurements_2.DataLineList[i][12+3],2)*WingArearea))
 
-        Static_Measurements_2.DataLineList[i].append((Static_Measurements_2.DataLineList[i][13+3])/(0.5*Static_Measurements_2.DataLineList[i][9+3]*math.pow(Static_Measurements_2.DataLineList[i][12+3],2)*WingArearea))
+        Static_Measurements_2.DataLineList[i].append((Static_Measurements_2.DataLineList[i][14+3])/(0.5*Static_Measurements_2.DataLineList[i][9+3]*math.pow(Static_Measurements_2.DataLineList[i][12+3],2)*WingArearea))
         Alpha_array[i] = Static_Measurements_2.DataLineList[i][2]
         Cl_array[i] = Static_Measurements_2.DataLineList[i][13+3]
         Cd_array[i] = Static_Measurements_2.DataLineList[i][15+3]
@@ -396,26 +396,20 @@ CL = Coeficients1(Static_Measurements_1, True)[1]
 CD = Coeficients1(Static_Measurements_1, True)[2]
 CL2 = np.square(CL)
 
-Cl_alpha = (CL[-1] - CL[0])/(alpha_rad[-1] - alpha_rad[0])
+# fitting lines through graphs
+CL_alpha, Cl0, r_value, p_value, std_err = stats.linregress(alpha_rad, CL)
+line_deriv1, Cd_0, r_value, p_value, std_err = stats.linregress(CL2, CD)
 
-line_derivative = (CL2[-1] - CL2[0])/(CD[-1] - CD[0])
-Cd_0 = CL2[0] - line_derivative * CD[0]
+e = 1/(math.pi * line_deriv1 * Aspect_ratio)
 
-e = 1/(math.pi * line_derivative * Aspect_ratio)
+CL_improved = CL_alpha * alpha_rad + Cl0
 
-    
-#Cl_alpha line for control
-b = alpha_rad[0] - Cl_alpha * CL[0]
-y1 = Cl_alpha * alpha_rad + b
-
-#straight line trough Cd - Cl^2
-y2 = line_derivative * CD + Cd_0
 
 # plotting
-Data_processing.plotter_stat_meas1(alpha_rad, CL, CD, CL2, y1, y2)
+Data_processing.plotter_stat_meas1(alpha_rad, CL_improved, CD, CL2)
 
 # variables
-stat_meas1_outcomes.append(Cl_alpha)
+stat_meas1_outcomes.append(CL_alpha)
 stat_meas1_outcomes.append(Cd_0)
 stat_meas1_outcomes.append(e)
 
@@ -435,14 +429,16 @@ for i in range(0, len(Static_Measurements_2.DataLineList)):
     red_F_e[i] = Data_processing.red_force(Static_Measurements_2.DataLineList[i][5], Static_Measurements_2.DataLineList[i][0], Static_Measurements_2.DataLineList[i][1], Static_Measurements_2.DataLineList[i][10], (TotalFuelMass - Static_Measurements_2.DataLineList[i][8]))
 
 Cm_delta = CoeficientsCGShift(Static_Measurements_3, Xcg1, Xcg2, True)
-Cm_alpha = -1 * ((red_F_e[-1] - red_F_e[0])/(red_Ve[-1] - red_Ve[0])) * Cm_delta
+
+lin_deriv2, intercept, r_value, p_value, std_err = stats.linregress(red_Ve, red_F_e)
+Cm_alpha = -1 * lin_deriv2 * Cm_delta
 
 #Cm_alpha line for control
 b = red_Ve[0] - el_def[0] * Cm_alpha
 y3 = Cm_alpha * red_Ve + b
 
 # plotting
-Data_processing.plotter_stat_meas2(red_Ve, el_def, red_F_e, y3)
+Data_processing.plotter_stat_meas2(red_Ve, el_def, red_F_e)
 
 # variables
 stat_meas2_outcomes.append(Cm_delta)
