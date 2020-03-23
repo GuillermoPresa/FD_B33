@@ -238,8 +238,8 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
     #Create input matlab for thrust.exe
     PressureAltitude = np.zeros(len(Static_Measurements_2.DataLineList))
     Mach = np.zeros(len(Static_Measurements_2.DataLineList))
-    FuelFlow1 = np.zeros(len(Static_Measurements_2.DataLineList))
-    FuelFlow2 = np.zeros(len(Static_Measurements_2.DataLineList))
+    FuelFlow1 = 0.048
+    FuelFlow2 = 0.048
     TemperatureDifference = np.zeros(len(Static_Measurements_2.DataLineList))
     Total_array = np.zeros(5*len(Static_Measurements_2.DataLineList))
 
