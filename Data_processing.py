@@ -14,7 +14,6 @@ import matplotlib.pyplot as plt
 from cg_pos import cg, payload_list
 import ISA_calculator
 import Data_reader
-import Main
 
 #### task 1: First Stationary Measurement Series
 
@@ -107,32 +106,40 @@ def red_force(Fe, hp, Vc, Tm, AFM):
     return red_Fe
 
 
-def C_md(time1, time2):
-    #calculations for the determination of the elevator effectiveness coefficient C_md
-    # time1 = time at beginning of weight shift (Xcg1)
-    # time2 = time at end of weight shift (Xcg2)
-    # el_def1 = elevator deflection at beginning of weight shift
-    # el_def2 = elevator deflection at end of weight shift
-    # C_md = Elevator effectiveness coefficient
+# def C_md(time1, time2):
+#     #calculations for the determination of the elevator effectiveness coefficient C_md
+#     # time1 = time at beginning of weight shift (Xcg1)
+#     # time2 = time at end of weight shift (Xcg2)
+#     # el_def1 = elevator deflection at beginning of weight shift
+#     # el_def2 = elevator deflection at end of weight shift
+#     # C_md = Elevator effectiveness coefficient
     
-    abs_difference1 = lambda list_value : abs(list_value - time1)
-    closest1 = min(time, key=abs_difference1)
-    index1 = time.index(closest1)
+#     abs_difference1 = lambda list_value : abs(list_value - time1)
+#     closest1 = min(time, key=abs_difference1)
+#     index1 = time.index(closest1)
     
-    abs_difference2 = lambda list_value : abs(list_value - time2)
-    closest2 = min(time, key=abs_difference2) 
-    index2 = time.index(closest2)
+#     abs_difference2 = lambda list_value : abs(list_value - time2)
+#     closest2 = min(time, key=abs_difference2) 
+#     index2 = time.index(closest2)
     
-    el_def1 = el_def_meas[index1]
-    el_def2 = el_def_meas[index2]
+#     el_def1 = el_def_meas[index1]
+#     el_def2 = el_def_meas[index2]
     
-    C_md = - 1/(el_def2 - el_def1) * Main.CN * (Main.Xcg2 - Main.Xcg1)/c_bar
     
-    return C_md
+#     # C_md = - 1/(el_def2 - el_def1) * CN * (Xcg2 - Xcg1)/c_bar
+    
+#     return C_md
 
 
-def plotter_stat_meas1(alpha, CL, CD, CL2):
+def plotter_stat_meas1(alpha, CL, CD, CL2, Cl_alpha, Cd_0, line_derivative):
     #plotter for the first static measurement graphs
+    
+    #Cl_alpha line for control
+    b = alpha[0] - Cl_alpha * CL[0]
+    y = Cl_alpha * alpha + b
+    
+    #straight line trough Cd - Cl^2
+    y2 = line_derivative * CD + Cd_0
     
     fig = plt.figure()
     
@@ -142,6 +149,7 @@ def plotter_stat_meas1(alpha, CL, CD, CL2):
     Cl_alpha_curve.set_xlabel('Angle of Attack')
     Cl_alpha_curve.set_ylabel('Lift Coefficient')
     Cl_alpha_curve.plot(alpha, CL)
+    Cl_alpha_curve.plot((alpha, y), color='red')
     
     Cd_alpha_curve = fig.add_subplot(222)
     Cd_alpha_curve.set_title('Cd vs Alpha Curve')
@@ -160,12 +168,17 @@ def plotter_stat_meas1(alpha, CL, CD, CL2):
     CD_CL2_curve.set_xlabel('Drag Coefficient')
     CD_CL2_curve.set_ylabel('Squared Lift Coefficient')
     CD_CL2_curve.plot(CD, CL2)
+    CD_CL2_curve.plot((CD, y2), color='red')
     
     plt.show()
     
     
-def plotter_stat_meas2(Ve_bar, el_def, F_e):
+def plotter_stat_meas2(Ve_bar, el_def, F_e, Cm_alpha):
     #plotter for the second static measurement graphs
+    
+    #Cm_alpha line for control
+    b = Ve_bar[0] - el_def[0] * Cm_alpha
+    y = Cm_alpha * Ve_bar + b
     
     fig = plt.figure()
     
@@ -174,6 +187,7 @@ def plotter_stat_meas2(Ve_bar, el_def, F_e):
     el_trim_curve.set_xlabel('Equivalent Airspeed')
     el_trim_curve.set_ylabel('Reduced Elevator Deflection')
     el_trim_curve.plot(Ve_bar, el_def)   
+    el_trim_curve.plot((Ve_bar, y), color='red')
     
     el_force_curve = fig.add_subplot(212)
     el_force_curve.set_title('Reduced Elevator Control Force Curve')
@@ -182,52 +196,3 @@ def plotter_stat_meas2(Ve_bar, el_def, F_e):
     el_force_curve.plot(Ve_bar, F_e)
     
     plt.show()
-
-
-############## Calculations with main.py functions
-
-# substitute reduced values in static measuerements
-Static_Measurements_1 = Main.Static_Measurements_1
-Static_Measurements_2 = Main.Static_Measurements_2
-Static_Measurements_3 = Main.Static_Measurements_3
-
-Static_Measurements_1.DataLineList = Main.Static_Measurements_1.DataLineList
-Static_Measurements_2.DataLineList = Main.Static_Measurements_2.DataLineList
-Static_Measurements_3.DataLineList = Main.Static_Measurements_3.DataLineList
-
-
-for j in range(0, len(Main.Static_Measurements_1.DataLineList)):
-    Static_Measurements_1.DataLineList[j][1] = red_airspeed(Main.Static_Measurements_1.DataLineList[j][0], Main.Static_Measurements_1.DataLineList[j][1], Main.Static_Measurements_1.DataLineList[j][6], (Main.TotalFuelMass - Main.Static_Measurements_1.DataLineList[j][5]))[1]
-    Static_Measurements_1.DataLineList[j][6] = red_airspeed(Main.Static_Measurements_1.DataLineList[j][0], Main.Static_Measurements_1.DataLineList[j][1], Main.Static_Measurements_1.DataLineList[j][6], (Main.TotalFuelMass - Main.Static_Measurements_1.DataLineList[j][5]))[4]
-
-
-for j in range(0, len(Main.Static_Measurements_2.DataLineList)):
-    Static_Measurements_2.DataLineList[j][1] = red_airspeed(Main.Static_Measurements_2.DataLineList[j][0], Main.Static_Measurements_2.DataLineList[j][1], Main.Static_Measurements_2.DataLineList[j][10], (Main.TotalFuelMass - Main.Static_Measurements_2.DataLineList[j][8]))[1]
-    Static_Measurements_2.DataLineList[j][10] = red_airspeed(Main.Static_Measurements_2.DataLineList[j][0], Main.Static_Measurements_2.DataLineList[j][10], Main.Static_Measurements_2.DataLineList[j][10], (Main.TotalFuelMass - Main.Static_Measurements_2.DataLineList[j][8]))[4]
-
-
-for j in range(0, len(Main.Static_Measurements_3.DataLineList)):
-    Static_Measurements_3.DataLineList[j][1] = red_airspeed(Main.Static_Measurements_3.DataLineList[j][0], Main.Static_Measurements_3.DataLineList[j][1], Main.Static_Measurements_3.DataLineList[j][10], (Main.TotalFuelMass - Main.Static_Measurements_3.DataLineList[j][8]))[1]
-    Static_Measurements_3.DataLineList[j][10] = red_airspeed(Main.Static_Measurements_3.DataLineList[j][0], Main.Static_Measurements_3.DataLineList[j][1], Main.Static_Measurements_3.DataLineList[j][10], (Main.TotalFuelMass - Main.Static_Measurements_3.DataLineList[j][8]))[4]
-
-
-# plotting the values for stat meas 1
-alpha = Main.Coeficients1(Static_Measurements_1)[0]
-CL = Main.Coeficients1(Static_Measurements_1)[1]
-CD = Main.Coeficients1(Static_Measurements_1)[2]
-CL2 = np.square(CL)
-
-plotter_stat_meas1(alpha, CL, CD, CL2)
-print(CL)
-print(CD)
-
-# plotting the values for stat meas 2
-
-
-# for i in range(0, len(Data_reader.flightdata['Dadc1_tas'])):
-#     Ve_bar_lst[i] = red_airspeed(hp[i], Vc[i], Tm[i], AFM[i])[1]
-#     red_el_def_lst[i] = red_thrust(el_def_meas[i])
-#     red_Fe_lst[i] = red_force(Fe[i], hp[i], Vc[i], Tm[i], AFM[i])
-
-
-
