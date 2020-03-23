@@ -107,7 +107,7 @@ def Coeficients1(Static_Measurements_1, Data_reduction = False):
         DataLine.append(DataLine[11]*aero_coeff.SpeedOfSound(DataLine[7]))    #Append TAS
         
         if Data_reduction is True:
-            DataLine[12] = Data_processing.red_airspeed(DataLineList[0], DataLineList[1], DataLineList[6], (TotalFuelMass - DataLineList[5]))[1]
+            DataLine[12] = Data_processing.red_airspeed(DataLine[0], DataLine[1], DataLine[6], (TotalFuelMass - DataLine[5]))[1]
         
         DataLine.append((DataLine[10]*9.80665)/(0.5*DataLine[9]*math.pow(DataLine[12],2)*WingArearea))
 #         print((DataLine[10]*9.80665)/(0.5*DataLine[9]*math.pow(DataLine[12],2)*WingArearea))
@@ -143,7 +143,7 @@ def Coeficients1(Static_Measurements_1, Data_reduction = False):
 
     #Run thrust.exe
 
-    os.startfile("C:/Users/Guille/Documents/GitHub/FD_B33/thrust.exe")
+#    os.startfile("C:/Users/Guille/Documents/GitHub/FD_B33/thrust.exe")
 
     #Read thrust.exe output
     datfile = open("thrust.dat",'r')
@@ -228,7 +228,7 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
         DataLine.append(aero_coeff.IAStoMach(SeaLevelPressure, SeaLevelDensity, SeaLevelTemperature, DataLine[0], DataLine[1]))    #Append Mach
         
         if Data_reduction is True:
-            DataLine[12] = Data_processing.red_airspeed(DataLineList[0], DataLineList[1], DataLineList[10], (TotalFuelMass - DataLineList[8]))[1]
+            DataLine[12] = Data_processing.red_airspeed(DataLine[0], DataLine[1], DataLine[10], (TotalFuelMass - DataLine[8]))[1]
             
         DataLine.append(DataLine[11+3]*aero_coeff.SpeedOfSound(DataLine[7+3]))    #Append TAS
         DataLine.append((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea))
@@ -265,7 +265,7 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
 
     #Run thrust.exe
 
-    os.startfile("C:/Users/Guille/Documents/GitHub/FD_B33/thrust.exe")
+#    os.startfile("C:/Users/Guille/Documents/GitHub/FD_B33/thrust.exe")
     time.sleep(0.1)
     #Read thrust.exe output
     datfile = open("thrust.dat")
@@ -339,7 +339,7 @@ def CoeficientsCGShift(Static_Measurements_3, Xcg1, Xcg2, Data_reduction = False
         DataLine.append(DataLine[11+3]*aero_coeff.SpeedOfSound(DataLine[7+3]))    #Append TAS
         
         if Data_reduction is True:
-            DataLine[12] = Data_processing.red_airspeed(DataLineList[0], DataLineList[1], DataLineList[10], (TotalFuelMass - DataLineList[8]))[1]
+            DataLine[12] = Data_processing.red_airspeed(DataLine[0], DataLine[1], DataLine[10], (TotalFuelMass - DataLine[8]))[1]
         
         DataLine.append((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea))
      #   print((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea))
@@ -401,7 +401,7 @@ Cl_alpha = (CL[-1] - CL[0])/(alpha[-1] - alpha[0])
 line_derivative = (CL2[-1] - CL2[0])/(CD[-1] - CD[0])
 Cd_0 = CL2[0] - line_derivative * CD[0]
 
-e = 1/(pi * line_derivative * Aspect_ratio)
+e = 1/(math.pi * line_derivative * Aspect_ratio)
 
 # plotting
 Data_processing.plotter_stat_meas1(alpha, CL, CD, CL2, Cl_alpha, Cd_0, line_derivative)
