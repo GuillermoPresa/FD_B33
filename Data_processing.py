@@ -94,7 +94,7 @@ def red_thrust(el_def_meas, Ve_bar, Thrust, rho):
     Tcs = Standard_thrust/(0.5 * rho * Ve_bar**2 * D**2)    # [-] Standard thrust coefficient
     Tc = Thrust/(0.5 * rho * Ve_bar**2 * D**2)              # [-] Thrust coefficient
 
-    red_el_def = el_def_meas - 1/Cmd * Cmtc * (Tcs -Tc)
+    red_el_def = el_def_meas - Cmtc/Cmd * (Tcs -Tc)
     
     return red_el_def
 
@@ -152,12 +152,12 @@ def plotter_stat_meas2(Ve_bar, el_def, F_e):
     el_trim_curve.set_title('Elevator Trim Curve')
     el_trim_curve.set_xlabel('Equivalent Airspeed [m/s]')
     el_trim_curve.set_ylabel('Reduced Elevator Deflection [deg]')
-    el_trim_curve.plot(Ve_bar, el_def)   
+    el_trim_curve.scatter(Ve_bar, el_def)   
     
     el_force_curve = fig.add_subplot(212)
     el_force_curve.set_title('Reduced Elevator Control Force Curve')
     el_force_curve.set_xlabel('Equivalent Airspeed [m/s]')
     el_force_curve.set_ylabel('Reduced Elevator Control Force [N]')
-    el_force_curve.plot(Ve_bar, F_e)
+    el_force_curve.scatter(Ve_bar, F_e)
     
     plt.show()
