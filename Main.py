@@ -233,7 +233,7 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
             DataLine[15] = Data_processing.red_airspeed(DataLine[0], DataLine[1], DataLine[10], (TotalFuelMass - DataLine[8]))[1]
         
         DataLine.append((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea)) #Only placeholder
-#         print((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea))
+#         print((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea)) a
 
 
     #Create input matlab for thrust.exe
