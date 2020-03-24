@@ -426,12 +426,16 @@ print("CLA:",CL_alpha)
 
 e = 1/(math.pi * line_deriv1 * Aspect_ratio)
 
-#improving CL data
-CL_improved = CL_alpha * alpha_rad + Cl0
+#improving CL data and CD
+alpha_improved = np.linspace(-0.05, 0.187, 10)
+CL1 = np.linspace(-0.5, 0.5, 20)
+
+CL_improved = CL_alpha * alpha_improved + Cl0
+CD_improved = Cd_0 + (CL1**2)/(math.pi * Aspect_ratio * e)
 
 
 # plotting
-Data_processing.plotter_stat_meas1(alpha_rad, CL_improved, CD, CL2)
+Data_processing.plotter_stat_meas1(alpha_improved, CL_improved, CD_improved, CL2)
 
 # variables
 stat_meas1_outcomes.append(CL_alpha)
