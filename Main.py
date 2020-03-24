@@ -347,7 +347,7 @@ def CoeficientsCGShift(Static_Measurements_3, Xcg1, Xcg2, Data_reduction = False
                                                                                                                                                                                                                                 
 Static_Measurements_3 = Stat_mes.DataBlock(PayloadList)
                                     #    [hp,    IAS,    a,        de,        detr,    Fe,        FFl,    FFr,    F.used,    TAT,    Temp,    Press,    Density,    Mass,    Mach,    TAS,    Cl,        Tot-Thrust,        Cd]
-Static_Measurements_3.DataLineList = [[7750,    157,    5.7,    -0.3,   2.6,    1,      421,    464,    852,    -2.0],
+Static_Measurements_3.DataLineList = [[7750,    157,    5.7,    0.3,   2.6,    1,      421,    464,    852,    -2.0],
                                       [7620,    158,    5.7,    -0.8,    2.6,    -20,    423,    467,    894,    -1.8]]
 
 for DataLine in Static_Measurements_3.DataLineList:
@@ -364,10 +364,10 @@ for DataLine in Static_Measurements_3.DataLineList:
 Xcg1 = cg_pos.cg((TotalFuelMass - Static_Measurements_3.DataLineList[0][8]), PayloadList)[0]
 
 #Moving Passenger
-Passenger7_moved = cg_pos.Passenger(61,9)
+Passenger8_moved = cg_pos.Passenger(95,1)
 
 
-PassengerList2 = [Pilot1, Pilot2, Passenger3, Passenger4, Passenger5, Passenger6, Passenger7_moved, Passenger8, Passenger10]
+PassengerList2 = [Pilot1, Pilot2, Passenger3, Passenger4, Passenger5, Passenger6, Passenger7, Passenger8_moved, Passenger10]
 PayloadList2 = PassengerList2 + BaggageList
 
 Xcg2 = cg_pos.cg((TotalFuelMass - Static_Measurements_3.DataLineList[1][8]), PayloadList2)[0]
