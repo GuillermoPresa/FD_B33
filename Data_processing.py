@@ -126,6 +126,7 @@ def plotter_stat_meas1(alpha, CL, CD, CL1):
     CL_CD_curve.set_title('Cl vs Cd Curve')
     CL_CD_curve.set_xlabel('Drag Coefficient')
     CL_CD_curve.set_ylabel('Lift Coefficient')
+    CL_CD_curve.spines['bottom'].set_position('zero')
     CL_CD_curve.plot(CD, CL1)
     
     plt.show()
