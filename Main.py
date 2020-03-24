@@ -347,7 +347,7 @@ def CoeficientsCGShift(Static_Measurements_3, Xcg1, Xcg2, Data_reduction = False
                                                                                                                                                                                                                                 
 Static_Measurements_3 = Stat_mes.DataBlock(PayloadList)
                                     #    [hp,    IAS,    a,        de,        detr,    Fe,        FFl,    FFr,    F.used,    TAT,    Temp,    Press,    Density,    Mass,    Mach,    TAS,    Cl,        Tot-Thrust,        Cd]
-Static_Measurements_3.DataLineList = [[7750,    157,    5.7,    0.3,   2.6,    1,      421,    464,    852,    -2.0],
+Static_Measurements_3.DataLineList = [[7750,    157,    5.7,    -0.3,   2.6,    1,      421,    464,    852,    -2.0],
                                       [7620,    158,    5.7,    -0.8,    2.6,    -20,    423,    467,    894,    -1.8]]
 
 for DataLine in Static_Measurements_3.DataLineList:
