@@ -99,6 +99,7 @@ def red_thrust(el_def_meas, Ve_bar, Thrust, rho):
     return red_el_def
 
 
+
 def red_force(Fe, hp, Vc, Tm, AFM):
     #calculations for the reduced elevator control force
     # Fe = measured elevator control force
@@ -121,17 +122,17 @@ def plotter_stat_meas1(alpha, CL, CD, CL2):
     Cl_alpha_curve.set_ylabel('Lift Coefficient')
     Cl_alpha_curve.plot(alpha, CL)
     
-    Cd_alpha_curve = fig.add_subplot(222)
-    Cd_alpha_curve.set_title('Cd vs Alpha Curve')
-    Cd_alpha_curve.set_xlabel('Angle of Attack [rad]')
-    Cd_alpha_curve.set_ylabel('Drag Coefficient')
-    Cd_alpha_curve.plot(alpha, CD)
-    
-    CL_CD_curve = fig.add_subplot(223)
+    CL_CD_curve = fig.add_subplot(222)
     CL_CD_curve.set_title('Cl vs Cd Curve')
     CL_CD_curve.set_xlabel('Drag Coefficient')
     CL_CD_curve.set_ylabel('Lift Coefficient')
     CL_CD_curve.plot(CD, CL)
+    
+    Cd_alpha_curve = fig.add_subplot(223)
+    Cd_alpha_curve.set_title('Cd vs Alpha Curve')
+    Cd_alpha_curve.set_xlabel('Angle of Attack [rad]')
+    Cd_alpha_curve.set_ylabel('Drag Coefficient')
+    Cd_alpha_curve.plot(alpha, CD)
     
     CD_CL2_curve = fig.add_subplot(224)
     CD_CL2_curve.set_title('Cd vs Cl^2 Curve')
