@@ -111,6 +111,7 @@ def Coeficients1(Static_Measurements_1, Data_reduction = False):
 
 
     #Create input matlab for thrust.exe
+    os.remove("matlab.dat")
     PressureAltitude = np.zeros(len(Static_Measurements_1.DataLineList))
     Mach = np.zeros(len(Static_Measurements_1.DataLineList))
     FuelFlow1 = np.zeros(len(Static_Measurements_1.DataLineList))
@@ -236,6 +237,7 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
 
 
     #Create input matlab for thrust.exe
+    os.remove("matlab.dat")
     PressureAltitude = np.zeros(len(Static_Measurements_2.DataLineList))
     Mach = np.zeros(len(Static_Measurements_2.DataLineList))
     FuelFlow1 = np.zeros(len(Static_Measurements_2.DataLineList))
