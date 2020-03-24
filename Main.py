@@ -323,23 +323,17 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
 def CoeficientsCGShift(Static_Measurements_3, Xcg1, Xcg2, Data_reduction = False):
 #     print("Executing Main: CoeficientsCGShift")
     for DataLine in Static_Measurements_3.DataLineList: #Processing1
-        DataLine[0] = DataLine[0]*0.3048    #ft to m
-        DataLine[1] = DataLine[1]*0.514444    #Knots to m/s
-        DataLine[3+3] = DataLine[3+3]*0.453592/3600    #Lb/hr to kg/s
-        DataLine[4+3] = DataLine[4+3]*0.453592/3600    #Lb/hr to kg/s
-        DataLine[5+3] = DataLine[5+3]*0.453592    #Lb to Kg
-        DataLine[6+3] = DataLine[6+3]+273.15    #C to K
-        DataLine.append(ISA_calculator.ISAcalc(DataLine[0])[0])    #Append Temperature
-        DataLine.append(ISA_calculator.ISAcalc(DataLine[0])[1])    #Append Pressure
-        DataLine.append(ISA_calculator.ISAcalc(DataLine[0])[2])    #Append Density
-        DataLine.append(Empty_mass +TotalPayloadMass+TotalFuelMass- DataLine[8])    
-        DataLine.append(aero_coeff.IAStoMach(SeaLevelPressure, SeaLevelDensity, SeaLevelTemperature, DataLine[0], DataLine[1]))    #Append Mach
-        DataLine.append(DataLine[11+3]*aero_coeff.SpeedOfSound(DataLine[7+3]))    #Append TAS
+        DataLine[7+3] = (ISA_calculator.ISAcalc(DataLine[0])[0])    #Append Temperature
+        DataLine[8+3] = (ISA_calculator.ISAcalc(DataLine[0])[1])    #Append Pressure
+        DataLine[9+3] = (ISA_calculator.ISAcalc(DataLine[0])[2])    #Append Density
+        DataLine[10+3] = (Empty_mass +TotalPayloadMass+TotalFuelMass- DataLine[8])    
+        DataLine[11+3] = (aero_coeff.IAStoMach(SeaLevelPressure, SeaLevelDensity, SeaLevelTemperature, DataLine[0], DataLine[1]))    #Append Mach
+        DataLine[12+3] = (DataLine[11+3]*aero_coeff.SpeedOfSound(DataLine[7+3]))    #Append TAS
         
         if Data_reduction is True:
             DataLine[15] = Data_processing.red_airspeed(DataLine[0], DataLine[1], DataLine[10], (TotalFuelMass - DataLine[8]))[1]
   
-        DataLine.append((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea))
+        DataLine[16] = ((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea))
      #   print((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea))
 
     CN = (DataLine[13]*9.80665)/(0.5*DataLine[12]*math.pow(DataLine[15],2)*WingArearea)
@@ -355,6 +349,16 @@ Static_Measurements_3 = Stat_mes.DataBlock(PayloadList)
                                     #    [hp,    IAS,    a,        de,        detr,    Fe,        FFl,    FFr,    F.used,    TAT,    Temp,    Press,    Density,    Mass,    Mach,    TAS,    Cl,        Tot-Thrust,        Cd]
 Static_Measurements_3.DataLineList = [[5730,    161,    5.3,    0,        2.8,    0,        471,    493,    881,    5],
                                         [5790,    161,    5.3,    -0.5,    2.8,    -30,    468,    490,    910,    5]]
+
+for DataLine in Static_Measurements_3.DataLineList:
+    for i in range(9,18):
+        DataLine.append(0)
+    DataLine[0] = DataLine[0]*0.3048    #ft to m
+    DataLine[1] = DataLine[1]*0.514444    #Knots to m/s
+    DataLine[3+3] = DataLine[3+3]*0.453592/3600    #Lb/hr to kg/s
+    DataLine[4+3] = DataLine[4+3]*0.453592/3600    #Lb/hr to kg/s
+    DataLine[5+3] = DataLine[5+3]*0.453592    #Lb to Kg
+    DataLine[6+3] = DataLine[6+3]+273.15    #C to K
 
 
 Xcg1 = cg_pos.cg((TotalFuelMass - Static_Measurements_3.DataLineList[0][8]), PayloadList)[0]
@@ -422,7 +426,7 @@ CL2 = np.square(CL)
 # fitting lines through graphs
 CL_alpha, Cl0, r_value, p_value, std_err = stats.linregress(alpha_rad, CL)
 line_deriv1, Cd_0, r_value, p_value, std_err = stats.linregress(CL2, CD)
-print("CLA:",CL_alpha)
+print("CLA:",CL_alpha)                                 
 
 e = 1/(math.pi * line_deriv1 * Aspect_ratio)
 
