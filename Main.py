@@ -464,7 +464,10 @@ for i in range(0, len(Static_Measurements_2.DataLineList)):
 
 Cm_delta = CoeficientsCGShift(Static_Measurements_3, Xcg1, Xcg2, True)
 
-lin_deriv2, intersect = np.polyfit(red_Ve, el_def, 1)
+alpha_deriv = Coeficients2(Static_Measurements_2, False)[0]
+alpha_deriv_rad = (alpha_deriv * math.pi)/180
+
+lin_deriv2, intersect = np.polyfit(alpha_deriv_rad, el_def, 1)
 Cm_alpha = -1 * lin_deriv2 * Cm_delta
 
 
