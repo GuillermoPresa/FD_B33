@@ -140,17 +140,17 @@ def Coeficients1(Static_Measurements_1, Data_reduction = False):
 
     #Run thrust.exe
 
-    os.startfile("C:/Users/Guille/Documents/GitHub/FD_B33/thrust.exe")
+    # os.startfile("C:/Users/Guille/Documents/GitHub/FD_B33/thrust.exe")
 
     #Read thrust.exe output
     time.sleep(0.2)
-    datfile = open("thrust.dat",'r')
+    datfile = open("thrust.dat")
     datContent = [i.strip().split() for i in datfile.readlines()]
     for i in range(0,len(Static_Measurements_1.DataLineList)):
         Static_Measurements_1.DataLineList[i].append(float(datContent[i][0])+float(datContent[i][1]))
         #Static_Measurements_1.DataLineList.append(float(ThrustTupple[0])+float(ThrustTupple[1]))
     datfile.close()
-    os.remove("thrust.dat")
+    # os.remove("thrust.dat")
 
     Cl_array = np.zeros(len(Static_Measurements_1.DataLineList))
     Cd_array = np.zeros(len(Static_Measurements_1.DataLineList))
@@ -266,7 +266,7 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
 
     #Run thrust.exe
 
-    os.startfile("C:/Users/Guille/Documents/GitHub/FD_B33/thrust.exe")
+    # os.startfile("C:/Users/Guille/Documents/GitHub/FD_B33/thrust.exe")
     time.sleep(0.2)
     #Read thrust.exe output
     datfile = open("thrust.dat")
@@ -277,7 +277,7 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
         Static_Measurements_2.DataLineList[i].append(float(datContent[i][0])+float(datContent[i][1]))
         #Static_Measurements_2.DataLineList.append(float(ThrustTupple[0])+float(ThrustTupple[1]))
     datfile.close()
-    os.remove("thrust.dat")
+    # os.remove("thrust.dat")
 
     Cl_array = np.zeros(len(Static_Measurements_2.DataLineList))
     Cd_array = np.zeros(len(Static_Measurements_2.DataLineList))
@@ -375,6 +375,8 @@ Xcg2 = cg_pos.cg((TotalFuelMass - Static_Measurements_3.DataLineList[1][8]), Pay
 CoeficientsCGShift(Static_Measurements_3,Xcg1,Xcg2)
 
 
+
+
                         
 Static_Measurements_2 = Stat_mes.DataBlock(PayloadList)
                                     #    [hp,    IAS,    a,        de,        detr,    Fe,        FFl,    FFr,    F.used,    TAT,    Temp,    Press,    Density,    Mass,    Mach,    TAS,    Cl,        Tot-Thrust,        Cd]
@@ -429,7 +431,7 @@ for i in range(0, len(Static_Measurements_2.DataLineList)):
 
 el_def = np.zeros(len(Static_Measurements_2.DataLineList))
 for i in range(0, len(Static_Measurements_2.DataLineList)):
-    el_def[i] = Data_processing.red_thrust(Static_Measurements_2.DataLineList[i][3], red_Ve[i], Static_Measurements_2.DataLineList[i][17], Static_Measurements_2.DataLineList[i][12])
+    el_def[i] = math.pi/180 * (Data_processing.red_thrust(Static_Measurements_2.DataLineList[i][3], red_Ve[i], Static_Measurements_2.DataLineList[i][17], Static_Measurements_2.DataLineList[i][12]))
     
 red_F_e = np.zeros(len(Static_Measurements_2.DataLineList))
 for i in range(0, len(Static_Measurements_2.DataLineList)):
