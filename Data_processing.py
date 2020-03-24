@@ -110,7 +110,7 @@ def red_force(Fe, hp, Vc, Tm, AFM):
     return red_Fe
 
 
-def plotter_stat_meas1(alpha, CL, CD, CL2):
+def plotter_stat_meas1(alpha, CL, CD, CL1):
     #plotter for the first static measurement graphs
     
     fig = plt.figure()
@@ -126,19 +126,7 @@ def plotter_stat_meas1(alpha, CL, CD, CL2):
     CL_CD_curve.set_title('Cl vs Cd Curve')
     CL_CD_curve.set_xlabel('Drag Coefficient')
     CL_CD_curve.set_ylabel('Lift Coefficient')
-    CL_CD_curve.plot(CD, CL)
-    
-    Cd_alpha_curve = fig.add_subplot(223)
-    Cd_alpha_curve.set_title('Cd vs Alpha Curve')
-    Cd_alpha_curve.set_xlabel('Angle of Attack [rad]')
-    Cd_alpha_curve.set_ylabel('Drag Coefficient')
-    Cd_alpha_curve.plot(alpha, CD)
-    
-    CD_CL2_curve = fig.add_subplot(224)
-    CD_CL2_curve.set_title('Cd vs Cl^2 Curve')
-    CD_CL2_curve.set_xlabel('Drag Coefficient')
-    CD_CL2_curve.set_ylabel('Squared Lift Coefficient')
-    CD_CL2_curve.plot(CL2, CD)
+    CL_CD_curve.plot(CD, CL1)
     
     plt.show()
     

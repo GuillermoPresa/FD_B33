@@ -435,7 +435,7 @@ CD_improved = Cd_0 + (CL1**2)/(math.pi * Aspect_ratio * e)
 
 
 # plotting
-Data_processing.plotter_stat_meas1(alpha_improved, CL_improved, CD_improved, CL2)
+Data_processing.plotter_stat_meas1(alpha_improved, CL_improved, CD_improved, CL1)
 
 # variables
 stat_meas1_outcomes.append(CL_alpha)
