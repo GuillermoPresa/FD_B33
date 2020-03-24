@@ -163,7 +163,7 @@ def Coeficients1(Static_Measurements_1, Data_reduction = False):
 #         print((Static_Measurements_1.DataLineList[i][10]*9.80665)/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
 
         Static_Measurements_1.DataLineList[i].append((math.cos(math.pi/180*Static_Measurements_1.DataLineList[i][2])*Static_Measurements_1.DataLineList[i][14])/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
-        Static_Measurements_1.DataLineList[i][13] = ((DataLine[10]*9.80665-math.sin(math.pi/180*Static_Measurements_1.DataLineList[i][2])*Static_Measurements_1.DataLineList[i][14])/(0.5*DataLine[9]*math.pow(DataLine[12],2)*WingArearea))
+        Static_Measurements_1.DataLineList[i][13] = ((Static_Measurements_1.DataLineList[i][10]*9.80665-math.sin(math.pi/180*Static_Measurements_1.DataLineList[i][2])*Static_Measurements_1.DataLineList[i][14])/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
         Alpha_array[i] = Static_Measurements_1.DataLineList[i][2]
         Cl_array[i] = Static_Measurements_1.DataLineList[i][13]
         Cd_array[i] = Static_Measurements_1.DataLineList[i][15]
@@ -171,7 +171,6 @@ def Coeficients1(Static_Measurements_1, Data_reduction = False):
 
 
 #     print(Static_Measurements_1.DataLineList)
-
 
 
     fig = plt.figure()
@@ -290,7 +289,7 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
 #         print((Static_Measurements_2.DataLineList[i][10+3]*9.80665)/(0.5*Static_Measurements_2.DataLineList[i][9+3]*math.pow(Static_Measurements_2.DataLineList[i][12+3],2)*WingArearea))
 
         Static_Measurements_2.DataLineList[i].append((math.cos(math.pi/180*Static_Measurements_2.DataLineList[i][2])*Static_Measurements_2.DataLineList[i][14+3])/(0.5*Static_Measurements_2.DataLineList[i][9+3]*math.pow(Static_Measurements_2.DataLineList[i][12+3],2)*WingArearea))
-        Static_Measurements_2.DataLineList[i][13] = ((DataLine[10+3]*9.80665-math.sin(math.pi/180*Static_Measurements_2.DataLineList[i][2])*Static_Measurements_2.DataLineList[i][14+3])/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea))
+        Static_Measurements_2.DataLineList[i][13] = ((Static_Measurements_1.DataLineList[i][10+3]*9.80665-math.sin(math.pi/180*Static_Measurements_2.DataLineList[i][2])*Static_Measurements_2.DataLineList[i][14+3])/(0.5*Static_Measurements_1.DataLineList[i][9+3]*math.pow(Static_Measurements_1.DataLineList[i][12+3],2)*WingArearea))
         Alpha_array[i] = Static_Measurements_2.DataLineList[i][2]
         Cl_array[i] = Static_Measurements_2.DataLineList[i][13+3]
         Cd_array[i] = Static_Measurements_2.DataLineList[i][15+3]
