@@ -16,7 +16,7 @@ m      = 6305.29           # mass [kg]
 # aerodynamic properties
 e      =  0.8           # Oswald factor [ ]
 CD0    = 0.04            # Zero lift drag coefficient [ ]
-CLa    = 4.084            # Slope of CL-alpha curve [ ]
+CLa    = 4.1            # Slope of CL-alpha curve [ ]
 
 # Longitudinal stability
 Cma    = -0.5832            # longitudinal stabilty [ ]  FILLER

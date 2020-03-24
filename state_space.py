@@ -27,6 +27,7 @@ def asymmetric_matrix_c3(cyda, cydr, clda, cldr, cnda, cndr):
 def symabcd_solver(c1mat,c2mat,c3mat):
 
     a = -np.matmul(np.linalg.inv(c1mat), c2mat)
+
     b = -np.matmul(np.linalg.inv(c1mat), c3mat)
     c = np.identity(4)
     d = np.array([[0,0],[0,0],[0,0],[0,0]])
@@ -34,6 +35,7 @@ def symabcd_solver(c1mat,c2mat,c3mat):
 def asymabcd_solver(c1mat,c2mat,c3mat):
 
     a = np.matmul(np.linalg.inv(c1mat), c2mat)
+
     b = np.matmul(np.linalg.inv(c1mat), c3mat)
     c = np.identity(4)
     d = np.array([[0,0],[0,0],[0,0],[0,0]])
