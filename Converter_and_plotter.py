@@ -79,7 +79,8 @@ for i in range(len(index)):
     asymmatc2 = asymmetric_matrix_c2(CYb,CL_new,CYp,CYr,mub, Clb, Clp, Clr,Cnb,Cnp,Cnr)
     asymmatc3 = asymmetric_matrix_c3(CYda,CYdr,Clda,Cldr,Cnda,Cndr)
 
-
+    matasymeig = np.linalg.eigvals(-np.matmul(np.linalg.inv(symmatc1),symmatc2))
+    mataasymeig = np.linalg.eigvals(np.matmul(np.linalg.inv(asymmatc1),asymmatc2))
     delta_e = deg_to_rad(flightdata['delta_e'])
     delta_e = delta_e[index_begin:index_end]
     trim = np.zeros(index_end-index_begin)
@@ -110,6 +111,7 @@ for i in range(len(index)):
 
     if manuever_type[i] == 1:
         print('-------------------SYMMETRIC-----------------')
+        print(matasymeig)
         plt.figure(figsize=(14, 10))
         plt.subplot(2,2,1)
         plt.plot(time_new,(vel_st+ybar_symm[0]*vel_st), label = 'Simulated Response')
@@ -140,10 +142,7 @@ for i in range(len(index)):
     else:
     #Asymm Plots
         print('-------------------ASYMMETRIC-----------------')
-        print(ybar_asymm[0])
-        print(phi_st+ybar_asymm[1])
-        print((ybar_asymm[2]*2*vel_st/b)-p_st)
-        print((ybar_asymm[3]*2*vel_st/b)+r_st)
+        print(mataasymeig)
         plt.figure(figsize=(16,12))
         plt.subplot(2,2,1)
         plt.plot(time_new,(ybar_asymm[0]), label = 'Simulated Response')
