@@ -141,7 +141,7 @@ def plotter_stat_meas2(Ve_bar, el_def, F_e):
     el_trim_curve = fig.add_subplot(211)
     el_trim_curve.set_title('Elevator Trim Curve')
     el_trim_curve.set_xlabel('Equivalent Airspeed [m/s]')
-    el_trim_curve.set_ylabel('Reduced Elevator Deflection [deg]')
+    el_trim_curve.set_ylabel('Reduced Elevator Deflection [rad]')
     el_trim_curve.plot(Ve_bar, el_def)   
     
     el_force_curve = fig.add_subplot(212)
