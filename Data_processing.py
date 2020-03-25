@@ -89,7 +89,7 @@ def red_thrust(el_def_meas, Ve_bar, Thrust, rho):
     Cmd = -1.1642               # [-] Elevator deflection moment coefficient
     Cmtc = -0.0064              # [-] Thrust moment arm
     D = 0.686                   # [m] Engine Diameter
-    Standard_thrust = 2113      # [-] Standard thrust
+    Standard_thrust = 4226      # [-] Standard thrust
     
     Tcs = Standard_thrust/(0.5 * rho * Ve_bar**2 * D**2)    # [-] Standard thrust coefficient
     Tc = Thrust/(0.5 * rho * Ve_bar**2 * D**2)              # [-] Thrust coefficient
