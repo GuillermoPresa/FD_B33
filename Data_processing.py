@@ -11,6 +11,7 @@ Created on Mon Mar  9 15:04:57 2020
 import math as m
 import numpy as np
 import matplotlib.pyplot as plt
+from numpy.polynomial.polynomial import polyfit
 import cg_pos
 import ISA_calculator
 import Data_reader
@@ -52,7 +53,7 @@ red_el_def_lst = np.zeros(len(Data_reader.flightdata['elevator_dte']))
 red_Fe_lst = np.zeros(len(Data_reader.flightdata['column_fe']))
 
 
-def red_airspeed(hp, Vc, Tm, AFM):
+def red_airspeed(hp, Vc, Tm, AFM, Mass):
     # alt = altitude
     # hp = measured pressure altitude 
     # Vc = calibrated airspeed on airplane airspeed indicator
@@ -74,7 +75,7 @@ def red_airspeed(hp, Vc, Tm, AFM):
     Ve = Vt * m.sqrt(rho/rho_0)
     
     #calculation for the reduction of the equivalent airspeed
-    m_tot = cg_pos.cg(AFM, cg_pos.payload_list)[1]
+    m_tot = Mass
     W = m_tot * g0
     Ve_bar = Ve * m.sqrt(Ws/W)
     
@@ -100,12 +101,12 @@ def red_thrust(el_def_meas, Ve_bar, Thrust, rho):
 
 
 
-def red_force(Fe, hp, Vc, Tm, AFM):
+def red_force(Fe, hp, Vc, Tm, AFM, Mass):
     #calculations for the reduced elevator control force
     # Fe = measured elevator control force
     # red_Fe = reduced elevator control force
     
-    red_Fe = Fe * Ws/(red_airspeed(hp, Vc, Tm, AFM)[3])
+    red_Fe = Fe * Ws/(red_airspeed(hp, Vc, Tm, AFM, Mass)[3])
     
     return red_Fe
 
@@ -142,12 +143,23 @@ def plotter_stat_meas2(Ve_bar, el_def, F_e):
     el_trim_curve.set_title('Elevator Trim Curve')
     el_trim_curve.set_xlabel('Equivalent Airspeed [m/s]')
     el_trim_curve.set_ylabel('Reduced Elevator Deflection [rad]')
-    el_trim_curve.plot(Ve_bar, el_def)   
+    Ve_bar_array = np.array(Ve_bar)
+    el_def_array = np.array(el_def)
+    FitEQ2, FitEQ1  = np.polyfit(Ve_bar_array, el_def_array, 1)
+    el_trim_curve.scatter(Ve_bar, el_def, color='red')
+    el_trim_curve.plot(Ve_bar, FitEQ1 + FitEQ2*Ve_bar)
+    #
+    #
+
     
     el_force_curve = fig.add_subplot(212)
     el_force_curve.set_title('Reduced Elevator Control Force Curve')
     el_force_curve.set_xlabel('Equivalent Airspeed [m/s]')
     el_force_curve.set_ylabel('Reduced Elevator Control Force [N]')
-    el_force_curve.plot(Ve_bar, F_e)
+    Ve_bar_array = np.array(Ve_bar)
+    F_e_array = np.array(F_e)
+    FitEQ2, FitEQ1  = np.polyfit(Ve_bar_array, F_e_array, 1)
+    el_force_curve.scatter(Ve_bar, F_e, color='red')
+    el_force_curve.plot(Ve_bar, FitEQ1 + FitEQ2*Ve_bar)
     
     plt.show()

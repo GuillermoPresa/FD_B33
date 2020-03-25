@@ -60,6 +60,11 @@ def Fuel_cg(Actual_fuel_mass):
 	Fuel_cg_x = Actual_fuel_moment/Actual_fuel_mass/9.80665
 	return 	Fuel_cg_x, Actual_fuel_moment
 
+Empty_mass = 0.453592 * 9165.0
+Empty_weight = 4.44822 * 9165.0
+Empty_arm = 0.0254 * 291.65
+Empty_moment = 0.1129848 * 2672953.5
+
 def cg(Actual_fuel_mass, payload_list): #In kg
 	Passengers_mass, Passengers_cg_x, Passengers_cg_y = payload_cg(payload_list)
 	Zero_fuel_mass = Empty_mass + Passengers_mass
@@ -71,42 +76,4 @@ def cg(Actual_fuel_mass, payload_list): #In kg
 	#print("The total mass is:", Total_mass, "The total x_cg is:", Total_cg_x, "or (in inch):", Total_cg_x*39.3701)
 	return 	Total_cg_x, Total_mass
 
-#CREW = Passenger(mass, seat number)
-Pilot1 = Passenger(61,1)
-Pilot2 = Passenger(61,2)
-Coordinator = Passenger(61,10)
-
-#Group B33  = Passenger(mass, seat number)
-Guille = Passenger(61,3)
-Igor = Passenger(61,4)
-Bob = Passenger(61,5)
-Daniel = Passenger(61,6)
-Luke = Passenger(61,7)
-Flip = Passenger(61,8)
-
-#Bags  = Bag(mass, baggage compartment)
-Bag1 = Bag(5,1)
-Bag2 = Bag(5,2)
-Bag3 = Bag(5,2)
-
-#Aircraft data
-Empty_mass = 0.453592 * 9165.0
-Empty_weight = 4.44822 * 9165.0
-Empty_arm = 0.0254 * 291.65
-Empty_moment = 0.1129848 * 2672953.5
-
-if abs(Empty_moment-Empty_weight*Empty_arm) > 50:
-	raise ValueError("Aircraft cg readings make no sense. abs(Moment-Mass*Arm) > 50")
-
-
-passenger_list = [Pilot1, Pilot2, Coordinator, Guille, Igor, Bob, Daniel, Luke, Flip]
-Baggage_list = [Bag1, Bag2, Bag3]
-payload_list = passenger_list + Baggage_list
-Passengers_mass, Passengers_cg_x, Passengers_cg_y = payload_cg(payload_list)
-
-Zero_fuel_mass = Empty_mass + Passengers_mass
-Zero_fuel_cg_x = (Empty_mass*Empty_arm + Passengers_cg_x*Passengers_mass) / Zero_fuel_mass
-#print("The Zero fuel mass is:", Zero_fuel_mass, "The zero fuel x_cg is:", Zero_fuel_cg_x, "or (in inch):", Zero_fuel_cg_x*39.3701 )
-
-cg(100/2.2, payload_list)
 
