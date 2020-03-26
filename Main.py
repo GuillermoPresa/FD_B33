@@ -198,9 +198,9 @@ Static_Measurements_1 = Stat_mes.DataBlock(PayloadList)
 Static_Measurements_1.DataLineList =[   [5010,    250,    1.7,    762,    817,    286,    6.5],
                                         [6030,    220,    2.4,    660,    698,    371,    3.2],
                                         [6030,    192,    3.6,    535,    577,    406,    1.3],
-                                        [6040,    161,    5.7,    454,    487,    442,    0.8],
-                                        [6030,    132,    8.5,    417,    459,    485,    -0.5],
-                                        [6140,    117,    11.2,    436,    473,    515,    -1.5]]
+                                        [6040,    161,    5.7,    454,    487,    442,    0.8]]
+                                        #[6030,    132,    8.5,    417,    459,    485,    -0.5],
+                                        #[6140,    117,    11.2,    436,    473,    515,    -1.5]]
 
 
 for DataLine in Static_Measurements_1.DataLineList:
@@ -415,7 +415,7 @@ print(Coeficients1(Static_Measurements_1))
 ########## STATIC MEASUREMENT 1
 stat_meas1_outcomes = []
 
-Coeficient1Output = Coeficients1(Static_Measurements_1, False)
+Coeficient1Output = Coeficients1(Static_Measurements_1, True)
 print("Coeficient1Output", Coeficient1Output)
 alpha = Coeficient1Output[0]
 print("alpha:",alpha)
