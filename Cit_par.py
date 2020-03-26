@@ -6,7 +6,7 @@ from math import *
 # Stationary flight condition
 #dummy values
 hp0    = 5000      	      # pressure altitude in the stationary flight condition [m]
-V0     = 230            # true airspeed in the stationary flight condition [m/sec]
+V0     = 95            # true airspeed in the stationary flight condition [m/sec]
 alpha0 = 5*pi/180            # angle of attack in the stationary flight condition [rad]
 th0    = 6*pi/180            # pitch angle in the stationary flight condition [rad]
 
@@ -19,8 +19,8 @@ CD0    = 0.04            # Zero lift drag coefficient [ ]
 CLa    = 4.1            # Slope of CL-alpha curve [ ]
 
 # Longitudinal stability
-Cma    = -0.5832            # longitudinal stabilty [ ]  FILLER
-Cmde   = -1.2163            # elevator effectiveness [ ] FILLER
+Cma    = -0.5            # longitudinal stabilty [ ]  FILLER
+Cmde   = -1.1         # elevator effectiveness [ ] FILLER
 
 # Aircraft geometry
 
@@ -86,11 +86,11 @@ CZadot = -0.00350
 CZq    = -5.66290
 CZde   = -0.69612
 
-Cmu    = +0.06990
+Cmu    = +0.0699
 Cmadot = +0.17800
-Cmq    = -8.79415
+Cmq    = -3
 
-CYb    = -0.7500
+CYb    = 0.200
 CYbdot =  0     
 CYp    = -0.0304
 CYr    = +0.8495
@@ -103,10 +103,10 @@ Clr    = +0.23760
 Clda   = -0.23088
 Cldr   = +0.03440
 
-Cnb    =  +0.1348
+Cnb    =  +0.09
 Cnbdot =   0     
 Cnp    =  -0.0602
-Cnr    =  -0.2061
+Cnr    =  -0.23
 Cnda   =  -0.0120
 Cndr   =  -0.0939
 
