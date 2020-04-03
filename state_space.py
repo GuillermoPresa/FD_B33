@@ -11,7 +11,8 @@ def symmetric_matrix_c1(muc, c, vel, czadot, cmadot, ky):
     return np.array([[-2*muc*c/vel, 0, 0, 0], [0, (czadot-2*muc)*c/vel, 0, 0], [0, 0, -c/vel, 0], [0, cmadot*c/vel, 0, (-2*muc*ky * c/vel)]])
 def symmetric_matrix_c2(cxu,cxa,cz0,czu,cza,cx0, czq,muc, cmu, cma, cmq):
     return np.array([[cxu, cxa, cz0, 0],[czu, cza, cx0, czq+2*muc],[0,0,0,1], [cmu,cma,0,cmq]])
-def symmetric_matrix_c3(cxde,cxdt,czde,czdt,cmde,cmdt):
+#the cxdt, czdt, and cmdt values may or may not be of importance here so they have been removed
+def symmetric_matrix_c3(cxde,czde,cmde):
     return np.array([[cxde],[czde],[0],[cmde]])
 
 
@@ -47,8 +48,8 @@ def asymabcd_solver(c1mat,c2mat,c3mat):
 #this returns the ybar values from the equation ybar = C*xbar + D*ubar the output is a y, a t and an x out
 def ybar(state_space,ubar,time_steps,x0):
     t,y,x= control.forced_response(state_space,time_steps,ubar,x0)
-   # y,t = cm.initial(state_space,ubar,time_steps,x0)
-    return y,t,x
+
+    return t,y,x
 
 
 
