@@ -13,6 +13,7 @@ import time
 import Data_processing
 from Cit_par import A as Aspect_ratio
 
+Thrust_inc = True
 
 SeaLevelPressure = 101325 #[Pa]
 SeaLevelDensity = 1.225 #[kg/m^3]
@@ -76,9 +77,9 @@ def Coeficients1(Static_Measurements_1, Data_reduction = False):
 
 #     print("Executing Main: Coeficients1")
     for DataLine in Static_Measurements_1.DataLineList: #Processing1
-        DataLine[7] = (ISA_calculator.ISAcalc(DataLine[0])[0])    #Append Temperature
-        DataLine[8] = (ISA_calculator.ISAcalc(DataLine[0])[1])    #Append Pressure
-        DataLine[9] = (ISA_calculator.ISAcalc(DataLine[0])[2])    #Append Density
+        DataLine[7] = (ISA_calculator.ISAcalc(DataLine[0])[1])    #Append Temperature
+        DataLine[8] = (ISA_calculator.ISAcalc(DataLine[0])[2])    #Append Pressure
+        DataLine[9] = (ISA_calculator.ISAcalc(DataLine[0])[0])    #Append Density
         DataLine[10] = (Empty_mass +TotalPayloadMass+TotalFuelMass - DataLine[5]) #Append Mass
         print("Mass or DataLine[10] is:", DataLine[10])
         DataLine[11] = (aero_coeff.IAStoMach(SeaLevelPressure, SeaLevelDensity, SeaLevelTemperature, DataLine[0], DataLine[1]))    #Append Mach
@@ -143,9 +144,12 @@ def Coeficients1(Static_Measurements_1, Data_reduction = False):
     for i in range(0,len(Static_Measurements_1.DataLineList)): #Processing2
 #         print("AT i: ",i,"The AOA is: ",Static_Measurements_1.DataLineList[i][2])
 #         print((Static_Measurements_1.DataLineList[i][10]*9.80665)/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
-
-        Static_Measurements_1.DataLineList[i][15] = ((math.cos(math.pi/180*Static_Measurements_1.DataLineList[i][2])*Static_Measurements_1.DataLineList[i][14])/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
-        Static_Measurements_1.DataLineList[i][13] = ((Static_Measurements_1.DataLineList[i][10]*9.80665-math.sin(math.pi/180*Static_Measurements_1.DataLineList[i][2])*Static_Measurements_1.DataLineList[i][14])/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
+        if Thrust_inc == True:
+            Static_Measurements_1.DataLineList[i][15] = ((math.cos(math.pi/180*Static_Measurements_1.DataLineList[i][2])*Static_Measurements_1.DataLineList[i][14])/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
+            Static_Measurements_1.DataLineList[i][13] = ((Static_Measurements_1.DataLineList[i][10]*9.80665-math.sin(math.pi/180*Static_Measurements_1.DataLineList[i][2])*Static_Measurements_1.DataLineList[i][14])/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
+        else:
+            Static_Measurements_1.DataLineList[i][15] = ((Static_Measurements_1.DataLineList[i][14])/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
+            Static_Measurements_1.DataLineList[i][13] = ((Static_Measurements_1.DataLineList[i][10]*9.80665)/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
         Alpha_array[i] = Static_Measurements_1.DataLineList[i][2]
         Cl_array[i] = Static_Measurements_1.DataLineList[i][13]
         Cd_array[i] = Static_Measurements_1.DataLineList[i][15]
@@ -200,7 +204,7 @@ for DataLine in Static_Measurements_1.DataLineList:
     DataLine[6] = DataLine[6]+273.15    #C to K
 
 
-test = Coeficients1(Static_Measurements_1, True)[2]
+test = Coeficients1(Static_Measurements_1, False)[2]
 
 def Coeficients2(Static_Measurements_2, Data_reduction = False):
 #     print("Executing Main: Coeficients2")
@@ -251,7 +255,7 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
     #Run thrust.exe
 
     os.startfile("C:/Users/Guille/Documents/GitHub/FD_B33/thrust.exe")
-    time.sleep(0.2)
+    time.sleep(0.8)
     #Read thrust.exe output
     datfile = open("thrust.dat")
     datContent = [i.strip().split() for i in datfile.readlines()]
@@ -401,7 +405,7 @@ print(Coeficients1(Static_Measurements_1))
 ########## STATIC MEASUREMENT 1
 stat_meas1_outcomes = []
 
-Coeficient1Output = Coeficients1(Static_Measurements_1, True)
+Coeficient1Output = Coeficients1(Static_Measurements_1, False)
 print("Coeficient1Output", Coeficient1Output)
 alpha = Coeficient1Output[0]
 print("alpha:",alpha)
