@@ -213,13 +213,13 @@ for i in range(len(index)):
         plt.subplot(2,2,1)
     # These y values may have to be changed
         plt.plot(tna,ybar_asymm[0]+yaw_beta_st, label = 'Simulated Response')
-        plt.plot(tna, yaw_beta[index_begin:index_end], label = 'Actual Response')
+        # plt.plot(tna, yaw_beta[index_begin:index_end], label = 'Actual Response')
         plt.legend(loc="best")
         plt.xlabel('Time Steps')
         plt.ylabel('Beta [Rad]')
         plt.subplot(2,2,2)
          # These y values may have to be changed
-        plt.plot(tna,ybar_asymm[1], label = 'Simulated Response')
+        plt.plot(tna,-ybar_asymm[1], label = 'Simulated Response')
         plt.plot(tna,phi[index_begin:index_end], label = 'Actual Response')
         plt.legend(loc="best")
         plt.xlabel('Time Steps')
@@ -240,7 +240,7 @@ for i in range(len(index)):
         plt.ylabel('r Values [Rad/s]')
         plt.suptitle(manuever)
         plt.show()
-        av_error = error(yaw_beta[index_begin:index_end],ybar_asymm[0]+yaw_beta_st), error(phi[index_begin:index_end],ybar_asymm[1]), error(p[index_begin:index_end],-ybar_asymm[2]), error(r[index_begin:index_end],ybar_asymm[3]+r_st)
+        av_error = error(phi[index_begin:index_end],ybar_asymm[1]), error(p[index_begin:index_end],-ybar_asymm[2]), error(r[index_begin:index_end],ybar_asymm[3]+r_st)
         print(av_error)
         #Below are the plotting functions used for when you want to plot the eigenmotions into one plot
       #   plt.figure(figsize = (16,12))
