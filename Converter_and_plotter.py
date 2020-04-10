@@ -27,7 +27,7 @@ if file == 'FTISxprt-20200306_flight1.mat':
     t_begin_ph = 3200       #begin time phugoid in seconds 
     t_begin_sp = 3418       #begin time short period in seconds
     t_begin_dr = 3512       #begin time dutch roll in seconds 
-    t_begin_ar = 3705       #begin time aperiodic roll in seconds 
+    t_begin_ar = 3710       #begin time aperiodic roll in seconds 
     t_begin_spir = 3880     #begin time spiral in seconds 
 else:
     #refernce data
@@ -40,8 +40,8 @@ else:
 #approximate length maneuvre [s]
 len_ph = 200
 len_sp = 10
-len_dr = 20
-len_ar = 30
+len_dr = 15
+len_ar = 15
 len_spir = 150
 
 
@@ -85,8 +85,8 @@ alt = ft_to_m(flightdata['Dadc1_alt'])
 yaw_beta = np.asarray(yaw_beta)
 
 #This can be used to calculate the error in the simulated values versus the real values
-def error(real,sim):
-    return sqrt(sum(((real-sim)/real)**2))/len(real)
+def tot_error(real,sim):
+    return sqrt(sum((real-sim)**2))
 
 def RMS(real,sim):
     RMS = np.sqrt(np.mean((real-sim)**2))
@@ -156,10 +156,10 @@ for i in range(len(index)):
     print(manuever)
     if manuever_type[i] == 1:
         abcd_symm = symabcd_solver(symmatc1,symmatc2,symmatc3)
-        tns,ybar_symm,x1 = ybar(abcd_symm,ubar_symm,time_new,[0,0,theta_st,q_st]) #vel_st,alpha_st,theta_st,q_st]
+        tns,ybar_symm,x1 = ybar(abcd_symm,ubar_symm,time_new)#,[0,0,theta_st,q_st]) #vel_st,alpha_st,theta_st,q_st]
     else:
         abcd_asymm = asymabcd_solver(asymmatc1,asymmatc2,asymmatc3)
-        tna,ybar_asymm,x2 = ybar(abcd_asymm,ubar_asymm,time_new,[0,phi_st,p_st,r_st])#[yaw_beta_st,phi_st,p_st,q_st]
+        tna,ybar_asymm,x2 = ybar(abcd_asymm,ubar_asymm,time_new)#,[0,phi_st,p_st,r_st])#[yaw_beta_st,phi_st,p_st,q_st]
    # print(time_new)
    # time_new = np.linspace(time(index_begin),time(index_end),index_end-index_begin)
     
@@ -172,22 +172,23 @@ for i in range(len(index)):
     if manuever_type[i] == 1:
         print('-------------------SYMMETRIC-----------------')
         plt.figure(figsize =(16,12))
-        plt.subplot(2,1,1)
-        #These y values may have to be changed
-        plt.plot(tns, ybar_symm[0]*vel_st + vel_st, label = 'Velocity [m/s]')
-        #plt.plot(tns,ybar_symm[1]+alpha_st, label = 'Alpha [Rad]')
-        #plt.plot(tns,ybar_symm[2]+theta_st, label = 'Theta [Rad]')
-       # plt.plot(tns,ybar_symm[3]*vel_st/c, label = 'q [Rad/s]')
-        plt.xlabel('Time Steps [s]')
-        plt.ylabel(' Velocity m/s')
-        plt.subplot(2,1,2)
-        #These y values may have to be changed
-        plt.plot(tns,deg_to_rad(flightdata['delta_e'][index_begin:index_end]), label = 'delta_e')
-        plt.xlabel('Time Steps [s]')
-        plt.ylabel('delta e [Rad]')
-        plt.show()
-        plt.figure(figsize=(14, 10))
-        plt.subplot(2,2,1)
+       #  plt.subplot(2,1,1)
+       #  #These y values may have to be changed
+       #  plt.plot(tns, ybar_symm[0]*vel_st + vel_st, label = 'Velocity [m/s]')
+       #  #plt.plot(tns,ybar_symm[1]+alpha_st, label = 'Alpha [Rad]')
+       #  #plt.plot(tns,ybar_symm[2]+theta_st, label = 'Theta [Rad]')
+       # # plt.plot(tns,ybar_symm[3]*vel_st/c, label = 'q [Rad/s]')
+       #  plt.xlabel('Time Steps [s]')
+       #  plt.ylabel(' Velocity m/s')
+       #  plt.subplot(2,1,2)
+       #  #These y values may have to be changed
+       #  plt.plot(tns,deg_to_rad(flightdata['delta_e'][index_begin:index_end]), label = 'delta_e')
+       #  plt.xlabel('Time Steps [s]')
+       #  plt.ylabel('delta e [Rad]')
+       #  plt.show()
+       #  plt.figure(figsize=(14, 10))
+       #  plt.subplot(2,2,1)
+        
         #These y values may have to be changed
         plt.plot(tns,(ybar_symm[0]*vel_st + vel_st), label = 'Simulated Response')
         plt.plot(tns, velocity[index_begin:index_end], label = 'Actual Response')

@@ -10,16 +10,16 @@ alpha0 = 5*pi/180            # angle of attack in the stationary flight conditio
 th0    = 6*pi/180            # pitch angle in the stationary flight condition [rad]
 
 # Aircraft mass
-m      = 6305.29           # mass [kg]
+m      = 790 + 4100*0.453592 + 9165*0.453592         # initial mass (TOW) [kg] (PAX + fuel + OEW)
 
 # aerodynamic properties
 e      =  0.8            # Oswald factor [ ]
 CD0    = 0.04            # Zero lift drag coefficient [ ]
-CLa    = 4.1             # Slope of CL-alpha curve [ ]
+CLa    = 4.55             # Slope of CL-alpha curve [ ]
 
 # Longitudinal stability
-Cma    = -0.5            # longitudinal stabilty [ ]  FILLER
-Cmde   = -1.1            # elevator effectiveness [ ] FILLER
+Cma    = -0.7            # longitudinal stabilty [ ]  FILLER
+Cmde   = -1.3            # elevator effectiveness [ ] FILLER
 
 # Aircraft geometry
 
@@ -96,9 +96,9 @@ CYr    = +0.8495
 CYda   = -0.0400
 CYdr   = +0.2300
 
-Clb    = -0.10260
-Clp    = -0.71085
-Clr    = +0.23760
+Clb    = -0.15 #-0.10260
+Clp    = -0.3 #-0.71085
+Clr    = 0.3 #+0.23760
 Clda   = -0.23088
 Cldr   = +0.03440
 
