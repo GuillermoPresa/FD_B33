@@ -1,25 +1,25 @@
 # Citation 550 - Linear simulation
+from math import *
 
 # xcg = 0.25 * c
 
 # Stationary flight condition
-
-hp0    =       	      # pressure altitude in the stationary flight condition [m]
-V0     =             # true airspeed in the stationary flight condition [m/sec]
-alpha0 =             # angle of attack in the stationary flight condition [rad]
-th0    =             # pitch angle in the stationary flight condition [rad]
+hp0    = 5000      	      # pressure altitude in the stationary flight condition [m]
+V0     = 95            # true airspeed in the stationary flight condition [m/sec]
+alpha0 = 5*pi/180            # angle of attack in the stationary flight condition [rad]
+th0    = 6*pi/180            # pitch angle in the stationary flight condition [rad]
 
 # Aircraft mass
-m      =             # mass [kg]
+m      = 6305.29           # mass [kg]
 
 # aerodynamic properties
-e      =             # Oswald factor [ ]
-CD0    =             # Zero lift drag coefficient [ ]
-CLa    =             # Slope of CL-alpha curve [ ]
+e      =  0.8            # Oswald factor [ ]
+CD0    = 0.04            # Zero lift drag coefficient [ ]
+CLa    = 4.1             # Slope of CL-alpha curve [ ]
 
 # Longitudinal stability
-Cma    =             # longitudinal stabilty [ ]
-Cmde   =             # elevator effectiveness [ ]
+Cma    = -0.5            # longitudinal stabilty [ ]  FILLER
+Cmde   = -1.1            # elevator effectiveness [ ] FILLER
 
 # Aircraft geometry
 
@@ -39,13 +39,13 @@ ih     = -2 * pi / 180   # stabiliser angle of incidence [rad]
 # Constant values concerning atmosphere and gravity
 
 rho0   = 1.2250          # air density at sea level [kg/m^3] 
-lambda = -0.0065         # temperature gradient in ISA [K/m]
+lambda1 = -0.0065         # temperature gradient in ISA [K/m]
 Temp0  = 288.15          # temperature at sea level in ISA [K]
 R      = 287.05          # specific gas constant [m^2/sec^2K]
 g      = 9.81            # [m/sec^2] (gravity constant)
 
 # air density [kg/m^3]  
-rho    = rho0 * power( ((1+(lambda * hp0 / Temp0))), (-((g / (lambda*R)) + 1)))   
+rho    = rho0 * pow( ((1+(lambda1 * hp0 / Temp0))), (-((g / (lambda1*R)) + 1)))   
 W      = m * g            # [N]       (aircraft weight)
 
 # Constant values concerning aircraft inertia
@@ -108,3 +108,8 @@ Cnp    =  -0.0602
 Cnr    =  -0.2061
 Cnda   =  -0.0120
 Cndr   =  -0.0939
+
+
+cxdt = 0
+cmdt = 0
+czdt = 0

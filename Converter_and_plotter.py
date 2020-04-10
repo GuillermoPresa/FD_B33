@@ -1,4 +1,4 @@
-from Cit_par import *
+from Cit_par_original import *
 from Data_reader import *
 import matplotlib.pyplot as plt
 from math import *
@@ -25,14 +25,14 @@ def pnd_to_kil(w_vals):
 #new index finder as from the excel sheet
 #symmetric
 t_begin_ph = 3200       #begin time phugoid in seconds 
-t_begin_sp = 3400       #begin time short period in seconds
+t_begin_sp = 3418       #begin time short period in seconds
 t_begin_dr = 3512       #begin time dutch roll in seconds 
 t_begin_ar = 3705       #begin time aperiodic roll in seconds 
 t_begin_spir = 3880     #begin time spiral in seconds 
 
 #approximate length maneuvre [s]
 len_ph = 200
-len_sp = 60
+len_sp = 10
 len_dr = 20
 len_ar = 30
 len_spir = 150
@@ -80,6 +80,10 @@ yaw_beta = np.asarray(yaw_beta)
 #This can be used to calculate the error in the simulated values versus the real values
 def error(real,sim):
     return sqrt(sum(((real-sim)/real)**2))/len(real)
+
+def RMS(real,sim):
+    RMS = np.sqrt(np.mean(real-sim))
+    return RMS
 
 #------------SYMM states-----------
 for i in range(len(index)):
@@ -203,8 +207,21 @@ for i in range(len(index)):
         plt.suptitle(manuever)
         plt.show()
         #This shows the error between the data provided and the simulated models
-        av_error = error(velocity[index_begin:index_end],ybar_symm[0]*vel_st + vel_st),error(alpha[index_begin:index_end],ybar_symm[1]+alpha_st), error(theta[index_begin:index_end],ybar_symm[2]+theta_st),error(q_val[index_begin:index_end],ybar_symm[3]*vel_st/c)
-        print(av_error)
+        # av_error = error(velocity[index_begin:index_end],ybar_symm[0]*vel_st + vel_st),error(alpha[index_begin:index_end],ybar_symm[1]+alpha_st), error(theta[index_begin:index_end],ybar_symm[2]+theta_st),error(q_val[index_begin:index_end],ybar_symm[3]*vel_st/c)
+        # print(av_error)
+        #RMS values
+        RMSv = RMS(velocity[index_begin:index_end],ybar_symm[0]*vel_st + vel_st)
+        RMSa = RMS(alpha[index_begin:index_end],ybar_symm[1]+alpha_st)
+        RMSt = RMS(theta[index_begin:index_end],ybar_symm[2]+theta_st)
+        RMSq = RMS(q_val[index_begin:index_end],ybar_symm[3]*vel_st/c)
+        print('RMS velocity ', manuever, ' = ', RMSv)
+        print('RMS alpha ', manuever, ' = ', RMSa)
+        print('RMS theta ', manuever, ' = ', RMSt)
+        print('RMS q ', manuever, ' = ', RMSq)
+        print()
+        print()
+        
+        
     else:
     #Asymm Plots
         print('-------------------ASYMMETRIC-----------------')
@@ -240,8 +257,19 @@ for i in range(len(index)):
         plt.ylabel('r Values [Rad/s]')
         plt.suptitle(manuever)
         plt.show()
-        av_error = error(phi[index_begin:index_end],ybar_asymm[1]), error(p[index_begin:index_end],-ybar_asymm[2]), error(r[index_begin:index_end],ybar_asymm[3]+r_st)
-        print(av_error)
+        # av_error = error(phi[index_begin:index_end],ybar_asymm[1]), error(p[index_begin:index_end],-ybar_asymm[2]), error(r[index_begin:index_end],ybar_asymm[3]+r_st)
+        # print(av_error)
+        #RMS values
+        RMSphi = RMS(phi[index_begin:index_end],ybar_asymm[1])
+        RMSp = RMS(p[index_begin:index_end],-ybar_asymm[2])
+        RMSr = RMS(r[index_begin:index_end],ybar_asymm[3]+r_st)
+        print('RMS phi ', manuever, ' = ', RMSphi)
+        print('RMS p ', manuever, ' = ', RMSp)
+        print('RMS r ', manuever, ' = ', RMSr)
+        print()
+        print()
+        
+        
         #Below are the plotting functions used for when you want to plot the eigenmotions into one plot
       #   plt.figure(figsize = (16,12))
       #   plt.subplot(2,1,1)
