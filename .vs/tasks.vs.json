@@ -5,6 +5,11 @@
       "taskLabel": "task-Static_measurements",
       "appliesTo": "Static_measurements.py",
       "type": "launch"
+    },
+    {
+      "taskLabel": "task-Main",
+      "appliesTo": "Main.py",
+      "type": "launch"
     }
   ]
 }

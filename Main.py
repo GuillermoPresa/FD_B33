@@ -13,22 +13,14 @@ import time
 import Data_processing
 from Cit_par import A as Aspect_ratio
 
-Thrust_inc = True
+Thrust_inc = False
 
 SeaLevelPressure = 101325 #[Pa]
 SeaLevelDensity = 1.225 #[kg/m^3]
 SeaLevelTemperature = 15 #[C]
 SeaLevelTemperature = SeaLevelTemperature + 273.15 #[K]
 
-#Aircraft conditions
-Empty_mass = 0.453592 * 9165.0
-Empty_weight = 4.44822 * 9165.0
-Empty_arm = 0.0254 * 291.65
-Empty_moment = 0.1129848 * 2672953.5
-WingArearea = 30 #m^2
-Chord = 2.0569
 
-TotalFuelMass = 1859.729
 
 #CREW = Passenger(mass, seat number)
 Pilot1 = cg_pos.Passenger(80,1)
@@ -44,23 +36,21 @@ Passenger8 = cg_pos.Passenger(95,8)
 Passenger10 = cg_pos.Passenger(88,10)
 
 
-#Bags  = Bag(mass, baggage compartment)
-Bag1 = cg_pos.Bag(0,1)
-Bag2 = cg_pos.Bag(0,2)
-Bag3 = cg_pos.Bag(0,2)
-
 #Aircraft data. Also in cg_pos. Change it there if ant changes are made here
 Empty_mass = 0.453592 * 9165.0
-Empty_weight = 4.44822 * 9165.0
+#Empty_weight = 4.44822 * 9165.0
 Empty_arm = 0.0254 * 291.65
 Empty_moment = 0.1129848 * 2672953.5
+WingArearea = 30 #m^2
+Chord = 2.0569
 
+
+TotalFuelMass = 1859.729
 ActualFuelMass = TotalFuelMass
 
                                                                                  
 PassengerList = [Pilot1, Pilot2, Passenger3, Passenger4, Passenger5, Passenger6, Passenger7, Passenger8, Passenger10]
-BaggageList = [Bag1, Bag2, Bag3]
-PayloadList = PassengerList + BaggageList
+PayloadList = PassengerList
 
 TotalPayloadMass = 0
 for Item in PayloadList:
@@ -84,12 +74,16 @@ def Coeficients1(Static_Measurements_1, Data_reduction = False):
         print("Mass or DataLine[10] is:", DataLine[10])
         DataLine[11] = (aero_coeff.IAStoMach(SeaLevelPressure, SeaLevelDensity, SeaLevelTemperature, DataLine[0], DataLine[1]))    #Append Mach
         DataLine[12] = (DataLine[11]*aero_coeff.SpeedOfSound(DataLine[7]))    #Append TAS
-        
+        print("Speed of sound is:", aero_coeff.SpeedOfSound(DataLine[7]))
+        #DataLine[12] = (DataLine[1]*(1+0.02*DataLine[0]/300))    #Append TAS
+        print("MASS IS:", DataLine[10])
+        print("Density IS:", DataLine[9])
+        print("TAS IS:", DataLine[12])
+        print("IAS IS:", DataLine[1])
         #if Data_reduction is True:
         #    DataLine[12] = Data_processing.red_airspeed(DataLine[0], DataLine[1], DataLine[6], (TotalFuelMass - DataLine[5]))[1]
-        
         DataLine[13] = ((DataLine[10]*9.80665)/(0.5*DataLine[9]*math.pow(DataLine[12],2)*WingArearea)) #Just a placeholder until we substract the sin(a)*T of W
-#         print((DataLine[10]*9.80665)/(0.5*DataLine[9]*math.pow(DataLine[12],2)*WingArearea))
+        print("Cl is", DataLine[13])
 
 
     #Create input matlab for thrust.exe
@@ -146,15 +140,19 @@ def Coeficients1(Static_Measurements_1, Data_reduction = False):
 #         print((Static_Measurements_1.DataLineList[i][10]*9.80665)/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
         if Thrust_inc == True:
             Static_Measurements_1.DataLineList[i][15] = ((math.cos(math.pi/180*Static_Measurements_1.DataLineList[i][2])*Static_Measurements_1.DataLineList[i][14])/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
-            Static_Measurements_1.DataLineList[i][13] = ((Static_Measurements_1.DataLineList[i][10]*9.80665-math.sin(math.pi/180*Static_Measurements_1.DataLineList[i][2])*Static_Measurements_1.DataLineList[i][14])/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
+            #Static_Measurements_1.DataLineList[i][13] = ((Static_Measurements_1.DataLineList[i][10]*9.80665-math.sin(math.pi/180*Static_Measurements_1.DataLineList[i][2])*Static_Measurements_1.DataLineList[i][14])/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
         else:
             Static_Measurements_1.DataLineList[i][15] = ((Static_Measurements_1.DataLineList[i][14])/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
-            Static_Measurements_1.DataLineList[i][13] = ((Static_Measurements_1.DataLineList[i][10]*9.80665)/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
+            #Static_Measurements_1.DataLineList[i][13] = ((Static_Measurements_1.DataLineList[i][10]*9.80665)/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
         Alpha_array[i] = Static_Measurements_1.DataLineList[i][2]
         Cl_array[i] = Static_Measurements_1.DataLineList[i][13]
         Cd_array[i] = Static_Measurements_1.DataLineList[i][15]
 
     print(Static_Measurements_1.DataLineList)
+
+    CL_alpha, Cl0, r_value, p_value, std_err = stats.linregress(Alpha_array*np.pi/180, Cl_array)
+    print("------------------------")
+    print("CL_alpha:", CL_alpha)
 
     fig = plt.figure()
     ax1 = fig.add_subplot(411)
@@ -173,7 +171,7 @@ def Coeficients1(Static_Measurements_1, Data_reduction = False):
     ax1.set_title('Cl/Cd')
     ax1.set_xlabel('Cd')
     ax1.set_ylabel('Cl')
-    img1 = ax1.plot(Cd_array, Cl_array)
+    img1 = ax1.plot(Cd_array, np.square(Cl_array))
     #ax1.set_ylim(0,1.25)
     #ax1.set_xlim(-0.000003,0.00003)    
     plt.show()
@@ -188,9 +186,9 @@ Static_Measurements_1 = Stat_mes.DataBlock(PayloadList)
 Static_Measurements_1.DataLineList =[   [5010,    250,    1.7,    762,    817,    286,    6.5],
                                         [6030,    220,    2.4,    660,    698,    371,    3.2],
                                         [6030,    192,    3.6,    535,    577,    406,    1.3],
-                                        [6040,    161,    5.7,    454,    487,    442,    0.8]]
-                                        #[6030,    132,    8.5,    417,    459,    485,    -0.5],
-                                        #[6140,    117,    11.2,    436,    473,    515,    -1.5]]
+                                        [6040,    161,    5.7,    454,    487,    442,    0.8],#]
+                                        [6030,    132,    8.5,    417,    459,    485,    -0.5],
+                                        [6140,    117,    11.2,    436,    473,    515,    -1.5]]
 
 
 for DataLine in Static_Measurements_1.DataLineList:
@@ -362,7 +360,7 @@ Passenger8_moved = cg_pos.Passenger(95,1)
 
 
 PassengerList2 = [Pilot1, Pilot2, Passenger3, Passenger4, Passenger5, Passenger6, Passenger7, Passenger8_moved, Passenger10]
-PayloadList2 = PassengerList2 + BaggageList
+PayloadList2 = PassengerList2
 
 Xcg2 = cg_pos.cg((TotalFuelMass - Static_Measurements_3.DataLineList[1][8]), PayloadList2)[0]
 
@@ -405,7 +403,7 @@ print(Coeficients1(Static_Measurements_1))
 ########## STATIC MEASUREMENT 1
 stat_meas1_outcomes = []
 
-Coeficient1Output = Coeficients1(Static_Measurements_1, False)
+Coeficient1Output = Coeficients1(Static_Measurements_1, True)
 print("Coeficient1Output", Coeficient1Output)
 alpha = Coeficient1Output[0]
 print("alpha:",alpha)
@@ -419,7 +417,7 @@ CL2 = np.square(CL)
 
 # fitting lines through graphs
 CL_alpha, Cl0, r_value, p_value, std_err = stats.linregress(alpha_rad, CL)
-line_deriv1, Cd_0, r_value, p_value, std_err = stats.linregress(CL2[:-2], CD[:-2])
+line_deriv1, Cd_0, r_value, p_value, std_err = stats.linregress(CL2, CD)
 print("CLA:",CL_alpha)                                 
 
 e = 1/(math.pi * line_deriv1 * Aspect_ratio)
