@@ -3,6 +3,8 @@ from math import *
 
 #xcg = 0.25 * c
 
+############## Own parametparameters
+
 # Stationary flight condition
 #dummy values
 hp0    = 5000      	      # pressure altitude in the stationary flight condition [m]
@@ -14,13 +16,17 @@ th0    = 6*pi/180            # pitch angle in the stationary flight condition [r
 m      = 6305.29           # mass [kg]
 
 # aerodynamic properties
-e      =  0.8           # Oswald factor [ ]
+e      =  0.8            # Oswald factor [ ]
 CD0    = 0.04            # Zero lift drag coefficient [ ]
-CLa    = 4.1            # Slope of CL-alpha curve [ ]
+CLa    = 4.1             # Slope of CL-alpha curve [ ]
 
 # Longitudinal stability
 Cma    = -0.5            # longitudinal stabilty [ ]  FILLER
-Cmde   = -1.1         # elevator effectiveness [ ] FILLER
+Cmde   = -1.1            # elevator effectiveness [ ] FILLER
+
+
+
+############## Pre-entered parameters
 
 # Aircraft geometry
 
