@@ -108,8 +108,10 @@ if file == 'matlab.mat':
                   'time':np.concatenate((mat.get('flightdata')[0][0][47][0][0][0]), axis=None)}
 
 
-#print(flightdata['Dadc1_alt'])
+#print(flightdata['time'])
 
+
+timetest = flightdata['time']
 
 
 

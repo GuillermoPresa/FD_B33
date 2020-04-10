@@ -21,6 +21,8 @@ asymmatc2 = asymmetric_matrix_c2(CYb, CL_new, CYp, CYr, mub, Clb, Clp, Clr, Cnb,
 asymmatc3 = asymmetric_matrix_c3(CYda, CYdr, Clda, Cldr, Cnda, Cndr)
 ybar_symm,time1 = ybar(symabcd_solver(symmatc1,symmatc2,symmatc3),0,np.linspace(0,50,300),[0,alpha0,0,0])
 ybar_asymm,time2 = ybar(asymabcd_solver(asymmatc1,asymmatc2,asymmatc3),0,np.linspace(0,50,300),[0,alpha0,alpha0,0])
+
+
 # yaw_beta = [alpha0]
 # for i in range(len(r)-1):
 #     yaw_beta.append(yaw_beta[i] + r[i])

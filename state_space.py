@@ -1,11 +1,13 @@
-from Cit_par import *
+from Cit_par_original import *
 from math import *
 import numpy as np
 import matplotlib.pyplot as plt
 import control
-from control.matlab import lsim
+#from control.matlab import lsim
 from Data_reader import *
-import control.matlab as cm
+#import control.matlab as cm
+
+
 #These matrices are in the form of (C1d/dt)*xdot + (C2d/dt)*x + C1d/dt = 0
 def symmetric_matrix_c1(muc, c, vel, czadot, cmadot, ky):
     return np.array([[-2*muc*c/vel, 0, 0, 0], [0, (czadot-2*muc)*c/vel, 0, 0], [0, 0, -c/vel, 0], [0, cmadot*c/vel, 0, (-2*muc*ky * c/vel)]])
@@ -36,6 +38,7 @@ def symabcd_solver(c1mat,c2mat,c3mat):
     d = [[0],[0],[0],[0]]
     #print('EigenValues Symmetric', np.linalg.eigvals(a))
     return control.ss(a,b,c,d)
+
 def asymabcd_solver(c1mat,c2mat,c3mat):
 
     a = -np.matmul(np.linalg.inv(c1mat), c2mat)
@@ -46,8 +49,8 @@ def asymabcd_solver(c1mat,c2mat,c3mat):
     #print('EigenValues Asymmetric', np.linalg.eigvals(a))
     return control.ss(a,b,c,d)
 #this returns the ybar values from the equation ybar = C*xbar + D*ubar the output is a y, a t and an x out
-def ybar(state_space,ubar,time_steps,x0):
-    t,y,x= control.forced_response(state_space,time_steps,ubar,x0)
+def ybar(state_space,ubar,time_steps):
+    t,y,x= control.forced_response(state_space,time_steps,ubar)#,x0)
 
     return t,y,x
 
