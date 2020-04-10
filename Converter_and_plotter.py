@@ -22,13 +22,20 @@ def pnd_to_kil(w_vals):
 #They may need to be adjusted as these are based on observations in the recorded data, as the
 #data given within the excel sheet is faulty
 
-#new index finder as from the excel sheet
-#symmetric
-t_begin_ph = 3200       #begin time phugoid in seconds 
-t_begin_sp = 3418       #begin time short period in seconds
-t_begin_dr = 3512       #begin time dutch roll in seconds 
-t_begin_ar = 3705       #begin time aperiodic roll in seconds 
-t_begin_spir = 3880     #begin time spiral in seconds 
+if file == 'FTISxprt-20200306_flight1.mat':
+    #new index finder as from the flight data
+    t_begin_ph = 3200       #begin time phugoid in seconds 
+    t_begin_sp = 3418       #begin time short period in seconds
+    t_begin_dr = 3512       #begin time dutch roll in seconds 
+    t_begin_ar = 3705       #begin time aperiodic roll in seconds 
+    t_begin_spir = 3880     #begin time spiral in seconds 
+else:
+    #refernce data
+    t_begin_ph = 53*60 + 57       #begin time phugoid in seconds 
+    t_begin_sp = 60*60 + 35       #begin time short period in seconds
+    t_begin_dr = 61*60 + 57       #begin time dutch roll in seconds 
+    t_begin_ar = 59*60 + 10       #begin time aperiodic roll in seconds 
+    t_begin_spir = 65*60 + 20     #begin time spiral in seconds
 
 #approximate length maneuvre [s]
 len_ph = 200
@@ -82,7 +89,7 @@ def error(real,sim):
     return sqrt(sum(((real-sim)/real)**2))/len(real)
 
 def RMS(real,sim):
-    RMS = np.sqrt(np.mean(real-sim))
+    RMS = np.sqrt(np.mean((real-sim)**2))
     return RMS
 
 #------------SYMM states-----------
@@ -147,12 +154,16 @@ for i in range(len(index)):
    # tns = time_new
    # tna = time_new
     print(manuever)
-    abcd_symm = symabcd_solver(symmatc1,symmatc2,symmatc3)
-    abcd_asymm = asymabcd_solver(asymmatc1,asymmatc2,asymmatc3)
+    if manuever_type[i] == 1:
+        abcd_symm = symabcd_solver(symmatc1,symmatc2,symmatc3)
+        tns,ybar_symm,x1 = ybar(abcd_symm,ubar_symm,time_new,[0,0,theta_st,q_st]) #vel_st,alpha_st,theta_st,q_st]
+    else:
+        abcd_asymm = asymabcd_solver(asymmatc1,asymmatc2,asymmatc3)
+        tna,ybar_asymm,x2 = ybar(abcd_asymm,ubar_asymm,time_new,[0,phi_st,p_st,r_st])#[yaw_beta_st,phi_st,p_st,q_st]
    # print(time_new)
    # time_new = np.linspace(time(index_begin),time(index_end),index_end-index_begin)
-    tns,ybar_symm,x1 = ybar(abcd_symm,ubar_symm,time_new,[0,0,theta_st,q_st]) #vel_st,alpha_st,theta_st,q_st]
-    tna,ybar_asymm,x2 = ybar(abcd_asymm,ubar_asymm,time_new,[0,phi_st,p_st,r_st])#[yaw_beta_st,phi_st,p_st,q_st]
+    
+    
 
 
 
