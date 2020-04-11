@@ -49,8 +49,8 @@ def asymabcd_solver(c1mat,c2mat,c3mat):
     #print('EigenValues Asymmetric', np.linalg.eigvals(a))
     return control.ss(a,b,c,d)
 #this returns the ybar values from the equation ybar = C*xbar + D*ubar the output is a y, a t and an x out
-def ybar(state_space,ubar,time_steps,x0):
-    t,y,x= control.forced_response(state_space,time_steps,ubar,x0)
+def ybar(state_space,ubar,time_steps):
+    t,y,x= control.forced_response(state_space,time_steps,ubar) #,x0)
 
     return t,y,x
 

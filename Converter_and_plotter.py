@@ -148,7 +148,7 @@ for i in range(len(index)):
     delta_a = deg_to_rad(flightdata['delta_a'][index_begin:index_end])
     delta_r = deg_to_rad(flightdata['delta_r'][index_begin:index_end])
     
-    ubar_asymm = [delta_a, delta_r]
+    ubar_asymm = np.vstack((delta_a, delta_r))
 
     time_new = time[index_begin:index_end]
     # time_new = np.linspace(0, (index_end - index_begin)/10, (index_end - index_begin))
@@ -158,10 +158,10 @@ for i in range(len(index)):
     print(manuever)
     if manuever_type[i] == 1:
         abcd_symm = symabcd_solver(symmatc1,symmatc2,symmatc3)
-        tns,ybar_symm,x1 = ybar(abcd_symm,ubar_symm,time_new,[0,0,theta_st,q_st]) #vel_st,alpha_st,theta_st,q_st]
+        tns,ybar_symm,x1 = ybar(abcd_symm,ubar_symm,time_new) #,[0,0,theta_st,q_st]) #vel_st,alpha_st,theta_st,q_st]
     else:
         abcd_asymm = asymabcd_solver(asymmatc1,asymmatc2,asymmatc3)
-        tna,ybar_asymm,x2 = ybar(abcd_asymm,ubar_asymm, time_new,[0,phi_st,p_st,r_st])#[yaw_beta_st,phi_st,p_st,q_st]
+        tna,ybar_asymm,x2 = ybar(abcd_asymm,ubar_asymm, time_new) #,[0,phi_st,p_st,r_st])#[yaw_beta_st,phi_st,p_st,q_st]
    # print(time_new)
    # time_new = np.linspace(time(index_begin),time(index_end),index_end-index_begin)
     
@@ -247,21 +247,21 @@ for i in range(len(index)):
         plt.ylabel('Beta [Rad]')
         plt.subplot(2,2,2)
          # These y values may have to be changed
-        plt.plot(tna,-ybar_asymm[1], label = 'Simulated Response')
+        plt.plot(tna,ybar_asymm[1] + phi_st, label = 'Simulated Response')
         plt.plot(tna,phi[index_begin:index_end], label = 'Actual Response')
         plt.legend(loc="best")
         plt.xlabel('Time Steps')
         plt.ylabel('Phi [Rad]')
         plt.subplot(2,2,3)
          # These y values may have to be changed
-        plt.plot(tna, -ybar_asymm[2], label = 'Simulated Response')
+        plt.plot(tna, -(ybar_asymm[2] * (2*vel_st/b) + p_st), label = 'Simulated Response')
         plt.plot(tna,p[index_begin:index_end], label = 'Actual Response')
         plt.legend(loc="best")
         plt.xlabel('Time Steps')
         plt.ylabel('p Values [Rad/s]')
         plt.subplot(2,2,4)
          # These y values may have to be changed
-        plt.plot(tna, ybar_asymm[3]+r_st, label = 'Simulated Response')
+        plt.plot(tna, -(ybar_asymm[3] * (2*vel_st/b) + r_st), label = 'Simulated Response')
         plt.plot(tna, r[index_begin:index_end], label = 'Actual Response')
         plt.legend(loc="best")
         plt.xlabel('Time Steps')
@@ -272,8 +272,8 @@ for i in range(len(index)):
         # print(av_error)
         #RMS values
         RMSphi = RMS(phi[index_begin:index_end],ybar_asymm[1])
-        RMSp = RMS(p[index_begin:index_end],-ybar_asymm[2])
-        RMSr = RMS(r[index_begin:index_end],ybar_asymm[3]+r_st)
+        RMSp = RMS(p[index_begin:index_end],-(ybar_asymm[2] * (2*vel_st/b) + p_st))
+        RMSr = RMS(r[index_begin:index_end],-(ybar_asymm[3] * (2*vel_st/b) + r_st))
         print('RMS phi ', manuever, ' = ', RMSphi)
         print('RMS p ', manuever, ' = ', RMSp)
         print('RMS r ', manuever, ' = ', RMSr)

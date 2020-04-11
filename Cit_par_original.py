@@ -19,7 +19,7 @@ CLa    = 4.55             # Slope of CL-alpha curve [ ]
 
 # Longitudinal stability
 Cma    = -0.7            # longitudinal stabilty [ ]  FILLER
-Cmde   = -1.3            # elevator effectiveness [ ] FILLER
+Cmde   = -1.6            # elevator effectiveness [ ] FILLER
 
 # Aircraft geometry
 
@@ -97,8 +97,8 @@ CYda   = -0.0400
 CYdr   = +0.2300
 
 Clb    = -0.15 #-0.10260
-Clp    = -1 #-0.71085
-Clr    = 0.15 #+0.23760
+Clp    = -0.9 #-0.71085
+Clr    = 0.10 #+0.23760
 Clda   = -0.23088
 Cldr   = +0.03440
 
