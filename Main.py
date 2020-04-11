@@ -13,6 +13,7 @@ import time
 import Data_processing
 from Cit_par import A as Aspect_ratio
 
+Flight = True
 Thrust_inc = False
 
 SeaLevelPressure = 101325 #[Pa]
@@ -21,20 +22,37 @@ SeaLevelTemperature = 15 #[C]
 SeaLevelTemperature = SeaLevelTemperature + 273.15 #[K]
 
 
+if Flight == True:
+    #CREW = Passenger(mass, seat number)
+    Pilot1 = cg_pos.Passenger(80,1)
+    Pilot2 = cg_pos.Passenger(102,2)
 
-#CREW = Passenger(mass, seat number)
-Pilot1 = cg_pos.Passenger(80,1)
-Pilot2 = cg_pos.Passenger(102,2)
+    #Group B33  = Passenger(mass, seat number)
+    Passenger3 = cg_pos.Passenger(69,3)
+    Passenger4 = cg_pos.Passenger(80,4)
+    Passenger5 = cg_pos.Passenger(76,5)
+    Passenger6 = cg_pos.Passenger(105,6)
+    Passenger7 = cg_pos.Passenger(95,7)
+    Passenger8 = cg_pos.Passenger(95,8)
+    Passenger10 = cg_pos.Passenger(88,10)
+    TotalFuelMass = 1859.729
+    ActualFuelMass = TotalFuelMass
 
-#Group B33  = Passenger(mass, seat number)
-Passenger3 = cg_pos.Passenger(69,3)
-Passenger4 = cg_pos.Passenger(80,4)
-Passenger5 = cg_pos.Passenger(76,5)
-Passenger6 = cg_pos.Passenger(105,6)
-Passenger7 = cg_pos.Passenger(95,7)
-Passenger8 = cg_pos.Passenger(95,8)
-Passenger10 = cg_pos.Passenger(88,10)
+else:
+    #CREW = Passenger(mass, seat number)
+    Pilot1 = cg_pos.Passenger(95,1)
+    Pilot2 = cg_pos.Passenger(92,2)
 
+    #Group B33  = Passenger(mass, seat number)
+    Passenger3 = cg_pos.Passenger(66,3)
+    Passenger4 = cg_pos.Passenger(61,4)
+    Passenger5 = cg_pos.Passenger(75,5)
+    Passenger6 = cg_pos.Passenger(78,6)
+    Passenger7 = cg_pos.Passenger(86,7)
+    Passenger8 = cg_pos.Passenger(68,8)
+    Passenger10 = cg_pos.Passenger(74,10)
+    TotalFuelMass = 1837.049
+    ActualFuelMass = TotalFuelMass
 
 #Aircraft data. Also in cg_pos. Change it there if ant changes are made here
 Empty_mass = 0.453592 * 9165.0
@@ -45,8 +63,7 @@ WingArearea = 30 #m^2
 Chord = 2.0569
 
 
-TotalFuelMass = 1859.729
-ActualFuelMass = TotalFuelMass
+
 
                                                                                  
 PassengerList = [Pilot1, Pilot2, Passenger3, Passenger4, Passenger5, Passenger6, Passenger7, Passenger8, Passenger10]
@@ -182,13 +199,23 @@ def Coeficients1(Static_Measurements_1, Data_reduction = False):
 Static_Measurements_1 = Stat_mes.DataBlock(PayloadList)
 
                                      #    [hp,    IAS,    a,        FFl,    FFr,    F.used,    TAT,  /*/  Temp,    Press,    Density,    Mass,    Mach,    TAS,    Cl,        Tot-Thrust,        Cd]
+if Flight == True:
+    Static_Measurements_1.DataLineList =[   [5010,    250,    1.7,    762,    817,    286,    6.5],
+                                            [6030,    220,    2.4,    660,    698,    371,    3.2],
+                                            [6030,    192,    3.6,    535,    577,    406,    1.3],
+                                            [6040,    161,    5.7,    454,    487,    442,    0.8],
+                                            [6030,    132,    8.5,    417,    459,    485,    -0.5],
+                                            [6140,    117,    11.2,    436,    473,    515,    -1.5]]
+else:
+    Static_Measurements_1.DataLineList =[   [5010,    249,    1.7	,    798,    813,    360,    12.5],
+                                            [5020,    221,    2.4	,    673,    682,    412,    10.5],
+                                            [5020,    192,    3.6	,    561,    579,    447,    8.8],
+                                            [5030,    163,    5.4	,    463,    484,    478,    7.2],
+                                            [5020,    130,    8.7	,    443,    467,    532,    6],
+                                            [5110,    118,    10.6  ,    474,    499,    570,    5.2]]
 
-Static_Measurements_1.DataLineList =[   [5010,    250,    1.7,    762,    817,    286,    6.5],
-                                        [6030,    220,    2.4,    660,    698,    371,    3.2],
-                                        [6030,    192,    3.6,    535,    577,    406,    1.3],
-                                        [6040,    161,    5.7,    454,    487,    442,    0.8],#]
-                                        [6030,    132,    8.5,    417,    459,    485,    -0.5],
-                                        [6140,    117,    11.2,    436,    473,    515,    -1.5]]
+
+
 
 
 for DataLine in Static_Measurements_1.DataLineList:
@@ -338,9 +365,13 @@ def CoeficientsCGShift(Static_Measurements_3, Xcg1, Xcg2, Data_reduction = False
 
                                                                                                                                                                                                                                 
 Static_Measurements_3 = Stat_mes.DataBlock(PayloadList)
-                                    #    [hp,    IAS,    a,        de,        detr,    Fe,        FFl,    FFr,    F.used,    TAT,    Temp,    Press,    Density,    Mass,    Mach,    TAS,    Cl,        Tot-Thrust,        Cd]
-Static_Measurements_3.DataLineList = [[7750,    157,    5.7,    0.3,   2.6,    1,      421,    464,    852,    -2.0],
-                                      [7620,    158,    5.7,    -0.8,    2.6,    -20,    423,    467,    894,    -1.8]]
+if Flight == True:
+                                        #    [hp,    IAS,    a,        de,        detr,    Fe,        FFl,    FFr,    F.used,    TAT,    Temp,    Press,    Density,    Mass,    Mach,    TAS,    Cl,        Tot-Thrust,        Cd]
+    Static_Measurements_3.DataLineList = [[7750,    157,    5.7,    0.3,   2.6,    1,      421,    464,    852,    -2.0],
+                                          [7620,    158,    5.7,    -0.8,    2.6,    -20,    423,    467,    894,    -1.8]]
+else:
+    Static_Measurements_3.DataLineList = [[5730,    161,    5.3,       0,   2.8,      0,    471,    493,    881,    5.0],
+                                          [5790,    161,    5.3,    -0.5,   2.8,    -30,    468,    490,    910,    5.0]]
 
 for DataLine in Static_Measurements_3.DataLineList:
     for i in range(9,18):
@@ -372,14 +403,25 @@ CoeficientsCGShift(Static_Measurements_3,Xcg1,Xcg2)
 
                         
 Static_Measurements_2 = Stat_mes.DataBlock(PayloadList)
-                                    #    [hp,    IAS,    a,        de,        detr,    Fe,        FFl,    FFr,    F.used,    TAT,    Temp,    Press,    Density,    Mass,    Mach,    TAS,    Cl,        Tot-Thrust,        Cd]
-Static_Measurements_2.DataLineList = [  [6910,    158,    5.7,    -0.3,   2.6,    0,    432,    470,    595,    -1.0],
-                                        [7020,    149,    6.6,    -0.7,   2.6,    -7,    430,    470,    636,    -1.6],
-                                        [7180,    139,    7.5,    -1.1,   2.6,    -26,    428,    467,    656,    -2.5],
-                                        [7300,    129,    9.2,    -1.7,    2.6,    -42,    424,    463,    683,    -3.0],
-                                        [6640,    172,    4.8,    0.2,    2.6,    29,        438,    479,    715,    0.2],
-                                        [6340,    178,    4.2,    0.5,    2.6,    43,        446,    487,    736,    0.5],
-                                        [5870,    188,    3.7,    0.7,    2.6,    85,        455,    496,    765,    0.8]]
+
+if Flight == True:
+                                        #    [hp,    IAS,    a,        de,        detr,    Fe,        FFl,    FFr,    F.used,    TAT,    Temp,    Press,    Density,    Mass,    Mach,    TAS,    Cl,        Tot-Thrust,        Cd]
+    Static_Measurements_2.DataLineList = [  [6910,    158,    5.7,    -0.3,   2.6,    0,    432,    470,    595,    -1.0],
+                                            [7020,    149,    6.6,    -0.7,   2.6,    -7,    430,    470,    636,    -1.6],
+                                            [7180,    139,    7.5,    -1.1,   2.6,    -26,    428,    467,    656,    -2.5],
+                                            [7300,    129,    9.2,    -1.7,    2.6,    -42,    424,    463,    683,    -3.0],
+                                            [6640,    172,    4.8,    0.2,    2.6,    29,        438,    479,    715,    0.2],
+                                            [6340,    178,    4.2,    0.5,    2.6,    43,        446,    487,    736,    0.5],
+                                            [5870,    188,    3.7,    0.7,    2.6,    85,        455,    496,    765,    0.8]]
+else:
+
+    Static_Measurements_2.DataLineList = [  [6060,    161,    5.3,       0,    2.8,    0,       462,    486,    664,    5.5],
+                                            [6350,    150,    6.3,    -0,4,    2.8,   -23,      458,    482,    694,    4.5],
+                                            [6550,    140,    7.3,    -0,9,    2.8,   -29,      454,    477,    730,    3.5],
+                                            [6880,    130,    8.5,    -1,5,    2.8,   -46,      449,    473,    755,    2.5],
+                                            [6160,    173,    4.5,     0,4,    2.8,    26,      465,    489,    798,    5.0],
+                                            [5810,    179,    4.1,     0,6,    2.8,    40,      472,    496,    825,    6.2],
+                                            [5310,    192,    3.4,       1,    2.8,    83,      482,    505,    846,    8.2]]
 
 
 for DataLine in Static_Measurements_2.DataLineList:
