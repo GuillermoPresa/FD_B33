@@ -147,25 +147,24 @@ for i in range(len(index)):
 
     delta_a = deg_to_rad(flightdata['delta_a'][index_begin:index_end])
     delta_r = deg_to_rad(flightdata['delta_r'][index_begin:index_end])
+    
+    ubar_asymm = [delta_a, delta_r]
 
-    ubar_asymm = [delta_a,delta_r]
-
-    time_new = time[index_begin:index_end]
+    # time_new = time[index_begin:index_end]
+    time_new = np.linspace(0, (index_end - index_begin)/10, (index_end - index_begin))
+    
    # tns = time_new
    # tna = time_new
     print(manuever)
     if manuever_type[i] == 1:
         abcd_symm = symabcd_solver(symmatc1,symmatc2,symmatc3)
-        tns,ybar_symm,x1 = ybar(abcd_symm,ubar_symm,time_new)#,[0,0,theta_st,q_st]) #vel_st,alpha_st,theta_st,q_st]
+        tns,ybar_symm,x1 = ybar(abcd_symm,ubar_symm,time_new,[0,0,theta_st,q_st]) #vel_st,alpha_st,theta_st,q_st]
     else:
         abcd_asymm = asymabcd_solver(asymmatc1,asymmatc2,asymmatc3)
-        tna,ybar_asymm,x2 = ybar(abcd_asymm,ubar_asymm,time_new)#,[0,phi_st,p_st,r_st])#[yaw_beta_st,phi_st,p_st,q_st]
+        tna,ybar_asymm,x2 = ybar(abcd_asymm,ubar_asymm, time_new,[0,phi_st,p_st,r_st])#[yaw_beta_st,phi_st,p_st,q_st]
    # print(time_new)
    # time_new = np.linspace(time(index_begin),time(index_end),index_end-index_begin)
     
-    
-
-
 
     #print(ybar_asymm)
 
