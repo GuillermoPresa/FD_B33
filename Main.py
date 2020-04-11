@@ -234,9 +234,9 @@ test = Coeficients1(Static_Measurements_1, False)[2]
 def Coeficients2(Static_Measurements_2, Data_reduction = False):
 #     print("Executing Main: Coeficients2")
     for DataLine in Static_Measurements_2.DataLineList: #Processing1
-        DataLine[7+3] = (ISA_calculator.ISAcalc(DataLine[0])[0])    #Append Temperature
-        DataLine[8+3] = (ISA_calculator.ISAcalc(DataLine[0])[1])    #Append Pressure
-        DataLine[9+3] = (ISA_calculator.ISAcalc(DataLine[0])[2])    #Append Density
+        DataLine[7+3] = (ISA_calculator.ISAcalc(DataLine[0])[1])    #Append Temperature
+        DataLine[8+3] = (ISA_calculator.ISAcalc(DataLine[0])[2])    #Append Pressure
+        DataLine[9+3] = (ISA_calculator.ISAcalc(DataLine[0])[0])    #Append Density
         DataLine[10+3] = (Empty_mass +TotalPayloadMass+TotalFuelMass-DataLine[8])    
         DataLine[11+3] = (aero_coeff.IAStoMach(SeaLevelPressure, SeaLevelDensity, SeaLevelTemperature, DataLine[0], DataLine[1]))    #Append Mach
         DataLine[12+3] = (DataLine[11+3]*aero_coeff.SpeedOfSound(DataLine[7+3]))    #Append TAS
@@ -342,13 +342,13 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
 def CoeficientsCGShift(Static_Measurements_3, Xcg1, Xcg2, Data_reduction = False):
 #     print("Executing Main: CoeficientsCGShift")
     for DataLine in Static_Measurements_3.DataLineList: #Processing1
-        DataLine[7+3] = (ISA_calculator.ISAcalc(DataLine[0])[0])    #Append Temperature
-        DataLine[8+3] = (ISA_calculator.ISAcalc(DataLine[0])[1])    #Append Pressure
-        DataLine[9+3] = (ISA_calculator.ISAcalc(DataLine[0])[2])    #Append Density
+        DataLine[7+3] = (ISA_calculator.ISAcalc(DataLine[0])[1])    #Append Temperature
+        DataLine[8+3] = (ISA_calculator.ISAcalc(DataLine[0])[2])    #Append Pressure
+        DataLine[9+3] = (ISA_calculator.ISAcalc(DataLine[0])[0])    #Append Density
         DataLine[10+3] = (Empty_mass +TotalPayloadMass+TotalFuelMass- DataLine[8])    
         DataLine[11+3] = (aero_coeff.IAStoMach(SeaLevelPressure, SeaLevelDensity, SeaLevelTemperature, DataLine[0], DataLine[1]))    #Append Mach
         DataLine[12+3] = (DataLine[11+3]*aero_coeff.SpeedOfSound(DataLine[7+3]))    #Append TAS
-        
+        print("**********************************************")
         if Data_reduction is True:
             DataLine[15] = Data_processing.red_airspeed(DataLine[0], DataLine[1], DataLine[10], (TotalFuelMass - DataLine[8]))[1]
   
@@ -387,21 +387,19 @@ for DataLine in Static_Measurements_3.DataLineList:
 Xcg1 = cg_pos.cg((TotalFuelMass - Static_Measurements_3.DataLineList[0][8]), PayloadList)[0]
 
 #Moving Passenger
-Passenger8_moved = cg_pos.Passenger(95,1)
+if Flight == True:
+    Passenger8_moved = cg_pos.Passenger(95,1)
+    PassengerList2 = [Pilot1, Pilot2, Passenger3, Passenger4, Passenger5, Passenger6, Passenger7, Passenger8_moved, Passenger10]
+else:
+    Passenger_7_moved = cg.pos.Passenger(86,8)  #Not sure which seat it is (left/right) either seat 6 or 7, that is 86 or 78kg
+    PassengerList2 = [Pilot1, Pilot2, Passenger3, Passenger4, Passenger5, Passenger6, Passenger7_moved, Passenger8, Passenger10]
 
-
-PassengerList2 = [Pilot1, Pilot2, Passenger3, Passenger4, Passenger5, Passenger6, Passenger7, Passenger8_moved, Passenger10]
 PayloadList2 = PassengerList2
 
 Xcg2 = cg_pos.cg((TotalFuelMass - Static_Measurements_3.DataLineList[1][8]), PayloadList2)[0]
 
-
 CoeficientsCGShift(Static_Measurements_3,Xcg1,Xcg2)
-
-
-
-
-                        
+                      
 Static_Measurements_2 = Stat_mes.DataBlock(PayloadList)
 
 if Flight == True:
