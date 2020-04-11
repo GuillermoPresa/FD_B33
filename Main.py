@@ -241,8 +241,8 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
         DataLine[11+3] = (aero_coeff.IAStoMach(SeaLevelPressure, SeaLevelDensity, SeaLevelTemperature, DataLine[0], DataLine[1]))    #Append Mach
         DataLine[12+3] = (DataLine[11+3]*aero_coeff.SpeedOfSound(DataLine[7+3]))    #Append TAS
         
-        if Data_reduction is True:
-            DataLine[15] = Data_processing.red_airspeed(DataLine[0], DataLine[1], DataLine[10], (TotalFuelMass - DataLine[8]))[1]
+        #if Data_reduction is True:
+            #DataLine[15] = Data_processing.red_airspeed(DataLine[0], DataLine[1], DataLine[10], (TotalFuelMass - DataLine[8]))[1]
         
         DataLine[16] = ((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea)) #Only placeholder
 #         print((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea)) a
@@ -348,9 +348,9 @@ def CoeficientsCGShift(Static_Measurements_3, Xcg1, Xcg2, Data_reduction = False
         DataLine[10+3] = (Empty_mass +TotalPayloadMass+TotalFuelMass- DataLine[8])    
         DataLine[11+3] = (aero_coeff.IAStoMach(SeaLevelPressure, SeaLevelDensity, SeaLevelTemperature, DataLine[0], DataLine[1]))    #Append Mach
         DataLine[12+3] = (DataLine[11+3]*aero_coeff.SpeedOfSound(DataLine[7+3]))    #Append TAS
-        print("**********************************************")
-        if Data_reduction is True:
-            DataLine[15] = Data_processing.red_airspeed(DataLine[0], DataLine[1], DataLine[10], (TotalFuelMass - DataLine[8]))[1]
+
+        #if Data_reduction is True:
+            #DataLine[15] = Data_processing.red_airspeed(DataLine[0], DataLine[1], DataLine[10], (TotalFuelMass - DataLine[8]))[1]
   
         DataLine[16] = ((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea))
      #   print((DataLine[10+3]*9.80665)/(0.5*DataLine[9+3]*math.pow(DataLine[12+3],2)*WingArearea))
@@ -359,7 +359,7 @@ def CoeficientsCGShift(Static_Measurements_3, Xcg1, Xcg2, Data_reduction = False
     print("Xcg2-Xcg1:", Xcg2-Xcg1)
     print("Chord:", Chord)
     print("CN:", CN)
-    Cmd = -1/(math.pi/180*(Static_Measurements_3.DataLineList[1][3]-Static_Measurements_3.DataLineList[0][3])) * CN * (Xcg2-Xcg1)/Chord
+    Cmd = -2/(math.pi/180*(Static_Measurements_3.DataLineList[1][3]-Static_Measurements_3.DataLineList[0][3])) * CN * (Xcg2-Xcg1)/Chord
     
     return Cmd
 
