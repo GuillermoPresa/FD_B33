@@ -247,7 +247,7 @@ for i in range(len(index)):
         plt.ylabel('Beta [Rad]')
         plt.subplot(2,2,2)
          # These y values may have to be changed
-        plt.plot(tna,ybar_asymm[1] + phi_st, label = 'Simulated Response')
+        plt.plot(tna,-ybar_asymm[1] + phi_st, label = 'Simulated Response')
         plt.plot(tna,phi[index_begin:index_end], label = 'Actual Response')
         plt.legend(loc="best")
         plt.xlabel('Time Steps')
@@ -261,7 +261,7 @@ for i in range(len(index)):
         plt.ylabel('p Values [Rad/s]')
         plt.subplot(2,2,4)
          # These y values may have to be changed
-        plt.plot(tna, -(ybar_asymm[3] * (2*vel_st/b) + r_st), label = 'Simulated Response')
+        plt.plot(tna, -(ybar_asymm[3] * (2*vel_st/b)) + r_st, label = 'Simulated Response')
         plt.plot(tna, r[index_begin:index_end], label = 'Actual Response')
         plt.legend(loc="best")
         plt.xlabel('Time Steps')
