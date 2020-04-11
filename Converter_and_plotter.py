@@ -150,8 +150,8 @@ for i in range(len(index)):
     
     ubar_asymm = [delta_a, delta_r]
 
-    # time_new = time[index_begin:index_end]
-    time_new = np.linspace(0, (index_end - index_begin)/10, (index_end - index_begin))
+    time_new = time[index_begin:index_end]
+    # time_new = np.linspace(0, (index_end - index_begin)/10, (index_end - index_begin))
     
    # tns = time_new
    # tna = time_new
