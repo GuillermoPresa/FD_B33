@@ -1,4 +1,4 @@
-from Cit_par_original import *
+from Cit_par import *
 from math import *
 import numpy as np
 import matplotlib.pyplot as plt

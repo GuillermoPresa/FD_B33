@@ -1,9 +1,11 @@
-from Cit_par_original import *
+from Cit_par import *
 from Data_reader import *
 import matplotlib.pyplot as plt
 from math import *
 from ISA_calculator import ISAcalc
 from state_space import *
+
+version
 
 #Equations to convert units
 def psi_to_pascal(psi_vals):
@@ -26,7 +28,7 @@ if file == 'FTISxprt-20200306_flight1.mat':
     #new index finder as from the flight data
     t_begin_ph = 3200       #begin time phugoid in seconds 
     t_begin_sp = 3418       #begin time short period in seconds
-    t_begin_dr = 3512       #begin time dutch roll in seconds 
+    t_begin_dr = 3513       #begin time dutch roll in seconds 
     t_begin_ar = 3710       #begin time aperiodic roll in seconds 
     t_begin_spir = 3880     #begin time spiral in seconds 
 else:
@@ -150,8 +152,8 @@ for i in range(len(index)):
     
     ubar_asymm = np.vstack((delta_a, delta_r))
 
-    time_new = time[index_begin:index_end]
-    # time_new = np.linspace(0, (index_end - index_begin)/10, (index_end - index_begin))
+    # time_new = time[index_begin:index_end]
+    time_new = np.linspace(0, (index_end - index_begin)/10, (index_end - index_begin))
     
    # tns = time_new
    # tna = time_new
@@ -170,7 +172,7 @@ for i in range(len(index)):
 
     if manuever_type[i] == 1:
         print('-------------------SYMMETRIC-----------------')
-        plt.figure(figsize =(16,12))
+        # plt.figure(figsize =(16,12))
        #  plt.subplot(2,1,1)
        #  #These y values may have to be changed
        #  plt.plot(tns, ybar_symm[0]*vel_st + vel_st, label = 'Velocity [m/s]')
@@ -180,40 +182,41 @@ for i in range(len(index)):
        #  plt.xlabel('Time Steps [s]')
        #  plt.ylabel(' Velocity m/s')
        #  plt.subplot(2,1,2)
-       #  #These y values may have to be changed
-       #  plt.plot(tns,deg_to_rad(flightdata['delta_e'][index_begin:index_end]), label = 'delta_e')
-       #  plt.xlabel('Time Steps [s]')
-       #  plt.ylabel('delta e [Rad]')
-       #  plt.show()
-       #  plt.figure(figsize=(14, 10))
-       #  plt.subplot(2,2,1)
+       # #These y values may have to be changed
+       # plt.plot(tns,deg_to_rad(flightdata['delta_e'][index_begin:index_end]), label = 'delta_e')
+       # plt.xlabel('Time Steps [s]')
+       # plt.ylabel('delta e [Rad]')
+       # plt.show()
+         
+        plt.figure(figsize=(14, 10))
+        plt.subplot(2,2,1)
         
         #These y values may have to be changed
         plt.plot(tns,(ybar_symm[0]*vel_st + vel_st), label = 'Simulated Response')
         plt.plot(tns, velocity[index_begin:index_end], label = 'Actual Response')
         plt.legend(loc="best")
-        plt.xlabel('Time Steps')
+        plt.xlabel('Time [s]')
         plt.ylabel('Velocity [m/s]')
-        plt.subplot(2,2,2)
+        plt.subplot(2,2,2)enin
         #These y values may have to be changed
         plt.plot(tns,ybar_symm[1]+alpha_st, label = 'Simulated Response')
         plt.plot(tns,alpha[index_begin:index_end], label = 'Actual Response')
         plt.legend(loc="best")
-        plt.xlabel('Time Steps')
+        plt.xlabel('Time [s]')
         plt.ylabel('Alpha [Rad]')
         plt.subplot(2,2,3)
         #These y values may have to be changed
         plt.plot(tns, ybar_symm[2]+theta_st, label = 'Simulated Response')
         plt.plot(tns,theta[index_begin:index_end], label = 'Actual Response')
         plt.legend(loc="best")
-        plt.xlabel('Time Steps')
+        plt.xlabel('Time [s]')
         plt.ylabel('Theta [Rad]')
         plt.subplot(2,2,4)
         #These y values may have to be changed
         plt.plot(tns, ybar_symm[3]*vel_st/c, label = 'Simulated Response')
         plt.plot(tns, q_val[index_begin:index_end], label = 'Actual Response')
         plt.legend(loc="best")
-        plt.xlabel('Time Steps')
+        plt.xlabel('Time [s]')
         plt.ylabel('Pitch Rate [Rad/s]')
         plt.suptitle(manuever)
         plt.show()
@@ -243,28 +246,28 @@ for i in range(len(index)):
         plt.plot(tna,ybar_asymm[0]+yaw_beta_st, label = 'Simulated Response')
         # plt.plot(tna, yaw_beta[index_begin:index_end], label = 'Actual Response')
         plt.legend(loc="best")
-        plt.xlabel('Time Steps')
+        plt.xlabel('Time [s]')
         plt.ylabel('Beta [Rad]')
         plt.subplot(2,2,2)
          # These y values may have to be changed
         plt.plot(tna,-ybar_asymm[1] + phi_st, label = 'Simulated Response')
         plt.plot(tna,phi[index_begin:index_end], label = 'Actual Response')
         plt.legend(loc="best")
-        plt.xlabel('Time Steps')
+        plt.xlabel('Time [s]')
         plt.ylabel('Phi [Rad]')
         plt.subplot(2,2,3)
          # These y values may have to be changed
         plt.plot(tna, -(ybar_asymm[2] * (2*vel_st/b) + p_st), label = 'Simulated Response')
         plt.plot(tna,p[index_begin:index_end], label = 'Actual Response')
         plt.legend(loc="best")
-        plt.xlabel('Time Steps')
+        plt.xlabel('Time [s]')
         plt.ylabel('p Values [Rad/s]')
         plt.subplot(2,2,4)
          # These y values may have to be changed
         plt.plot(tna, -(ybar_asymm[3] * (2*vel_st/b)) + r_st, label = 'Simulated Response')
         plt.plot(tna, r[index_begin:index_end], label = 'Actual Response')
         plt.legend(loc="best")
-        plt.xlabel('Time Steps')
+        plt.xlabel('Time [s]')
         plt.ylabel('r Values [Rad/s]')
         plt.suptitle(manuever)
         plt.show()

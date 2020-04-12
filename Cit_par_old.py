@@ -1,25 +1,32 @@
 # Citation 550 - Linear simulation
 from math import *
 
-# xcg = 0.25 * c
+#xcg = 0.25 * c
+
+############## Own parametparameters
 
 # Stationary flight condition
+#dummy values
 hp0    = 5000      	      # pressure altitude in the stationary flight condition [m]
 V0     = 95            # true airspeed in the stationary flight condition [m/sec]
 alpha0 = 5*pi/180            # angle of attack in the stationary flight condition [rad]
 th0    = 6*pi/180            # pitch angle in the stationary flight condition [rad]
 
 # Aircraft mass
-m      = 790 + 4100*0.453592 + 9165*0.453592         # initial mass (TOW) [kg] (PAX + fuel + OEW)
+m      = 6305.29           # mass [kg]
 
 # aerodynamic properties
 e      =  0.8            # Oswald factor [ ]
 CD0    = 0.04            # Zero lift drag coefficient [ ]
-CLa    = 4.55             # Slope of CL-alpha curve [ ]
+CLa    = 4.1             # Slope of CL-alpha curve [ ]
 
 # Longitudinal stability
-Cma    = -0.7            # longitudinal stabilty [ ]  FILLER
-Cmde   = -1.6            # elevator effectiveness [ ] FILLER
+Cma    = -0.5            # longitudinal stabilty [ ]  FILLER
+Cmde   = -1.1            # elevator effectiveness [ ] FILLER
+
+
+
+############## Pre-entered parameters
 
 # Aircraft geometry
 
@@ -45,7 +52,7 @@ R      = 287.05          # specific gas constant [m^2/sec^2K]
 g      = 9.81            # [m/sec^2] (gravity constant)
 
 # air density [kg/m^3]  
-rho    = rho0 * pow( ((1+(lambda1 * hp0 / Temp0))), (-((g / (lambda1*R)) + 1)))   
+rho    = rho0 * pow(((1+(lambda1 * hp0 / Temp0))), (-((g / (lambda1*R)) + 1)))
 W      = m * g            # [N]       (aircraft weight)
 
 # Constant values concerning aircraft inertia
@@ -72,7 +79,7 @@ CD = CD0 + (CLa * alpha0) ** 2 / (pi * A * e) # Drag coefficient [ ]
 # Stabiblity derivatives
 
 CX0    = W * sin(th0) / (0.5 * rho * V0 ** 2 * S)
-CXu    = -0.02792
+CXu    =  -0.095
 CXa    = +0.47966		# Positive! (has been erroneously negative since 1993) 
 CXadot = +0.08330
 CXq    = -0.28170
@@ -85,11 +92,11 @@ CZadot = -0.00350
 CZq    = -5.66290
 CZde   = -0.69612
 
-Cmu    = +0.06990
+Cmu    = +0.0699
 Cmadot = +0.17800
-Cmq    = -8.79415
+Cmq    = -3
 
-CYb    = -0.7500
+CYb    = 0.200
 CYbdot =  0     
 CYp    = -0.0304
 CYr    = +0.8495
@@ -102,10 +109,10 @@ Clr    = +0.23760
 Clda   = -0.23088
 Cldr   = +0.03440
 
-Cnb    =  +0.1348
+Cnb    =  +0.09
 Cnbdot =   0     
 Cnp    =  -0.0602
-Cnr    =  -0.2061
+Cnr    =  -0.23
 Cnda   =  -0.0120
 Cndr   =  -0.0939
 
