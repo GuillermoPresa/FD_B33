@@ -93,6 +93,9 @@ def RMS(real,sim):
     RMS = np.sqrt(np.mean((real-sim)**2))
     return RMS
 
+tot_error_sym = []
+tot_error_asym = []
+    
 #------------SYMM states-----------
 for i in range(len(index)):
 
@@ -166,7 +169,6 @@ for i in range(len(index)):
    # print(time_new)
    # time_new = np.linspace(time(index_begin),time(index_end),index_end-index_begin)
     
-
     #print(ybar_asymm)
 
     if manuever_type[i] == 1:
@@ -227,6 +229,12 @@ for i in range(len(index)):
         RMSa = RMS(alpha[index_begin:index_end],ybar_symm[1]+alpha_st)
         RMSt = RMS(theta[index_begin:index_end],ybar_symm[2]+theta_st)
         RMSq = RMS(q_val[index_begin:index_end],ybar_symm[3]*vel_st/c)
+        
+        tot_error_sym.append(RMSv**2)
+        tot_error_sym.append(RMSa**2)
+        tot_error_sym.append(RMSt**2)
+        tot_error_sym.append(RMSq**2)
+        
         print('RMS velocity ', manuever, ' = ', RMSv)
         print('RMS alpha ', manuever, ' = ', RMSa)
         print('RMS theta ', manuever, ' = ', RMSt)
@@ -276,6 +284,11 @@ for i in range(len(index)):
         RMSphi = RMS(phi[index_begin:index_end],ybar_asymm[1])
         RMSp = RMS(p[index_begin:index_end],-(ybar_asymm[2] * (2*vel_st/b) + p_st))
         RMSr = RMS(r[index_begin:index_end],-(ybar_asymm[3] * (2*vel_st/b) + r_st))
+        
+        tot_error_asym.append(RMSphi**2)
+        tot_error_asym.append(RMSp**2)
+        tot_error_asym.append(RMSr**2)
+            
         print('RMS phi ', manuever, ' = ', RMSphi)
         print('RMS p ', manuever, ' = ', RMSp)
         print('RMS r ', manuever, ' = ', RMSr)
@@ -301,3 +314,9 @@ for i in range(len(index)):
       #   plt.ylabel('delta a, delta r [Rad]')
       #   plt.show()
 
+tot_error_sym = np.sqrt(sum(np.asarray(tot_error_sym)))
+tot_error_asym = np.sqrt(sum(np.asarray(tot_error_asym)))
+
+print('----------------------- total error -------------------------')
+print('symmetric = ', tot_error_sym)
+print('asymmetric = ', tot_error_asym)
