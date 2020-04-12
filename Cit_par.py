@@ -79,24 +79,24 @@ CD = CD0 + (CLa * alpha0) ** 2 / (pi * A * e) # Drag coefficient [ ]
 if VERSION == 1:
     # Adjusted cit_par data for optimising the numerical model
     # Stabiblity derivatives
-    
-    CX0    = W * sin(th0) / (0.5 * rho * V0 ** 2 * S)
-    CXu    = -0.14
-    CXa    = +0.47966		# Positive! (has been erroneously negative since 1993) 
-    CXadot = +0.08330
-    CXq    = -0.28170
-    CXde   = -0.03728
-    
-    CZ0    = -W * cos(th0) / (0.5 * rho * V0 ** 2 * S)
-    CZu    = -1.17
-    CZa    = -4.5
+
+    CX0 = W * sin(th0) / (0.5 * rho * V0 ** 2 * S)
+    CXu = -0.001  # -0.02792
+    CXa = +0.2  # +0.47966		# Positive! (has been erroneously negative since 1993)
+    CXadot = +0.10  # +0.08330
+    CXq = -0.4  # -0.28170
+    CXde = -0.03728
+
+    CZ0 = -W * cos(th0) / (0.5 * rho * V0 ** 2 * S)
+    CZu = -0.9  # -0.37616
+    CZa = -5.74340
     CZadot = -0.00350
-    CZq    = -5.66290
-    CZde   = -0.69612
-    
-    Cmu    = +0.01
-    Cmadot = +0.17800
-    Cmq    = -8.79415
+    CZq = -5.66290
+    CZde = -0.69612
+
+    Cmu = +0.13  # +0.06990
+    Cmadot = +1.2  # +0.17800
+    Cmq = -16  # -8.79415
     
     CYb    = -0.7500
     CYbdot =  0     
@@ -105,14 +105,14 @@ if VERSION == 1:
     CYda   = -0.0400
     CYdr   = +0.2300
     
-    Clb    = -0.10260
-    Clp    = -0.71085
-    Clr    = +0.23760
+    Clb    = -0.18#-0.10260
+    Clp    = -0.85#-0.71085
+    Clr    = +0.18#+0.23760
     Clda   = -0.23088
     Cldr   = +0.03440
     
-    Cnb    =  +0.1348
-    Cnbdot =   0     
+    Cnb    =  0.1348
+    Cnbdot =   0.03 #0
     Cnp    =  -0.0602
     Cnr    =  -0.2061
     Cnda   =  -0.0120
