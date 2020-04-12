@@ -5,7 +5,6 @@ from math import *
 from ISA_calculator import ISAcalc
 from state_space import *
 
-version
 
 #Equations to convert units
 def psi_to_pascal(psi_vals):
@@ -35,7 +34,7 @@ else:
     #refernce data
     t_begin_ph = 53*60 + 57       #begin time phugoid in seconds 
     t_begin_sp = 60*60 + 35       #begin time short period in seconds
-    t_begin_dr = 61*60 + 57       #begin time dutch roll in seconds 
+    t_begin_dr = 61*60 + 57       #begin time dutch roll in seconds
     t_begin_ar = 59*60 + 10       #begin time aperiodic roll in seconds 
     t_begin_spir = 65*60 + 20     #begin time spiral in seconds
 
@@ -197,7 +196,7 @@ for i in range(len(index)):
         plt.legend(loc="best")
         plt.xlabel('Time [s]')
         plt.ylabel('Velocity [m/s]')
-        plt.subplot(2,2,2)enin
+        plt.subplot(2,2,2)
         #These y values may have to be changed
         plt.plot(tns,ybar_symm[1]+alpha_st, label = 'Simulated Response')
         plt.plot(tns,alpha[index_begin:index_end], label = 'Actual Response')

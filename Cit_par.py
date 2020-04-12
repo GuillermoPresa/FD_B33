@@ -81,20 +81,20 @@ if VERSION == 1:
     # Stabiblity derivatives
     
     CX0    = W * sin(th0) / (0.5 * rho * V0 ** 2 * S)
-    CXu    = -0.02792
+    CXu    = -0.14
     CXa    = +0.47966		# Positive! (has been erroneously negative since 1993) 
     CXadot = +0.08330
     CXq    = -0.28170
     CXde   = -0.03728
     
     CZ0    = -W * cos(th0) / (0.5 * rho * V0 ** 2 * S)
-    CZu    = -0.37616
-    CZa    = -5.74340
+    CZu    = -1.17
+    CZa    = -4.5
     CZadot = -0.00350
     CZq    = -5.66290
     CZde   = -0.69612
     
-    Cmu    = +0.06990
+    Cmu    = +0.01
     Cmadot = +0.17800
     Cmq    = -8.79415
     
