@@ -111,38 +111,7 @@ if file == 'matlab.mat':
 #print(flightdata['time'])
 
 
-if file == 'FTISxprt-20200306_flight1.mat':
-    #new index finder as from the flight data
-    t_begin_ph = 3200       #begin time phugoid in seconds 
-    t_begin_sp = 3418       #begin time short period in seconds
-    t_begin_dr = 3513       #begin time dutch roll in seconds 
-    t_begin_ar = 3710       #begin time aperiodic roll in seconds 
-    t_begin_spir = 3880     #begin time spiral in seconds 
-else:
-    #refernce data
-    t_begin_ph = 53*60 + 57       #begin time phugoid in seconds 
-    t_begin_sp = 60*60 + 35       #begin time short period in seconds
-    t_begin_dr = 61*60 + 57       #begin time dutch roll in seconds
-    t_begin_ar = 59*60 + 10       #begin time aperiodic roll in seconds 
-    t_begin_spir = 65*60 + 20     #begin time spiral in seconds
 
-#approximate length maneuvre [s]
-len_ph = 200
-len_sp = 10
-len_dr = 15
-len_ar = 15
-len_spir = 150
-
-
-#indexes
-i_ph = int(np.where(flightdata['time']==t_begin_ph)[0])
-i_sp = int(np.where(flightdata['time']==t_begin_sp)[0])
-i_dr = int(np.where(flightdata['time']==t_begin_dr)[0])
-i_ar = int(np.where(flightdata['time']==t_begin_ar)[0])
-i_spir = int(np.where(flightdata['time']==t_begin_spir)[0])
-
-
-print("Airspeeed is:",flightdata['Dadc1_tas'][i_dr])
 
 
 
