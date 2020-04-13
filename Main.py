@@ -157,10 +157,10 @@ def Coeficients1(Static_Measurements_1, Data_reduction = False):
 #         print((Static_Measurements_1.DataLineList[i][10]*9.80665)/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
         if Thrust_inc == True:
             Static_Measurements_1.DataLineList[i][15] = ((math.cos(math.pi/180*Static_Measurements_1.DataLineList[i][2])*Static_Measurements_1.DataLineList[i][14])/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
-            #Static_Measurements_1.DataLineList[i][13] = ((Static_Measurements_1.DataLineList[i][10]*9.80665-math.sin(math.pi/180*Static_Measurements_1.DataLineList[i][2])*Static_Measurements_1.DataLineList[i][14])/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
+            Static_Measurements_1.DataLineList[i][13] = ((Static_Measurements_1.DataLineList[i][10]*9.80665-math.sin(math.pi/180*Static_Measurements_1.DataLineList[i][2])*Static_Measurements_1.DataLineList[i][14])/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
         else:
             Static_Measurements_1.DataLineList[i][15] = ((Static_Measurements_1.DataLineList[i][14])/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
-            #Static_Measurements_1.DataLineList[i][13] = ((Static_Measurements_1.DataLineList[i][10]*9.80665)/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
+            Static_Measurements_1.DataLineList[i][13] = ((Static_Measurements_1.DataLineList[i][10]*9.80665)/(0.5*Static_Measurements_1.DataLineList[i][9]*math.pow(Static_Measurements_1.DataLineList[i][12],2)*WingArearea))
         Alpha_array[i] = Static_Measurements_1.DataLineList[i][2]
         Cl_array[i] = Static_Measurements_1.DataLineList[i][13]
         Cd_array[i] = Static_Measurements_1.DataLineList[i][15]
@@ -258,13 +258,15 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
     Total_array = np.zeros(5*len(Static_Measurements_2.DataLineList))
 
     for i in range(0,len(Static_Measurements_2.DataLineList)): #Processing1
+
+
         PressureAltitude[i] = Static_Measurements_2.DataLineList[i][0]
         Total_array[5*i] = Static_Measurements_2.DataLineList[i][0]
         Mach[i] = Static_Measurements_2.DataLineList[i][11+3]
         Total_array[5*i+1] = Static_Measurements_2.DataLineList[i][11+3]
-        FuelFlow1[i] = 0.048
+        FuelFlow1[i] = Static_Measurements_2.DataLineList[i][3+3]
         Total_array[5*i+2] = Static_Measurements_2.DataLineList[i][3+3]
-        FuelFlow2[i] = 0.048
+        FuelFlow2[i] = Static_Measurements_2.DataLineList[i][4+3]
         Total_array[5*i+3] = Static_Measurements_2.DataLineList[i][4+3]
         TemperatureDifference[i] = Static_Measurements_2.DataLineList[i][7+3] - Static_Measurements_2.DataLineList[i][6+3]
         Total_array[5*i+4]  = Static_Measurements_2.DataLineList[i][6+3] - Static_Measurements_2.DataLineList[i][7+3]
@@ -301,9 +303,13 @@ def Coeficients2(Static_Measurements_2, Data_reduction = False):
     for i in range(0,len(Static_Measurements_2.DataLineList)): #Processing2
 #         print("AT i: ",i,"The AOA is: ",Static_Measurements_2.DataLineList[i][2])
 #         print((Static_Measurements_2.DataLineList[i][10+3]*9.80665)/(0.5*Static_Measurements_2.DataLineList[i][9+3]*math.pow(Static_Measurements_2.DataLineList[i][12+3],2)*WingArearea))
-
-        Static_Measurements_2.DataLineList[i][18] = ((math.cos(math.pi/180*Static_Measurements_2.DataLineList[i][2])*Static_Measurements_2.DataLineList[i][14+3])/(0.5*Static_Measurements_2.DataLineList[i][9+3]*math.pow(Static_Measurements_2.DataLineList[i][12+3],2)*WingArearea))
-        #Static_Measurements_2.DataLineList[i][13] = ((Static_Measurements_1.DataLineList[i][10+3]*9.80665-math.sin(math.pi/180*Static_Measurements_2.DataLineList[i][2])*Static_Measurements_2.DataLineList[i][14+3])/(0.5*Static_Measurements_1.DataLineList[i][9+3]*math.pow(Static_Measurements_1.DataLineList[i][12+3],2)*WingArearea))
+        if Flight == True:
+            Static_Measurements_2.DataLineList[i][18] = ((math.cos(math.pi/180*Static_Measurements_2.DataLineList[i][2])*Static_Measurements_2.DataLineList[i][14+3])/(0.5*Static_Measurements_2.DataLineList[i][9+3]*math.pow(Static_Measurements_2.DataLineList[i][12+3],2)*WingArearea))
+            Static_Measurements_2.DataLineList[i][16] = ((Static_Measurements_2.DataLineList[i][10+3]*9.80665-math.sin(math.pi/180*Static_Measurements_2.DataLineList[i][2])*Static_Measurements_2.DataLineList[i][14+3])/(0.5*Static_Measurements_2.DataLineList[i][9+3]*math.pow(Static_Measurements_2.DataLineList[i][12+3],2)*WingArearea))
+        else:
+            Static_Measurements_2.DataLineList[i][18] = ((Static_Measurements_2.DataLineList[i][14+3])/(0.5*Static_Measurements_2.DataLineList[i][9+3]*math.pow(Static_Measurements_2.DataLineList[i][12+3],2)*WingArearea))
+            Static_Measurements_2.DataLineList[i][16] = ((Static_Measurements_2.DataLineList[i][10+3]*9.80665)/(0.5*Static_Measurements_2.DataLineList[i][9+3]*math.pow(Static_Measurements_2.DataLineList[i][12+3],2)*WingArearea))
+          
         Alpha_array[i] = Static_Measurements_2.DataLineList[i][2]
         Cl_array[i] = Static_Measurements_2.DataLineList[i][13+3]
         Cd_array[i] = Static_Measurements_2.DataLineList[i][15+3]
@@ -359,7 +365,7 @@ def CoeficientsCGShift(Static_Measurements_3, Xcg1, Xcg2, Data_reduction = False
     print("Xcg2-Xcg1:", Xcg2-Xcg1)
     print("Chord:", Chord)
     print("CN:", CN)
-    Cmd = -2/(math.pi/180*(Static_Measurements_3.DataLineList[1][3]-Static_Measurements_3.DataLineList[0][3])) * CN * (Xcg2-Xcg1)/Chord
+    Cmd = -1/(math.pi/180*(Static_Measurements_3.DataLineList[1][3]-Static_Measurements_3.DataLineList[0][3])) * CN * (Xcg2-Xcg1)/Chord
     
     return Cmd
 
@@ -391,11 +397,11 @@ if Flight == True:
     Passenger8_moved = cg_pos.Passenger(95,1)
     PassengerList2 = [Pilot1, Pilot2, Passenger3, Passenger4, Passenger5, Passenger6, Passenger7, Passenger8_moved, Passenger10]
 else:
-    Passenger_7_moved = cg.pos.Passenger(86,8)  #Not sure which seat it is (left/right) either seat 6 or 7, that is 86 or 78kg
+    Passenger7_moved = cg_pos.Passenger(78,9)  #Not sure which seat it is (left/right) either seat 6 or 7, that is 86 or 78kg
     PassengerList2 = [Pilot1, Pilot2, Passenger3, Passenger4, Passenger5, Passenger6, Passenger7_moved, Passenger8, Passenger10]
 
 PayloadList2 = PassengerList2
-
+                            
 Xcg2 = cg_pos.cg((TotalFuelMass - Static_Measurements_3.DataLineList[1][8]), PayloadList2)[0]
 
 CoeficientsCGShift(Static_Measurements_3,Xcg1,Xcg2)
@@ -403,7 +409,7 @@ CoeficientsCGShift(Static_Measurements_3,Xcg1,Xcg2)
 Static_Measurements_2 = Stat_mes.DataBlock(PayloadList)
 
 if Flight == True:
-                                        #    [hp,    IAS,    a,        de,        detr,    Fe,        FFl,    FFr,    F.used,    TAT,    Temp,    Press,    Density,    Mass,    Mach,    TAS,    Cl,        Tot-Thrust,        Cd]
+                                        #    [hp,    IAS,    a,        de,  detr,    Fe,   FFl,    FFr,    F.used,    TAT,    Temp,    Press,    Density,    Mass,    Mach,    TAS,    Cl,        Tot-Thrust,        Cd]
     Static_Measurements_2.DataLineList = [  [6910,    158,    5.7,    -0.3,   2.6,    0,    432,    470,    595,    -1.0],
                                             [7020,    149,    6.6,    -0.7,   2.6,    -7,    430,    470,    636,    -1.6],
                                             [7180,    139,    7.5,    -1.1,   2.6,    -26,    428,    467,    656,    -2.5],
@@ -413,13 +419,15 @@ if Flight == True:
                                             [5870,    188,    3.7,    0.7,    2.6,    85,        455,    496,    765,    0.8]]
 else:
 
-    Static_Measurements_2.DataLineList = [  [6060,    161,    5.3,       0,    2.8,    0,       462,    486,    664,    5.5],
-                                            [6350,    150,    6.3,    -0,4,    2.8,   -23,      458,    482,    694,    4.5],
-                                            [6550,    140,    7.3,    -0,9,    2.8,   -29,      454,    477,    730,    3.5],
-                                            [6880,    130,    8.5,    -1,5,    2.8,   -46,      449,    473,    755,    2.5],
-                                            [6160,    173,    4.5,     0,4,    2.8,    26,      465,    489,    798,    5.0],
-                                            [5810,    179,    4.1,     0,6,    2.8,    40,      472,    496,    825,    6.2],
-                                            [5310,    192,    3.4,       1,    2.8,    83,      482,    505,    846,    8.2]]
+    Static_Measurements_2.DataLineList = [  [6060,    161,    5.3,        0,    2.8,      0,     462,    486,    664,    5.5],
+                                            [6350,    150,    6.3,     -0.4,    2.8,    -23,     458,    482,    694,    4.5],
+                                            [6550,    140,    7.3,     -0.9,    2.8,    -29,     454,    477,    730,    3.5],
+                                            [6880,    130,    8.5,     -1.5,    2.8,    -46,	 449,    473,    755,    2.5],
+                                            [6160,    173,    4.5,     0.4,    2.8,     26,     465,    489,    798,    5.0],
+                                            [5810,    179,    4.1,     0.6,    2.8,     40,     472,    496,    825,    6.2],
+                                            [5310,    192,    3.4,       1,    2.8,     83,     482,    505,    846,    8.2]]
+
+
 
 
 for DataLine in Static_Measurements_2.DataLineList:
