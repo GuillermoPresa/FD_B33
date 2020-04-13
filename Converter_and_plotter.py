@@ -25,7 +25,7 @@ def pnd_to_kil(w_vals):
 
 if file == 'FTISxprt-20200306_flight1.mat':
     #new index finder as from the flight data
-    t_begin_ph = 3200       #begin time phugoid in seconds 
+    t_begin_ph = 3195       #begin time phugoid in seconds 
     t_begin_sp = 3418       #begin time short period in seconds
     t_begin_dr = 3513       #begin time dutch roll in seconds 
     t_begin_ar = 3710       #begin time aperiodic roll in seconds 
@@ -59,7 +59,7 @@ index = [(i_ph, i_ph+len_ph*10), (i_spir, i_spir+len_spir*10), (i_sp, i_sp+len_s
 #index = [(31900,33200),(38800,39800),(34210,34300),(35130,35300),(37000,37200)]
 
 
-name = ['Phugoid', 'Spiral', 'Short Period', 'Dutch Roll', 'Aperiodic']
+name = ['Phugoid', 'Spiral', 'Short Period', 'Dutch Roll', 'Aperiodic Roll']
 #Manuever type 1 means symmetric and 0 means asymmetric
 manuever_type = [1,0,1,0,0]
 #This line below resets the time to start at 0 because the time started at 9
@@ -159,7 +159,7 @@ for i in range(len(index)):
     
    # tns = time_new
    # tna = time_new
-    print(manuever)
+    print('-------------------',manuever,'-------------------')
     if manuever_type[i] == 1:
         abcd_symm = symabcd_solver(symmatc1,symmatc2,symmatc3)
         tns,ybar_symm,x1 = ybar(abcd_symm,ubar_symm,time_new) #,[0,0,theta_st,q_st]) #vel_st,alpha_st,theta_st,q_st]
@@ -317,6 +317,6 @@ for i in range(len(index)):
 tot_error_sym = np.sqrt(sum(np.asarray(tot_error_sym)))
 tot_error_asym = np.sqrt(sum(np.asarray(tot_error_asym)))
 
-print('----------------------- total error -------------------------')
+print('-------------------TOTAL ERROR-------------------')
 print('symmetric = ', tot_error_sym)
 print('asymmetric = ', tot_error_asym)

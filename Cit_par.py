@@ -5,7 +5,7 @@ from math import *
 #if VERSION = 1 adjusted values are selected
 #if VERSION = 0 original (brightspace) values are selected
 
-VERSION = 0
+VERSION = 1
 
 # xcg = 0.25 * c
 
